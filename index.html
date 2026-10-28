@@ -95,8 +95,7 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
 .chip.off{background:var(--off);color:var(--muted);border-style:dashed}
 .chip.off b,.chip.off span{text-decoration:line-through}
 
-.sports{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-@media (max-width:1000px){.sports{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.sports{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 @media (max-width:460px){.sports{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .sport{border:2px solid var(--line);background:var(--surface-2);border-radius:12px;padding:0;overflow:hidden;display:flex;flex-direction:column;text-align:center}
 .sport canvas{display:block;width:100%;aspect-ratio:3/2;max-width:100%}
@@ -431,6 +430,9 @@ function humanPose(x,y,s,o){
     case'cheer':std();bob=-Math.abs(Math.sin(t*8))*s*.05;arms[0]=LA(Math.PI-.35+Math.sin(t*10)*.2,.1);arms[1]=LA(Math.PI-.25-Math.sin(t*10)*.2,.1);break;
     case'carry':bob=-Math.abs(Math.sin(ph))*s*.03;lean=s*.02;for(let i=0;i<2;i++){const p=ph+(i?0:Math.PI);legs[i]=LA(Math.sin(p)*.7,.25+.8*(.5+.5*Math.cos(p)))}arms[0]=LA(Math.PI-.45,.05);arms[1]=LA(Math.PI-.25,.05);break;
     case'selfie':std();arms[1]=LA(Math.PI-.8,.7);break;
+    case'skate':{hip=P(x,y-L*1.78);lean=s*.13;bob=-Math.abs(Math.sin(ph))*s*.015;for(let i=0;i<2;i++){const e=Math.sin(ph+i*Math.PI);legs[i]=LA(.12-1.05*Math.max(0,e),.55-.45*Math.max(0,e));arms[i]=LA(-e*.9,.35)}break}
+    case'reach':std();arms[1]=LA(1.45,.15);arms[0]=LA(1.25,.35);break;
+    case'spiral':lean=s*.17;legs[0]=LA(.02,.02);legs[1]=LA(-1.95,0);arms[1]=LA(1.5,.05);arms[0]=LA(-1.75,.05);break;
     case'stretch':std();arms[0]=LA(Math.PI-.15,.05);arms[1]=LA(Math.PI+.1,.05);lean=-s*.02;break;
     case'dance':sway=Math.sin(t*7)*s*.04;bob=-Math.abs(Math.sin(t*7))*s*.04;for(let i=0;i<2;i++){const p=t*7+i*Math.PI;legs[i]=LA(Math.sin(p)*.35,.45+.3*Math.cos(p));arms[i]=LA(Math.PI-.7+Math.sin(p)*.6,.6)}break;
     case'sit':hip=P(x,y-s*.08);legs[0]=LA(1.42,.12);legs[1]=LA(1.48,.08);arms[0]=LA(-.6,0);arms[1]=LA(-.45,0);lean=-s*.02;break;
@@ -454,7 +456,7 @@ function humanPose(x,y,s,o){
 }
 function renderHuman(c,J,o,part){
   const w=J.s*.085,L=J.L,back=part!=='front',front=part!=='back';
-  const leg=(i,col)=>{const{k,f}=J.legs[i];seg(c,[J.hip,k,f],w,col);const a2=Math.atan2(f.x-k.x,f.y-k.y),dx=Math.cos(a2),dy=-Math.sin(a2);seg(c,[P(f.x-dx*L*.05,f.y-dy*L*.05),P(f.x+dx*L*.36,f.y+dy*L*.36)],w*.9,SHOE)};
+  const leg=(i,col)=>{const{k,f}=J.legs[i];seg(c,[J.hip,k,f],w,col);const a2=Math.atan2(f.x-k.x,f.y-k.y),dx=Math.cos(a2),dy=-Math.sin(a2);seg(c,[P(f.x-dx*L*.05,f.y-dy*L*.05),P(f.x+dx*L*.36,f.y+dy*L*.36)],w*.9,o.shoe||SHOE)};
   const arm=(i,sl,sk)=>{const{e,h}=J.arms[i];seg(c,[J.sh,e],w*.95,sl);seg(c,[e,h],w*.8,sk);dot(c,h.x,h.y,w*.55,sk)};
   if(back){leg(0,PANTS_D);arm(0,o.dark,SKIN_D)}
   if(front){
@@ -1001,6 +1003,198 @@ Object.assign(EV_SKI,{
   selfie:{w:2,dur:[2.4,3.2],say:['셀카 찍자! 김치~','브이~ 찰칵!','인생샷 건졌다','눈밭 배경 최고!'],st:()=>({mode:'selfie'}),over:(c,x,y,s,u)=>drawPhone(c,x,y,s,0,u)}
 });
 EV_SKI.snowman.w=2.5;EV_SKI.snowman.dur=[3.6,5];EV_SKI.snowman.say=['눈사람 만들자!','눈사람 완성~','모자도 씌워 줄게','코는 당근으로!'];
+/* ---------- 카약 ---------- */
+function drawFishShape(c,x,y,s,rot){c.save();c.translate(x,y);c.rotate(rot||0);ell(c,0,0,s*.09,s*.04,'#f39c34');
+  c.fillStyle='#f39c34';c.beginPath();c.moveTo(-s*.07,0);c.lineTo(-s*.14,-s*.045);c.lineTo(-s*.14,s*.045);c.closePath();c.fill();dot(c,s*.05,-s*.01,s*.01,INK);c.restore()}
+function drawDuck(c,x,y,r,col){ell(c,x,y,r*1.2,r*.7,col);dot(c,x+r*.9,y-r*.75,r*.5,col);dot(c,x+r*1.05,y-r*.85,r*.09,INK);
+  c.fillStyle='#f08a24';c.beginPath();c.moveTo(x+r*1.3,y-r*.8);c.lineTo(x+r*1.75,y-r*.68);c.lineTo(x+r*1.3,y-r*.6);c.closePath();c.fill()}
+function drawCroc(c,x,y,s,u,t){
+  let cx=x-s*(1.35+Math.max(0,.3-u)*3),al=1;if(u>.8){cx-=(u-.8)*s*6;al=Math.max(0,1-(u-.8)*5)}
+  c.save();c.globalAlpha=al;const g='#4f7f3a',gd='#3b6a2c';
+  c.strokeStyle=g;c.lineWidth=s*.09;c.lineCap='round';c.beginPath();c.moveTo(cx-s*.45,y+s*.02);c.quadraticCurveTo(cx-s*.75,y+s*.02+Math.sin(t*9)*s*.06,cx-s*1.0,y-s*.02);c.stroke();
+  ell(c,cx,y+s*.02,s*.55,s*.1,g);
+  c.fillStyle=gd;for(let i=0;i<6;i++){const bx=cx-s*.4+i*s*.14;c.beginPath();c.moveTo(bx-s*.04,y-s*.06);c.lineTo(bx,y-s*.12);c.lineTo(bx+s*.04,y-s*.06);c.closePath();c.fill()}
+  const jaw=Math.abs(Math.sin(t*10))*.4;
+  c.save();c.translate(cx+s*.45,y+s*.0);c.fillStyle=g;c.beginPath();c.moveTo(0,s*.02);c.lineTo(s*.48,s*.05);c.lineTo(s*.48,s*.1);c.lineTo(0,s*.1);c.closePath();c.fill();
+  c.rotate(-jaw);c.beginPath();c.moveTo(0,-s*.06);c.lineTo(s*.5,-s*.0);c.lineTo(s*.5,s*.04);c.lineTo(0,s*.04);c.closePath();c.fill();
+  c.fillStyle='#ffffff';for(let i=0;i<5;i++){c.beginPath();c.moveTo(s*(.12+i*.08),s*.04);c.lineTo(s*(.15+i*.08),s*.08);c.lineTo(s*(.18+i*.08),s*.04);c.fill()}
+  c.restore();
+  dot(c,cx+s*.42,y-s*.09,s*.06,g);dot(c,cx+s*.44,y-s*.1,s*.035,'#ffd23f');dot(c,cx+s*.45,y-s*.1,s*.015,INK);
+  c.restore();
+}
+function drawKayakSp(c,s,ph,R,st,t){
+  const m=st.mode||'paddle',hr=s*.26,lean=m==='paddle'?s*.05:0;
+  const hip=P(0,-s*.07),sh=P(s*.03+lean,-s*.36+(m==='cheer'?-s*.02:0));
+  if(st.motor){c.fillStyle='rgba(255,255,255,.85)';for(let i=0;i<7;i++){const k=((t*3)+i/7)%1;dot(c,-s*(.7+k*.7),s*.01+Math.sin(i*2.3)*s*.03,s*(.05-k*.03),'rgba(255,255,255,.85)')}}
+  seg(c,[hip,sh],s*.16,R.col);
+  c.fillStyle='#ffb02e';c.beginPath();c.moveTo(hip.x-s*.07,hip.y-s*.04);c.lineTo(sh.x-s*.07,sh.y+s*.06);c.lineTo(sh.x+s*.06,sh.y+s*.06);c.lineTo(hip.x+s*.07,hip.y-s*.04);c.closePath();c.fill();
+  c.fillStyle=R.col;c.strokeStyle=R.dark;c.lineWidth=Math.max(1.5,s*.012);
+  c.beginPath();c.moveTo(s*.66,-s*.05);c.quadraticCurveTo(0,-s*.13,-s*.66,-s*.05);c.quadraticCurveTo(-s*.32,s*.12,0,s*.11);c.quadraticCurveTo(s*.32,s*.12,s*.66,-s*.05);c.closePath();c.fill();c.stroke();
+  c.strokeStyle='rgba(255,255,255,.75)';c.lineWidth=s*.02;c.beginPath();c.moveTo(-s*.55,-s*.02);c.quadraticCurveTo(0,s*.05,s*.55,-s*.02);c.stroke();
+  ell(c,0,-s*.085,s*.17,s*.035,R.dark);
+  if(st.motor){c.fillStyle='#3a3f45';c.fillRect(-s*.74,-s*.2,s*.13,s*.16);seg(c,[P(-s*.68,-s*.04),P(-s*.68,s*.14)],s*.03,'#3a3f45');
+    ell(c,-s*.68,s*.14,s*.025,s*.06+Math.abs(Math.sin(t*40))*s*.02,'#9aa5ae');c.fillStyle='#e8463a';c.fillRect(-s*.74,-s*.2,s*.13,s*.04)}
+  const arm=(h,col)=>{const e=ik(sh,h,s*.18,s*.18,-1);seg(c,[sh,e,h],s*.065,col);dot(c,h.x,h.y,s*.04,col)};
+  const paddle=(C,th)=>{const d=P(Math.cos(th),Math.sin(th)),L2=s*.5;
+    seg(c,[P(C.x-d.x*L2,C.y-d.y*L2),P(C.x+d.x*L2,C.y+d.y*L2)],s*.028,'#3a3a3a');
+    [1,-1].forEach(k=>ell(c,C.x+d.x*L2*k,C.y+d.y*L2*k,s*.1,s*.04,'#ffd23f',th));
+    arm(P(C.x-d.x*s*.15,C.y-d.y*s*.15),SKIN_D);arm(P(C.x+d.x*s*.15,C.y+d.y*s*.15),SKIN)};
+  if(st.nopaddle||m==='hand'){arm(P(s*.32+Math.cos(ph)*s*.1,-s*.04+Math.sin(ph)*s*.07),SKIN_D);arm(P(s*.3+Math.cos(ph+Math.PI)*s*.1,-s*.04+Math.sin(ph+Math.PI)*s*.07),SKIN)}
+  else if(m==='bail'){const h=P(s*.22,-s*.2+Math.sin(t*10)*s*.12);arm(P(h.x-s*.05,h.y),SKIN_D);arm(h,SKIN);
+    c.fillStyle='#8a96a3';c.beginPath();c.moveTo(h.x-s*.06,h.y-s*.08);c.lineTo(h.x+s*.06,h.y-s*.08);c.lineTo(h.x+s*.045,h.y+s*.02);c.lineTo(h.x-s*.045,h.y+s*.02);c.closePath();c.fill()}
+  else if(m==='cheer')paddle(P(s*.04,-s*.78+Math.sin(t*9)*s*.04),Math.sin(t*9)*.2);
+  else if(m==='still')paddle(P(s*.1,-s*.17),.04);
+  else if(m==='chop')paddle(P(s*.32,-s*.3+Math.abs(Math.sin(t*9))*s*.12),1.15);
+  else paddle(P(s*.16,-s*.27),Math.sin(ph)*.55);
+  if(st.anim&&!st.motor)for(let i=0;i<3;i++){const k=((ph*.4)+i/3)%1;c.globalAlpha=1-k;c.strokeStyle='#ffffff';c.lineWidth=2;c.beginPath();c.moveTo(-s*(.7+k*.35),s*.02);c.lineTo(-s*(.82+k*.35),s*.02);c.stroke()}
+  c.globalAlpha=1;
+  deferHead(c,sh.x+s*.02,sh.y-hr*.85,hr,'helmet');
+}
+function bgKayak(c,L){
+  c.fillStyle='#5c9a4a';c.fillRect(0,0,L.W,L.top);
+  if(L.top>20){c.strokeStyle='#3f7a34';c.lineWidth=2;for(let x=8;x<L.W;x+=22){const h=L.top*(.25+((x*7)%10)/40);c.beginPath();c.moveTo(x,L.top);c.quadraticCurveTo(x+4,L.top-h*.6,x+2,L.top-h);c.stroke();ell(c,x+2,L.top-h,2.5,6,'#7a5530')}}
+  const g=c.createLinearGradient(0,L.top,0,L.H);g.addColorStop(0,'#3ba7b8');g.addColorStop(1,'#1f6f8b');c.fillStyle=g;c.fillRect(0,L.top,L.W,L.H-L.top);
+  c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=2;for(let i=0;i<46;i++){const x=(i*113)%L.W,y=L.top+((i*61)%Math.max(1,L.H-L.top));c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+16,y-5,x+32,y);c.stroke()}
+  if(!L.noLines){const rr=Math.max(2.5,Math.min(5,L.laneH*.11));for(let i=1;i<L.n;i++){const y=L.top+L.laneH*i;for(let x=10,k=0;x<L.W;x+=rr*7,k++)dot(c,x,y,rr,k%2?'#ffffff':'#f08a24')}}
+  startFinish(c,L,'#ffffff');
+}
+const SAY_KAYAK={
+  talk:['팔 아파…','노 젓기 생각보다 힘들다','물 위라 시원하다~','배고파…','여기 물고기 많대','선생님 저 잘하고 있죠?','구명조끼가 꽉 껴','흔들흔들 무서워','강바람 좋다~','카약 처음 타 봐','엉덩이가 젖었어','노가 너무 무거워','하늘에 구름 봐~','물에 내 얼굴이 비친다'],
+  croc:['악어다!!','으아아 노 저어!','나 맛없어 악어야!','악어가 입을 벌렸어!'],
+  freeze:['물이 얼어 버렸어!','카약이 꼼짝을 안 해!','으으 추워…'],freeze2:['얼음 깨기 성공!','다시 출발~'],
+  motor:['카약이 모터보트로 변신!','부릉부릉~ 슝!','이게 반칙인가?','노 안 저어도 된다~'],
+  roll:['뒤집힌다~!','으앗 꼬르륵!'],roll2:['에스키모 롤 성공!','한 바퀴 돌고 왔다!'],
+  back:['반대로 저었네?','앗, 모자 떨어뜨렸다!','뒤로 가는 중…','방향이 헷갈려'],
+  lost:['노를 놓쳤어!','손으로 젓자 영차영차','노야 돌아와~'],
+  fish:['물고기가 뛰어들었어!','앗 차가워 물고기다!'],fish2:['안녕 물고기야~ 놓아줄게','잘 가 물고기야!'],
+  ducks:['오리 가족 먼저 가세요~','꽥꽥 귀여워!','아기 오리 따라가자'],
+  whirl:['소용돌이다~!','빙글빙글 어지러워','카약이 팽이가 됐어'],
+  rapids:['급류다~ 꽉 잡아!','롤러코스터 같아!','우와아아~!'],
+  leak:['배에 물이 샌다!','퍼내자 퍼내자!','구멍 막아야 해!'],
+  wave:['얘들아 안녕~!','카약 최고!','사진 찍어 줘!','노 들고 만세!'],
+  sprint:['전속력!','노 젓기 파워!','팔이 프로펠러야!'],
+  nap:['둥둥 낮잠…','물결이 자장가 같아','5분만 떠 있을게']
+};
+const EV_KAYAK={
+  talk:{w:3,dur:[2.4,3.4],say:SAY_KAYAK.talk,st:()=>({mode:'still',fx:'sweat'})},
+  nap:{w:1.5,dur:[2.8,3.8],say:SAY_KAYAK.nap,st:()=>({mode:'still',fx:'zzz'})},
+  wave:{w:2,dur:[1.8,2.6],say:SAY_KAYAK.wave,st:()=>({mode:'cheer'})},
+  sprint:{w:2,dur:[1.4,2],amt:[.08,.12],say:SAY_KAYAK.sprint,pos:lin,st:()=>({mode:'paddle',anim:true,fx:'splash'})},
+  croc:{w:2.5,dur:[1.6,2.4],amt:[.13,.19],say:SAY_KAYAK.croc,pos:(u,e)=>e.amt*ease(u),st:()=>({mode:'paddle',anim:true,fx:'sweat'}),over:(c,x,y,s,u,tl)=>drawCroc(c,x,y,s,u,tl)},
+  freeze:{w:2.5,dur:[3.6,4.6],amt:[.02,.03],say:SAY_KAYAK.freeze,say2:SAY_KAYAK.freeze2,sayAt:.72,pos:(u,e)=>e.amt*ease(span(u,.75,1)),
+    st:(u,e,tl)=>u<.5?{mode:'still',rot:Math.sin(tl*40)*.015,fx:'sweat',noWater:true}:u<.72?{mode:'chop',noWater:true}:{mode:'paddle',anim:true,noWater:u<.8},
+    under:(c,x,y,s,u)=>{const k=1-ease(span(u,.7,.85));if(k<=0)return;c.save();c.globalAlpha=k;c.fillStyle='#e6f6ff';c.strokeStyle='#9cc8e4';c.lineWidth=2;c.beginPath();
+      for(let i=0;i<14;i++){const a=i/14*Math.PI*2,rr=1+((i*37)%7)/25;c.lineTo(x+Math.cos(a)*s*.95*rr,y+s*.05+Math.sin(a)*s*.13*rr)}c.closePath();c.fill();c.stroke();
+      if(u>.5){c.strokeStyle='#5c8fb3';c.lineWidth=1.5;c.beginPath();for(let i=0;i<6;i++){const a=i/6*Math.PI*2+.3;c.moveTo(x+s*.2,y+s*.05);c.lineTo(x+s*.2+Math.cos(a)*s*.6*span(u,.5,.7),y+s*.05+Math.sin(a)*s*.1*span(u,.5,.7))}c.stroke()}
+      c.restore()}},
+  motor:{w:2.5,dur:[1.6,2.4],amt:[.14,.2],say:SAY_KAYAK.motor,pos:(u,e)=>e.amt*ease(u),st:u=>({mode:'cheer',motor:true,rot:-.08*Math.min(1,Math.sin(Math.PI*u)*3),fx:'splash'})},
+  roll:{w:1.5,dur:[2.2,3],say:SAY_KAYAK.roll,say2:SAY_KAYAK.roll2,sayAt:.7,st:u=>{const v=span(u,.15,.65);return{mode:'still',rot:ease(v)*Math.PI*2,dy:.06*Math.sin(Math.PI*v),fx:(v>.3&&v<.9)?'splash':null}}},
+  back:{w:2,dur:[2.4,3.2],amt:[.04,.07],say:SAY_KAYAK.back,pos:(u,e)=>-e.amt*ease(span(u,0,.65)),st:u=>({mode:u<.65?'paddle':'still',anim:u<.65,dir:u<.65?-1:1})},
+  lost:{w:1.5,dur:[2.8,3.6],amt:[.012,.02],say:SAY_KAYAK.lost,pos:lin,st:()=>({mode:'hand',anim:true,nopaddle:true,fx:'sweat'}),
+    over:(c,x,y,s,u)=>{const px=x-s*(.5+u*1.3),py=y+Math.sin(u*20)*s*.02;c.save();c.globalAlpha=1-span(u,.75,1);seg(c,[P(px-s*.45,py),P(px+s*.45,py-s*.03)],s*.028,'#3a3a3a');ell(c,px-s*.45,py,s*.1,s*.04,'#ffd23f');ell(c,px+s*.45,py-s*.03,s*.1,s*.04,'#ffd23f');c.restore()}},
+  fish:{w:2,dur:[3,4],say:SAY_KAYAK.fish,say2:SAY_KAYAK.fish2,sayAt:.7,st:()=>({mode:'still'}),
+    over:(c,x,y,s,u,tl)=>{const v=span(u,.08,.45),v2=span(u,.75,.95);
+      if(v>0&&v<1)drawFishShape(c,lerp(x+s*1.0,x+s*.05,v),y-s*.1-Math.sin(Math.PI*v)*s*.8,s,Math.PI+(v-.5)*2.2);
+      else if(u>=.45&&u<.75)drawFishShape(c,x-s*.25,y-s*.15,s,Math.sin(tl*20)*.6);
+      else if(v2>0&&v2<1)drawFishShape(c,lerp(x-s*.25,x-s*1.0,v2),y-s*.15-Math.sin(Math.PI*v2)*s*.6,s,Math.PI+(v2-.5)*2)}},
+  ducks:{w:2,dur:[2.6,3.6],amt:[.012,.02],say:SAY_KAYAK.ducks,pos:lin,st:()=>({mode:'paddle',anim:true}),
+    over:(c,x,y,s,u,tl)=>{for(let i=0;i<4;i++){const dx=x+s*(.9+i*.2)+u*s*.3,dy=y-s*.03+Math.sin(tl*5+i)*s*.015;drawDuck(c,dx,dy,i?s*.045:s*.075,i?'#ffd84a':'#a0673a')}}},
+  whirl:{w:1.5,dur:[2.2,3],say:SAY_KAYAK.whirl,
+    st:(u,e,tl)=>{const c=Math.cos(tl*9);return{mode:'still',sx:Math.abs(c)<.15?(c<0?-.15:.15):c,fx:'stars'}},
+    under:(c,x,y,s,u,tl)=>{c.save();c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=2;c.setLineDash([10,8]);c.lineDashOffset=-tl*60;for(let k=1;k<=4;k++){c.beginPath();c.ellipse(x,y+s*.04,s*.24*k,s*.05*k,0,0,Math.PI*2);c.stroke()}c.restore()}},
+  rapids:{w:2,dur:[1.6,2.4],amt:[.09,.13],say:SAY_KAYAK.rapids,pos:lin,st:u=>({mode:'cheer',dy:-Math.abs(Math.sin(u*Math.PI*5))*.18,rot:Math.sin(u*Math.PI*5)*.15,fx:'splash'})},
+  leak:{w:1.5,dur:[2.8,3.8],say:SAY_KAYAK.leak,st:u=>({mode:'bail',sink:.1*Math.sin(Math.PI*u),fx:'splash'})}
+};
+
+/* ---------- 스케이트 ---------- */
+function drawZamboni(c,x,y,s,u){const zx=x+s*(.9+u*2.6),al=1-span(u,.8,1);if(al<=0)return;c.save();c.globalAlpha=al;
+  c.fillStyle='rgba(255,255,255,.8)';c.fillRect(x,y-s*.03,Math.max(0,zx-s*.3-x),s*.05);
+  c.fillStyle='#2f6db5';roundRect(c,zx-s*.35,y-s*.48,s*.7,s*.38,s*.05);c.fill();
+  c.fillStyle='#bfe3ff';c.fillRect(zx-s*.05,y-s*.68,s*.28,s*.2);c.strokeStyle='#2f6db5';c.lineWidth=3;c.strokeRect(zx-s*.05,y-s*.68,s*.28,s*.2);
+  c.fillStyle='#ffffff';c.fillRect(zx-s*.3,y-s*.36,s*.4,s*.08);
+  c.fillStyle='#8a96a3';c.fillRect(zx+s*.33,y-s*.22,s*.08,s*.2);
+  dot(c,zx-s*.2,y-s*.08,s*.08,'#1d1d1d');dot(c,zx+s*.2,y-s*.08,s*.08,'#1d1d1d');c.restore()}
+function drawMug(c,x,y,s,t){const mx=x+s*.27,my=y-s*.62;c.strokeStyle='#c2366b';c.lineWidth=2.5;c.beginPath();c.arc(mx+s*.06,my,s*.035,-Math.PI/2,Math.PI/2);c.stroke();
+  c.fillStyle='#ffffff';c.fillRect(mx-s*.05,my-s*.06,s*.11,s*.12);c.strokeRect(mx-s*.05,my-s*.06,s*.11,s*.12);ell(c,mx,my-s*.055,s*.045,s*.01,'#6b3f1d');
+  c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=2;for(let i=0;i<2;i++){const k=((t*.8)+i*.5)%1;c.globalAlpha=1-k;c.beginPath();c.moveTo(mx-s*.02+i*s*.04,my-s*.08-k*s*.15);c.quadraticCurveTo(mx+s*.02+i*s*.04,my-s*.13-k*s*.15,mx-s*.01+i*s*.04,my-s*.18-k*s*.15);c.stroke()}c.globalAlpha=1}
+function drawFan(c,x,y,s,u,tl){
+  const fx=x+s*(u<.2?lerp(1.7,.78,ease(span(u,0,.2))):u>.88?lerp(.78,2.2,span(u,.88,1)):.78);
+  const J=humanPose(0,0,s*.85,{mode:u<.62?'reach':'cheer',t:tl,ph:tl*9,headR:s*.2});
+  c.save();c.translate(fx,y);c.scale(-1,1);renderHuman(c,J,{col:'#ff7eb6',dark:'#c2366b',hat:'band',R:{col:'#7a5cff',dark:'#5a3ccf'}});
+  if(u<.62){const h=J.arms[1].h;c.fillStyle='#ffffff';c.strokeStyle='#9aa5ae';c.lineWidth=1.5;c.fillRect(h.x-s*.02,h.y-s*.16,s*.14,s*.18);c.strokeRect(h.x-s*.02,h.y-s*.16,s*.14,s*.18);
+    if(u>.3){c.strokeStyle='#2f6db5';c.lineWidth=2;c.beginPath();const k=span(u,.3,.55);for(let i=0;i<=8*k;i++){c.lineTo(h.x+s*(.01+i*.012),h.y-s*.08+Math.sin(i*2.2)*s*.025)}c.stroke()}}
+  c.restore();
+  if(u>.04&&u<.32&&R)drawBubble(c,'사인해 주세요!',fx,y-s*.85*1.5,R.fs,R.W);
+}
+function drawPuck(c,x,y,s,u){if(u<=0||u>=1)return;const px=x+s*(2.2-3.4*u),py=y-s*.62;ell(c,px,py,s*.07,s*.03,'#111');
+  c.strokeStyle='rgba(20,33,43,.5)';c.lineWidth=2;for(let i=0;i<3;i++){c.beginPath();c.moveTo(px+s*(.1+i*.04),py-s*.03+i*s*.03);c.lineTo(px+s*(.25+i*.04),py-s*.03+i*s*.03);c.stroke()}}
+function drawSkateSp(c,s,ph,R,st,t){
+  if(st.swim){drawSwimSp(c,s,ph,R,{mode:'swim',anim:true},t);return}
+  const J=humanPose(0,0,s,{mode:st.mode||'skate',ph,t,headR:s*.29,torso:s*.2});
+  const blade=i=>{const{k,f}=J.legs[i];const a2=Math.atan2(f.x-k.x,f.y-k.y),d=P(Math.cos(a2),-Math.sin(a2)),n=P(Math.sin(a2),Math.cos(a2)),L=J.L,o=s*.05;
+    const a=P(f.x-d.x*L*.12+n.x*o,f.y-d.y*L*.12+n.y*o),b=P(f.x+d.x*L*.5+n.x*o,f.y+d.y*L*.5+n.y*o);
+    seg(c,[P(f.x+n.x*o*.2,f.y+n.y*o*.2),P(a.x*.5+b.x*.5-d.x*L*.15,a.y*.5+b.y*.5-d.y*L*.15)],2,'#9aa5ae');seg(c,[a,b],Math.max(2,s*.02),'#c9d3da')};
+  blade(0);
+  const o={col:R.col,dark:R.dark,hat:'beanie',R,defer:true,shoe:'#f4f4f4'};
+  renderHuman(c,J,o,'back');renderHuman(c,J,o,'front');blade(1);
+}
+function bgSkate(c,L){
+  c.fillStyle='#ffffff';c.fillRect(0,0,L.W,L.top);
+  if(L.top>14){const pal=['#ffd6e0','#d6ecff','#fff1c2','#d9f5e3'];for(let x=0,i=0;x<L.W;x+=90,i++){c.fillStyle=pal[i%4];c.fillRect(x+6,L.top*.25,78,L.top*.5)}
+    c.fillStyle='#2f6db5';c.fillRect(0,L.top-8,L.W,4);c.fillStyle='#d63a2f';c.fillRect(0,L.top-4,L.W,4)}
+  const g=c.createLinearGradient(0,L.top,0,L.H);g.addColorStop(0,'#f6fcff');g.addColorStop(1,'#d8ecf7');c.fillStyle=g;c.fillRect(0,L.top,L.W,L.H-L.top);
+  c.strokeStyle='rgba(150,180,200,.35)';c.lineWidth=1.5;for(let i=0;i<60;i++){const x=(i*131)%L.W,y=L.top+((i*71)%Math.max(1,L.H-L.top));c.beginPath();c.moveTo(x,y);c.quadraticCurveTo(x+30,y-4-(i%3)*2,x+60+(i%4)*10,y+(i%2)*3);c.stroke()}
+  laneLines(c,L,'rgba(80,140,190,.35)',1.5,[14,10]);
+  if(!L.noLines){c.fillStyle='#d63a2f';c.fillRect(L.W*.5-2,L.top,4,L.H-L.top);dot(c,L.W*.5,L.top+(L.H-L.top)/2,Math.min(26,(L.H-L.top)*.06),'rgba(214,58,47,.25)')}
+  startFinish(c,L,'#d63a2f');
+}
+const SAY_SKATE={
+  talk:['얼음이 너무 미끄러워','발목이 후들후들','손이 꽁꽁 얼었어','코가 시려','핫초코 마시고 싶다','스케이트 날이 무뎌졌나?','엉덩이가 차가워','음악 틀어 주세요~','넘어질 것 같아…','펭귄은 어떻게 걷지?','입김이 하얗다~','피겨 선수가 꿈이야','장갑을 두고 왔어','빙판 위에선 다 천천히!'],
+  sit:['얼음 위에 앉으니 차가워','잠깐 쉬었다 갈래','다리가 후들후들'],
+  lie:['얼음 침대 차갑다…','천장 조명 예쁘다','쿨쿨… 얼음 낮잠'],
+  slip:['으아 미끄러진다~','균형! 균형!','팔 휘적휘적~'],slip2:['꽈당! 엉덩방아…','아야야 엉덩이!','괜찮아, 다시 일어나!'],
+  crack:['얼음이 깨졌어!','으앗 빠진다!'],crack2:['으으 추워… 다시 출발!','젖은 채로 간다!'],
+  water:['얼음이 물로 변했어?!','어? 발이 빠져!'],water2:['수영으로 가자!','스케이트 신고 수영 중~','첨벙첨벙!'],
+  axel:['트리플 악셀!','빙그르르 점프~','회전 들어간다!'],axel2:['완벽한 착지!','관중석 박수 짝짝짝!','10점 만점에 10점!'],
+  spin:['제자리 스핀~','빙글빙글 팽이처럼!','어지러워도 멋있게!'],
+  spiral:['스파이럴~ 우아하게','발레리나 같지?','한 발로 쭉~'],
+  fan:['팬이 왔다! 사인해 줄게~','내 팬이라고?','이름 멋지게 써 줄게'],fan2:['같이 사진도 찰칵!','응원 고마워~'],
+  back:['뒤로 타기 연습!','앗 반대 방향이다!','뒤로도 잘 타지?'],
+  zamboni:['정빙차 따라가자~','반짝반짝 새 얼음!','미끌미끌 더 빠르다!'],
+  belly:['배로 미끄럼 슝~','펭귄처럼 쭉~','이게 더 빠른데?'],
+  penguin:['펭귄이랑 같이 타요','펭귄도 스케이트 잘 타네?','펭귄 선수 등장!'],
+  puck:['하키 퍽이다! 숙여!','퍽이 날아온다!'],puck2:['휴, 살았다','하키장은 저쪽이에요~'],
+  sprint:['쇼트트랙 선수처럼!','코너링 간다!','스피드 업!'],
+  cocoa:['핫초코 한 잔~','따뜻하다~','후후 불어 마셔야지']
+};
+const EV_SKATE=Object.assign({},HUM,{
+  talk:Object.assign({},HUM.talk,{say:SAY_SKATE.talk}),
+  sit:Object.assign({},HUM.sit,{say:SAY_SKATE.sit,w:1.5}),
+  lie:Object.assign({},HUM.lie,{say:SAY_SKATE.lie,w:1.5}),
+  back:{w:2,dur:[2.4,3.2],amt:[.04,.07],say:SAY_SKATE.back,init:e=>{e.face=Math.random()<.5?-1:1},pos:(u,e)=>-e.amt*ease(span(u,0,.65)),
+    st:(u,e)=>({mode:u<.65?'skate':'stand',anim:u<.65,dir:u<.65?e.face:1})},
+  slip:{w:3,dur:[2.2,3],amt:[.01,.02],say:SAY_SKATE.slip,say2:SAY_SKATE.slip2,sayAt:.32,pos:(u,e)=>e.amt*ease(span(u,0,.3)),
+    st:(u,e,tl)=>{if(u<.3)return{mode:'cheer',rot:Math.sin(tl*25)*.15,pivot:-.1};const k=ease(span(u,.3,.42))*(1-ease(span(u,.8,1)));return{mode:'sit',rot:-.5*k,dy:-.02*k,fx:(u>.35&&u<.8)?'stars':null}}},
+  crack:{w:2,dur:[3.6,4.8],say:SAY_SKATE.crack,say2:SAY_SKATE.crack2,sayAt:.72,st:u=>{const k=ease(span(u,0,.12))*(1-ease(span(u,.6,.85)));return{mode:k>.3?'climb':'stand',sink:.6*k+Math.sin(u*30)*.02*k,fx:u<.3?'splash':null}},props:(e,q,t0)=>[{type:'icehole',q,from:t0}]},
+  water:{w:2.5,dur:[3.6,4.6],amt:[.04,.07],say:SAY_SKATE.water,say2:SAY_SKATE.water2,sayAt:.3,pos:(u,e)=>e.amt*span(u,.12,.88),
+    st:u=>u<.12?{mode:'cheer',fx:'splash'}:u<.88?{swim:true,anim:true}:{mode:'cheer',fx:'splash'},
+    under:(c,x,y,s,u)=>{const k=ease(span(u,0,.12))*(1-ease(span(u,.88,1)));if(k<=0)return;ell(c,x,y+s*.02,s*1.0*k,s*.14*k,'#3fb0e6');ell(c,x-s*.2,y,s*.4*k,s*.03*k,'rgba(255,255,255,.6)')},
+    over:(c,x,y,s,u,tl)=>{if(u>.12&&u<.88)waterOver(c,x,y,s,tl)}},
+  axel:{w:2.5,dur:[2,2.8],amt:[.03,.05],say:SAY_SKATE.axel,say2:SAY_SKATE.axel2,sayAt:.8,pos:lin,
+    st:u=>{const v=span(u,.1,.75);const c=Math.cos(v*Math.PI*6);return{mode:v>0&&v<1?'stand':'cheer',dy:-Math.sin(Math.PI*v)*.8,sx:v>0&&v<1?(Math.abs(c)<.15?(c<0?-.15:.15):c):0,fx:u>.8?'music':null}}},
+  spin:{w:2,dur:[2,2.8],say:SAY_SKATE.spin,st:(u,e,tl)=>{const c=Math.cos(tl*14);return{mode:'stretch',sx:Math.abs(c)<.15?(c<0?-.15:.15):c,fx:'music'}}},
+  spiral:{w:2,dur:[2,2.8],amt:[.05,.08],say:SAY_SKATE.spiral,pos:lin,st:()=>({mode:'spiral'})},
+  fan:{w:2,dur:[3.6,4.6],say:SAY_SKATE.fan,say2:SAY_SKATE.fan2,sayAt:.62,st:u=>({mode:u<.62?'reach':'selfie'}),
+    over:(c,x,y,s,u,tl)=>{drawFan(c,x,y,s,u,tl);if(u>.62)drawPhone(c,x,y,s,0,(u-.62)*2)}},
+  zamboni:{w:1.5,dur:[2,2.8],amt:[.08,.11],say:SAY_SKATE.zamboni,pos:lin,st:()=>({mode:'skate',anim:true,fx:'dust'}),under:(c,x,y,s,u)=>drawZamboni(c,x,y,s,u)},
+  belly:{w:2,dur:[1.8,2.6],amt:[.06,.09],say:SAY_SKATE.belly,pos:lin,st:u=>{const k=ease(span(u,0,.15))*(1-ease(span(u,.85,1)));return{mode:'stand',rot:1.45*k,dy:-.06*k,fx:'dust'}}},
+  penguin:{w:1.5,dur:[2.4,3.2],amt:[.03,.05],say:SAY_SKATE.penguin,pos:lin,st:()=>({mode:'skate',anim:true}),over:(c,x,y,s,u,tl)=>drawPenguin(c,x,y,s,tl)},
+  puck:{w:1.5,dur:[1.8,2.4],say:SAY_SKATE.puck,say2:SAY_SKATE.puck2,sayAt:.7,st:u=>({mode:(u>.2&&u<.7)?'crouch':'stand',fx:u>.2&&u<.7?'sweat':null}),over:(c,x,y,s,u)=>drawPuck(c,x,y,s,span(u,.15,.75))},
+  sprint:{w:2,dur:[1.4,2],amt:[.09,.13],say:SAY_SKATE.sprint,pos:lin,st:()=>({mode:'skate',anim:true,fx:'dust'})},
+  cocoa:{w:1.5,dur:[2.2,3],say:SAY_SKATE.cocoa,st:()=>({mode:'stand'}),over:(c,x,y,s,u,tl)=>drawMug(c,x,y,s,tl)}
+});
+delete EV_SKATE.fall;
+
 /* ---------- 종목 ---------- */
 const SPORTS={
   run:{name:'달리기',bar:'달리기',wr:.6,stride:.30,draw:drawRunSp,bg:bgRun,ev:EV_RUN,mv:'run',
@@ -1014,7 +1208,13 @@ const SPORTS={
   swim:{name:'수영',bar:'수영 경기',wr:1.25,stride:.55,draw:drawSwimSp,bg:bgSwim,ev:EV_SWIM,mv:'swim',strokes:['swim','swim','swim','backstroke','fly'],hRatio:.7,base:.6,afterLane:waterOver,
     pre:()=>({mode:'tread'}),done:k=>({mode:k<2.5?'cheer':'tread'})}
 };
-const SPORT_ORDER=['run','horse','bike','ski','swim'];
+function kayakWater(c,x,fy,s,t){c.save();const g=c.createLinearGradient(x-s*.85,0,x+s*.85,0);g.addColorStop(0,'rgba(36,128,152,0)');g.addColorStop(.15,'rgba(36,128,152,.55)');g.addColorStop(.85,'rgba(36,128,152,.55)');g.addColorStop(1,'rgba(36,128,152,0)');
+  c.fillStyle=g;c.beginPath();c.moveTo(x-s*.85,fy+s*.03);for(let i=0;i<=10;i++){const xx=x-s*.85+s*1.7*i/10;c.lineTo(xx,fy+s*.025+Math.sin(t*4+xx*.05)*s*.012)}c.lineTo(x+s*.85,fy+s*.13);c.lineTo(x-s*.85,fy+s*.13);c.closePath();c.fill();c.restore()}
+SPORTS.kayak={name:'카약',bar:'카약 경주',wr:1.35,stride:.6,draw:drawKayakSp,bg:bgKayak,ev:EV_KAYAK,mv:'paddle',hRatio:.95,base:.66,afterLane:kayakWater,
+  pre:()=>({mode:'still'}),done:k=>({mode:k<2.5?'cheer':'still'})};
+SPORTS.skate={name:'스케이트',bar:'스케이트 경주',wr:.95,stride:.5,draw:drawSkateSp,bg:bgSkate,ev:EV_SKATE,mv:'skate',
+  pre:()=>({mode:'stand'}),done:k=>({mode:k<2.5?'cheer':'stand'})};
+const SPORT_ORDER=['run','horse','bike','ski','swim','kayak','skate'];
 const SIZE_MULT={normal:2.6,big:3.5,huge:4.5};
 
 /* ---------- 경주 계획: 정해진 도착 시간에 맞춰 이벤트를 끼워 넣음 ---------- */
@@ -1321,7 +1521,7 @@ function frame(now){
       ctx.restore();
     }
     if(st.ev&&st.ev.def.over)st.ev.def.over(ctx,x,fy,s,st.u,st.tl,X(st.p0));
-    if(sp.afterLane&&!st.hide)sp.afterLane(ctx,x,fy,s,t);
+    if(sp.afterLane&&!st.hide&&!st.noWater)sp.afterLane(ctx,x,fy,s,t);
   });
   flushHeads(ctx);
   ctx.setTransform(DPR,0,0,DPR,0,0);
