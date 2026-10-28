@@ -1,3 +1,4 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
 <title>달려라 번호뽑기</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,6 +151,16 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
 .result-actions button.go{background:#f0641c;border-color:#f0641c;color:#fff}
 .result-actions button.quiet{border-color:transparent;background:none;color:#8a6f5d;text-decoration:underline;font-weight:700}
 
+.music-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.music-row .seg{flex:0 0 auto}
+.music-row .seg button{min-width:72px}
+.vol{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;flex:1 1 180px;min-width:0}
+.vol input{flex:1 1 auto;min-width:0;accent-color:var(--accent)}
+#musicNote.warn{color:var(--danger)}
+.credits{color:var(--muted);font-size:13px}
+.credits summary{cursor:pointer;font-weight:700;width:max-content}
+.credits ul{margin:8px 0;padding-left:18px;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+.credits p{margin:0;overflow-wrap:anywhere}
 @media (prefers-reduced-motion: reduce){.result-card{animation:none}.toast{transition:none}}
 </style>
 
@@ -277,6 +288,18 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
         <p class="hint">최근에 뽑힌 학생은 이번에 되도록 뽑히지 않아요. 출전 학생이 모자라면 다시 뽑힐 수 있어요.</p>
       </div>
 
+      <div class="field">
+        <span class="flabel">배경음악</span>
+        <div class="music-row">
+          <div class="seg" id="musicSeg">
+            <button type="button" data-music="on">켜기</button>
+            <button type="button" data-music="off">끄기</button>
+          </div>
+          <label class="vol" for="musicVol"><span>음량</span><input type="range" id="musicVol" min="0" max="100" step="5"></label>
+        </div>
+        <p class="hint" id="musicNote">종목마다 다른 음악이 나와요. ‘꼴등이 주인공’일 때는 살금살금 음악이 나와요.</p>
+      </div>
+
       <button class="start" id="btnStart" type="button">출발선에 서기</button>
       <p class="start-note" id="startNote"></p>
     </section>
@@ -294,12 +317,20 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
       <ul class="hist" id="histList"></ul>
     </section>
   </main>
+  <footer class="credits">
+    <details>
+      <summary>음악 출처</summary>
+      <ul id="creditList"></ul>
+      <p>모든 곡은 Creative Commons 저작자표시 4.0 라이선스(https://creativecommons.org/licenses/by/4.0/)를 따릅니다.</p>
+    </details>
+  </footer>
 </div>
 
 <div class="race" id="raceView" hidden>
   <div class="race-bar">
     <h3 id="raceTitle"></h3>
     <span class="info" id="raceInfo"></span>
+    <button type="button" id="btnMusic"></button>
     <button type="button" id="btnSound"></button>
     <button type="button" id="btnFull">전체 화면</button>
     <button type="button" id="btnStop">그만하기</button>
@@ -1428,6 +1459,51 @@ function beep(f,d,v){if(!store.sound||!actx)return;try{const o=actx.createOscill
 function soundLabel(){$('#btnSound').textContent=store.sound?'소리 켬':'소리 끔'}
 $('#btnSound').onclick=()=>{store.sound=!store.sound;ensureAudio();soundLabel();persistSoon()};
 
+/* ---------- 배경음악 (Kevin MacLeod, incompetech.com, CC BY 4.0) ---------- */
+const TRACKS={run:'Run Amok',horse:'Meatball Parade',bike:'Pixel Peeker Polka - faster',ski:'Fluffing a Duck',kayak:'Beach Bum',skate:'Faster Does It',last:'Sneaky Snitch',random:'Monkeys Spinning Monkeys',wait:'Carefree'};
+const TRACK_FOR={run:'달리기',horse:'승마',bike:'자전거',ski:'크로스컨트리',kayak:'카약',skate:'스케이트',last:'꼴등이 주인공',random:'수영 · 기본',wait:'시작 전 대기'};
+if(store.musicOn===undefined)store.musicOn=true;
+if(typeof store.musicVol!=='number')store.musicVol=.5;
+const bgm=new Audio();bgm.loop=true;bgm.preload='auto';
+let bgmKey=null,bgmTry=0,bgmUnlocked=false,fadeT=0;const musicMissing=new Set();
+function trackUrls(key){const t=TRACKS[key];return['music/'+encodeURIComponent(t)+'.mp3','music/'+t.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.mp3']}
+function setVol(v){try{bgm.volume=Math.max(0,Math.min(1,v))}catch(e){}}
+function fadeTo(v,ms,done){clearInterval(fadeT);const from=bgm.volume,t0=performance.now();fadeT=setInterval(()=>{const k=Math.min(1,(performance.now()-t0)/ms);setVol(from+(v-from)*k);if(k>=1){clearInterval(fadeT);if(done)done()}},40)}
+function loadTry(){
+  const urls=trackUrls(bgmKey);
+  if(bgmTry>=urls.length){musicMissing.add(bgmKey);
+    if(bgmKey!=='random'&&bgmKey!=='wait'&&!musicMissing.has('random')){bgmKey='random';bgmTry=0;loadTry()}
+    updateMusicUI();return}
+  bgm.src=urls[bgmTry];setVol(0);
+  const pr=bgm.play();if(pr&&pr.catch)pr.catch(()=>{});
+  fadeTo(store.musicVol,700);
+}
+bgm.addEventListener('error',()=>{if(!bgmKey)return;bgmTry++;loadTry()});
+bgm.addEventListener('playing',()=>{musicMissing.delete(bgmKey);updateMusicUI()});
+function playMusic(key){
+  if(!store.musicOn||!bgmUnlocked){bgmKey=null;if(!store.musicOn)bgm.pause();return}
+  if(musicMissing.has(key)&&key!=='wait'&&key!=='random'&&!musicMissing.has('random'))key='random';
+  if(musicMissing.has(key))return;
+  if(bgmKey===key&&!bgm.paused){fadeTo(store.musicVol,400);return}
+  bgmKey=key;bgmTry=0;loadTry();
+}
+function stopMusic(ms){const k=bgmKey;bgmKey=null;fadeTo(0,ms||500,()=>{if(!bgmKey)bgm.pause()});return k}
+function sceneMusic(){if(R&&R.state!=='done')playMusic(R.pick==='last'?'last':(TRACKS[R.sport]?R.sport:'random'));else if(!R)playMusic('wait')}
+function updateMusicUI(){
+  document.querySelectorAll('#musicSeg button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.music==='on')===store.musicOn)));
+  const v=$('#musicVol');if(document.activeElement!==v)v.value=Math.round(store.musicVol*100);v.disabled=!store.musicOn;
+  const n=$('#musicNote');
+  if(store.musicOn&&musicMissing.size&&musicMissing.size>=2){n.textContent='음악 파일을 찾지 못했어요. 이 페이지와 같은 곳의 music 폴더에 MP3 파일을 올리면 재생돼요. 그동안은 효과음만 나와요.';n.classList.add('warn')}
+  else{n.textContent='종목마다 다른 음악이 나와요. ‘꼴등이 주인공’일 때는 살금살금 음악이 나와요.';n.classList.remove('warn')}
+  const b=$('#btnMusic');if(b)b.textContent=store.musicOn?'음악 켬':'음악 끔';
+}
+document.addEventListener('click',e=>{const b=e.target.closest('#musicSeg button');if(!b)return;store.musicOn=b.dataset.music==='on';persistSoon();if(store.musicOn){bgmUnlocked=true;sceneMusic()}else stopMusic(300);updateMusicUI()});
+$('#musicVol').addEventListener('input',e=>{store.musicVol=Number(e.target.value)/100;clearInterval(fadeT);setVol(store.musicVol);persistSoon()});
+$('#btnMusic').onclick=()=>{store.musicOn=!store.musicOn;persistSoon();if(store.musicOn){bgmUnlocked=true;sceneMusic()}else stopMusic(300);updateMusicUI()};
+function unlockMusic(){if(bgmUnlocked)return;bgmUnlocked=true;sceneMusic()}
+['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,unlockMusic,{once:true,capture:true}));
+(function(){const ul=$('#creditList');Object.keys(TRACKS).forEach(k=>{const li=document.createElement('li');li.textContent='“'+TRACKS[k]+'” Kevin MacLeod (incompetech.com) · '+TRACK_FOR[k];ul.append(li)})})();
+
 /* ---------- 뽑기 ---------- */
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function decide(c,parts){
@@ -1481,7 +1557,8 @@ function startRace(){
   R={cls:c.id,sport:c.sport,size:c.size,pick:c.pick,racers,dec,state:'count',t0:performance.now(),finishCount:0,lastCount:4,maxT:Math.max(...times),confetti:[],recorded:false,lastSec:-1};
   $('#raceTitle').textContent=SPORTS[c.sport].bar+' · '+c.name;
   $('#result').hidden=true;$('#raceView').hidden=false;document.body.style.overflow='hidden';
-  stopTiles();soundLabel();layoutRace();updateInfo(0);
+  stopTiles();soundLabel();updateMusicUI();layoutRace();updateInfo(0);
+  bgmUnlocked=true;sceneMusic();
   cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);
 }
 function updateInfo(t){
@@ -1570,6 +1647,7 @@ function finishRace(){
   }
   if(!reduce){const now=performance.now();for(let i=0;i<140;i++)R.confetti.push({x:R.W*Math.random(),y:-20-Math.random()*R.H*.3,vx:(Math.random()-.5)*120,vy:Math.random()*80,r:Math.random()*6,vr:(Math.random()-.5)*10,c:i%6,t:now})}
   beep(660,.12,.07);setTimeout(()=>beep(990,.3,.07),130);
+  if(bgmKey)fadeTo(store.musicVol*.35,800);
   showResult();
 }
 function showResult(){
@@ -1607,7 +1685,7 @@ function showResult(){
 function closeRace(){
   cancelAnimationFrame(raf);R=null;$('#raceView').hidden=true;document.body.style.overflow='';
   try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}
-  render();startTiles();
+  render();startTiles();sceneMusic();
 }
 $('#btnStart').onclick=startRace;
 $('#btnStop').onclick=closeRace;
@@ -1618,7 +1696,9 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&R&&!document.fullsc
 
 /* ---------- 시작 ---------- */
 if(!store.currentId||!store.classes[store.currentId])store.currentId=store.order[0]||null;
-buildSportTiles();render();persist(true);startTiles();
+buildSportTiles();render();persist(true);startTiles();updateMusicUI();
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{drawTiles(0)});
 })();
 </script>
+
+</body></html>
