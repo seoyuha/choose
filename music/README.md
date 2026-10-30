@@ -11,9 +11,8 @@
 | `Fluffing a Duck.mp3` | 크로스컨트리 |
 | `Beach Bum.mp3` | 카약 |
 | `Faster Does It.mp3` | 스케이트 |
-| `Sneaky Snitch.mp3` | ‘꼴등이 주인공’으로 뽑을 때 (종목 음악 대신) |
+| `Sneaky Snitch.mp3` | 마블 레이스 |
 | `Monkeys Spinning Monkeys.mp3` | 수영, 그리고 종목 음악 파일이 없을 때 |
-| `Carefree.mp3` | 시작 전 설정 화면 |
 | `Hyperfun.mp3` | 오리 레이스 (없으면 Monkeys Spinning Monkeys) |
 | `Pixelland.mp3` | 오리 뽑기 (없으면 Sneaky Snitch) |
 | `Bit Quest.mp3` | 가챠 뽑기 (없으면 Sneaky Snitch) |
