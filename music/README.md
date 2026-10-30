@@ -13,7 +13,9 @@
 | `Faster Does It.mp3` | 스케이트 |
 | `Sneaky Snitch.mp3` | 마블 룰렛 |
 | `ladder.mp3` | 사다리타기 (선생님이 보내 주신 곡) |
-| `Carefree.mp3` | 추억의 뽑기 |
+| `Carefree.mp3` | 추억의 뽑기, 스카이다이빙 |
+
+로프 오르기·레펠(‘하나 둘’ 구령)과 크리스마스 뽑기(징글벨)는 파일 없이 페이지가 직접 소리를 만들어요.
 | `Monkeys Spinning Monkeys.mp3` | 수영, 그리고 종목 음악 파일이 없을 때 |
 | `Hyperfun.mp3` | 오리 레이스 (없으면 Monkeys Spinning Monkeys) |
 | `Pixelland.mp3` | 오리 뽑기 (없으면 Sneaky Snitch) |
