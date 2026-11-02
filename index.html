@@ -643,7 +643,7 @@ function load(){
 let store=load();Object.values(store.classes).forEach(c=>{if(c.avoidRace===undefined)c.avoidRace=10});
 let canSave=true;
 function persist(quiet){
-  try{localStorage.setItem(KEY,JSON.stringify(store));canSave=true;
+  try{localStorage.setItem(KEY,JSON.stringify(store));canSave=true;s2PushSoon();
     const t=new Date();$('#saveState').textContent='저장됨 '+pad(t.getHours())+':'+pad(t.getMinutes());
   }catch(e){canSave=false;$('#saveState').textContent='이 브라우저에서는 저장이 안 돼요';}
 }
@@ -3832,7 +3832,7 @@ const S_DAYS=['일','월','화','수','목','금','토'];
 function s2Defaults(){return{preset:'pair3',layout:null,rules:{gender:false,genderMode:'mixed',genderMix:false,partner:true,sameSeat:true,emptyBack:true},len:'short',gender:{},secret:{stick:[],apart:[],front:[],frontRange:1,fixed:{},mode:'signal',key:'s'},hist:[],cur:null,next:null,motto:'함께 웃는 우리 반'}}
 function s2Data(c){if(!c.seat2){c.seat2=s2Defaults();if(c.seat&&c.seat.gender)c.seat2.gender=Object.assign({},c.seat.gender)}const d=c.seat2,df=s2Defaults();
   for(const k in df)if(d[k]===undefined)d[k]=df[k];for(const k in df.rules)if(d.rules[k]===undefined)d.rules[k]=df.rules[k];for(const k in df.secret)if(d.secret[k]===undefined)d.secret[k]=df.secret[k];
-  if(!d.layout)d.layout=s2Preset(d.preset,Math.max(1,participants(c).length));return d}
+  if(!d.layout)d.layout=s2Preset(d.preset,Math.max(1,participants(c).length));if(d.cur&&!d.hist.includes(d.cur)){const m=d.hist.find(h=>h.at===d.cur.at&&JSON.stringify(h.seats)===JSON.stringify(d.cur.seats));if(m)d.cur=m}return d}
 function s2Preset(key,n){n=Math.max(1,n);const L={rows:1,cols:1,desks:{}},put=(r,cc,dir)=>{L.desks[r*L.cols+cc]=dir||0};
   const blocks=(bw,nb)=>{L.cols=nb*bw+(nb-1);L.rows=Math.max(1,Math.ceil(n/(bw*nb)));for(let r=0;r<L.rows;r++)for(let b=0;b<nb;b++)for(let k=0;k<bw;k++)put(r,b*(bw+1)+k,0)};
   if(key==='pair3')blocks(2,3);else if(key==='pair4')blocks(2,4);else if(key==='trio')blocks(3,2);
@@ -3899,7 +3899,7 @@ function s2Sprout(on){return skyImg('sprout'+on,()=>pxMake(10,12,(set,rect)=>{re
 function s2Plant(){return skyImg('plant',()=>pxMake(12,15,(set,rect)=>{rect(2,10,8,5,'#c0703a');rect(1,9,10,2,'#d9824a');rect(5,4,2,6,'#3f9b48');rect(1,2,4,3,'#4fae4a');rect(7,1,4,3,'#4fae4a');rect(3,5,3,2,'#5cc35a');rect(6,4,4,2,'#5cc35a');rect(4,0,3,2,'#5cc35a')},['#1d1d1d']))}
 
 /* ---------- 열기 · 닫기 ---------- */
-function openSeat(){const c=cur();if(!c){toast('먼저 학급을 골라 주세요');return}ensureAudio();const d=s2Data(c);
+function openSeat(){const c=cur();if(!c){toast('먼저 학급을 골라 주세요');return}if(SDB&&!openSeat.pulling){openSeat.pulling=true;s2Pull().then(ch=>{openSeat.pulling=false;if(ch&&SEAT&&SEAT.phase==='setup'){const c2=cur();SEAT.c=c2;SEAT.d=s2Data(c2);s2SeatedFromCur();s2SetupRender()}})}ensureAudio();const d=s2Data(c);
   SEAT={c,d,phase:'setup',kidsMode:'abs',swap:false,sel:-1,chars:[],conf:[],sig:false,wink:0,tsay:null,doorK:0,note:{tab:'stick',pick:0,sel:new Set(),fix:-1},ed:{mode:'add'},chartView:'student'};
   $('#seatView').hidden=false;document.body.style.overflow='hidden';stopTiles();
   const bc=$('#sBadgeIc').getContext('2d');bc.imageSmoothingEnabled=false;bc.clearRect(0,0,18,18);bc.drawImage(s2Teacher(0),1,0,22,24,0,0,18,20);
@@ -3912,15 +3912,16 @@ function s2SetPhase(p){const S=SEAT;S.phase=p;const room=p!=='setup';$('#sSetup'
   $('#sChip').textContent=S.c.name+' · '+participants(S.c).length+'명';$('#sBadgeCls').textContent=S.c.name;$('#sStatus').hidden=!(p==='anim'||p==='result');$('#sCnt').hidden=!(p==='anim'||p==='result');
   if(p==='setup'){S.tsay=null;s2SetupRender()}
   s2Bottom();sceneMusic()}
-function s2Bottom(){const S=SEAT,b=$('#sBottom');if(S.phase==='ready'){b.hidden=false;b.innerHTML='<div class="s-bar"><button type="button" class="big" data-sb="start">자리 바꾸기 시작!</button><button type="button" class="lnk" data-sb="setup">설정으로</button></div>';return}
-  if(S.phase==='result'){b.hidden=false;b.innerHTML=(S.swap?'<span class="tip">바꿀 두 자리를 차례로 누르세요 · 빈자리도 돼요</span>':'')+'<div class="s-bar"><button type="button" class="big" data-sb="chart">자리표 크게 보기</button><button type="button" class="s-btn" data-sb="again">다시 뽑기</button><button type="button" class="s-btn dark" data-sb="swap">'+(S.swap?'바꾸기 끝':'직접 바꾸기')+'</button><button type="button" class="lnk" data-sb="setup">설정으로</button></div>';return}
+function s2Bottom(){const S=SEAT,b=$('#sBottom');const has=!!(S.A&&S.A.some(Boolean)),tip=S.swap?'<span class="tip">바꿀 두 자리를 차례로 누르세요 · 빈자리도 돼요</span>':'';const sw=has?'<button type="button" class="s-btn dark" data-sb="swap">'+(S.swap?'교환 끝':'자리 교환하기')+'</button>':'';const sv='<button type="button" class="s-btn" data-sb="saved">저장된 자리</button>';
+  if(S.phase==='ready'){b.hidden=false;b.innerHTML=tip+'<div class="s-bar"><button type="button" class="big" data-sb="start">자리 바꾸기 시작!</button>'+sw+sv+'<button type="button" class="lnk" data-sb="setup">설정으로</button></div>';return}
+  if(S.phase==='result'){b.hidden=false;b.innerHTML=tip+'<div class="s-bar"><button type="button" class="big" data-sb="chart">자리표 크게 보기</button><button type="button" class="s-btn" data-sb="again">다시 뽑기</button>'+sw+sv+'<button type="button" class="lnk" data-sb="setup">설정으로</button></div>';return}
   b.hidden=true;b.innerHTML=''}
 
 /* ---------- 설정 카드 ---------- */
 function s2Seg(attr,list,val,cls){return'<div class="s-seg2'+(cls?' '+cls:'')+'">'+list.map(([v,t,sub])=>'<button type="button" '+attr+'="'+v+'" aria-pressed="'+(String(v)===String(val))+'">'+t+(sub?'<small>'+sub+'</small>':'')+'</button>').join('')+'</div>'}
 function s2SetupRender(){const S=SEAT,c=S.c;
   $('#sSetup').innerHTML='<div class="s-card"><div class="s-card-h">두근두근 자리 바꾸기</div><div class="s-card-b">'+
-    '<div class="s-clsrow"><span>학급별 설정</span><select id="s2Cls">'+store.order.map(id=>'<option value="'+id+'"'+(id===c.id?' selected':'')+'>'+escapeHtml(store.classes[id].name)+'</option>').join('')+'</select><span class="sp"></span><button type="button" class="s-btn sm" data-sa="export">파일로 내보내기</button><button type="button" class="s-btn sm" data-sa="import">파일 불러오기</button></div>'+
+    '<div class="s-clsrow"><span>학급별 설정</span><select id="s2Cls">'+store.order.map(id=>'<option value="'+id+'"'+(id===c.id?' selected':'')+'>'+escapeHtml(store.classes[id].name)+'</option>').join('')+'</select><span class="sp"></span><small id="s2Sync" style="color:#2c8a54;font-weight:900">'+(SDB?'☁ 다른 컴퓨터와 연결됨':'이 컴퓨터에만 저장돼요')+'</small><button type="button" class="s-btn sm" data-sa="export">파일로 내보내기</button><button type="button" class="s-btn sm" data-sa="import">파일 불러오기</button></div>'+
     '<div class="s-cols"><section id="s2Kids"></section><section id="s2Lay"></section><section id="s2Rules"></section></div></div></div>';
   s2KidsRender();s2LayRender();s2RulesRender()}
 function s2KidsRender(){const S=SEAT,c=S.c,d=S.d,el=$('#s2Kids');if(!el)return;const named=c.display==='name',gm=S.kidsMode==='gender';
@@ -4127,7 +4128,7 @@ function s2Say(txt,keep){if(SEAT)SEAT.tsay={txt,t:performance.now(),keep:keep||3
 function s2Frame(now){const S=SEAT;if(!S)return;const c=$('#seatCanvas').getContext('2d');c.setTransform(S.dpr,0,0,S.dpr,0,0);
   if(S.phase==='ready'&&S.doorK<1)S.doorK=Math.min(1,S.doorK+.04);
   s2Room(c,S,now);const L=S.d.layout;Object.entries(L.desks).forEach(([i,dir])=>s2DrawDesk(c,S,+i,dir));
-  if(S.phase==='result'&&S.swap&&S.sel>=0){const r=Math.floor(S.sel/L.cols),cc=S.sel%L.cols;c.setLineDash([8,6]);c.strokeStyle='#f2b824';c.lineWidth=4;roundRect(c,s2X(cc)+2,s2Y(r)+2,S.csx-4,S.csy-4,10);c.stroke();c.setLineDash([])}
+  if((S.phase==='result'||S.phase==='ready')&&S.swap&&S.sel>=0){const r=Math.floor(S.sel/L.cols),cc=S.sel%L.cols;c.setLineDash([8,6]);c.strokeStyle='#f2b824';c.lineWidth=4;roundRect(c,s2X(cc)+2,s2Y(r)+2,S.csx-4,S.csy-4,10);c.stroke();c.setLineDash([])}
   s2Teach(c,S,now);
   const t=S.phase==='anim'?(now-S.t0)/1000:1e6,draw=[];let seated=0,status=null;
   S.chars.forEach(ch=>{const p=s2Pos(ch,t,L);if(!p)return;if(p.final)seated++;draw.push(p);if(S.phase==='anim'){if(p.fake&&!ch.saidFake){ch.saidFake=true;status='<b>'+ch.n+'번</b> 앉을까 말까…'}if(p.final&&!ch.done){ch.done=true;status='<b>'+ch.n+'번</b> 착석!';beep(620+(seated%8)*50,.05,.035)}}});
@@ -4138,7 +4139,7 @@ function s2Frame(now){const S=SEAT;if(!S)return;const c=$('#seatCanvas').getCont
   if(S.conf.length){S.conf.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.r+=p.vr;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.fillRect(-4,-2,8,4);c.restore()});S.conf=S.conf.filter(p=>p.y<S.H+20)}
   sraf=requestAnimationFrame(s2Frame)}
 function s2Pos(ch,t,L){const segs=ch.segs;let g=segs[segs.length-1];for(const s of segs){if(t<s.t1){g=s;break}}if(t<segs[0].t0)return null;
-  if(g.k==='hide')return null;const out={n:ch.n,u:0,v:0};
+  if(g.k==='hide')return null;const out={n:ch.n,u:0,v:0};if(g.k==='stand'){out.u=g.x;out.v=g.y;out.y=out.v;out.act='jump';out.au=(t-g.t0)/Math.max(.1,g.t1-g.t0);return out}
   if(g.k==='sit'||g.k==='sitold'){const p=s2Chair(L,g.seat);out.u=p[0];out.v=p[1];out.seated=true;out.final=g.k==='sit';out.y=out.v;return out}
   if(g.k==='walk'){const u=cl((t-g.t0)/(g.t1-g.t0));out.u=lerp(g.x0,g.x1,u);out.v=lerp(g.y0,g.y1,u);out.ph=t*11+ch.n;out.y=out.v;return out}
   if(g.k==='fake'){const p=s2Chair(L,g.seat),u=(t-g.t0)/(g.t1-g.t0);out.u=p[0];out.v=p[1];out.y=out.v;out.fake=true;if(u<.62){out.seated=true;if(u>.25)out.say=g.say1}else{out.v-=.05;out.say=g.say2;out.act='look';out.au=u}return out}
@@ -4168,13 +4169,14 @@ function s2Start(){const S=SEAT;if(!S||(S.phase!=='ready'&&S.phase!=='result'))r
 function s2NextRes(){const S=SEAT,d=S.d,nx=d.next;if(!nx||!s2SameLayout(nx.layout,d.layout))return null;const L=d.layout,G=s2Geo(L),studs=participants(S.c),live=new Set(studs),A=new Array(L.rows*L.cols).fill(0),placed=new Set();
   Object.entries(nx.seats).forEach(([i,n])=>{if(live.has(n)&&L.desks[i]!==undefined){A[+i]=n;placed.add(n)}});const empty=shuffle(G.D.filter(o=>!A[o.i]).map(o=>o.i));studs.filter(n=>!placed.has(n)).forEach(n=>{const i=empty.shift();if(i!==undefined)A[i]=n});
   return{A,D:{},n:studs.length,G,planned:true}}
-function s2Done(){const S=SEAT;if(S.phase!=='anim')return;if(S.res&&S.res.planned){S.d.next=null}S.A=S.res.A.slice();S.chars.forEach(ch=>{ch.segs=[{k:'sit',t0:-1,t1:1e9,seat:ch.seat}]});
-  const d=S.d,seats={};S.A.forEach((n,i)=>{if(n)seats[i]=n});const h={at:Date.now(),layout:JSON.parse(JSON.stringify(d.layout)),seats};d.hist.push(h);if(d.hist.length>12)d.hist.shift();d.cur=h;persist();
+function s2Done(){const S=SEAT;if(S.phase!=='anim')return;if(S.res&&S.res.planned&&!S.res.load){S.d.next=null}S.A=S.res.A.slice();S.chars.forEach(ch=>{ch.segs=[{k:'sit',t0:-1,t1:1e9,seat:ch.seat}]});
+  const d=S.d,seats={};S.A.forEach((n,i)=>{if(n)seats[i]=n});if(S.res.load){d.cur=S.res.load;persist();s2SetPhase('result');s2Say('저장된 자리로 앉았어요!',4000);$('#sStatus').innerHTML='저장된 자리로 옮겼어요';return}
+  const h={at:Date.now(),layout:JSON.parse(JSON.stringify(d.layout)),seats};d.hist.push(h);if(d.hist.length>20)d.hist.shift();d.cur=h;persist();
   s2SetPhase('result');s2Say('자리 바꾸기 대성공!',5000);$('#sStatus').innerHTML='모두 자리를 찾았어요!';const cols=['#ffd23f','#f0641c','#4fd3ff','#7cff6b','#ff4f8b','#c08cff'];
   for(let i=0;i<140;i++)S.conf.push({x:Math.random()*S.W,y:-Math.random()*S.H*.4,vx:(Math.random()-.5)*1.5,vy:1+Math.random()*2,r:Math.random()*6,vr:(Math.random()-.5)*.2,col:cols[i%6]});beep(784,.12,.05);setTimeout(()=>beep(1046,.25,.05),140)}
-function s2SaveCur(){const S=SEAT,d=S.d;if(!S.A)return;const seats={};S.A.forEach((n,i)=>{if(n)seats[i]=n});if(d.cur){d.cur.seats=seats}persist()}
+function s2SaveCur(){const S=SEAT,d=S.d;if(!S.A)return;const seats={};S.A.forEach((n,i)=>{if(n)seats[i]=n});if(d.cur&&s2SameLayout(d.cur.layout,d.layout)){d.cur.seats=seats}else{d.cur={at:Date.now(),layout:JSON.parse(JSON.stringify(d.layout)),seats};d.hist.push(d.cur)}persist()}
 $('#sBottom').addEventListener('click',e=>{const S=SEAT;if(!S)return;const b=e.target.closest('[data-sb]');if(!b)return;const a=b.dataset.sb;
-  if(a==='start'||a==='again')s2Start();else if(a==='setup'){S.swap=false;s2SetPhase('setup')}else if(a==='chart')s2ChartOpen();else if(a==='swap'){S.swap=!S.swap;S.sel=-1;s2Bottom()}});
+  if(a==='start'||a==='again')s2Start();else if(a==='setup'){S.swap=false;s2SetPhase('setup')}else if(a==='chart')s2ChartOpen();else if(a==='swap'){S.swap=!S.swap;S.sel=-1;s2Bottom()}else if(a==='saved')s2SavedOpen()});
 $('#sBack').onclick=()=>{if(SEAT){SEAT.swap=false;s2SetPhase('setup')}};$('#sSkip').onclick=()=>{const S=SEAT;if(S&&S.phase==='anim')s2Done()};
 $('#sHome').onclick=()=>{closeSeat();window.scrollTo({top:0,behavior:'smooth'})};
 $('#sFull').onclick=()=>{const el=$('#seatView');try{if(document.fullscreenElement)document.exitFullscreen();else if(el.requestFullscreen)el.requestFullscreen()}catch(e){}};
@@ -4184,7 +4186,7 @@ $('#sMusic').onclick=()=>{store.musicOn=!store.musicOn;persistSoon();if(store.mu
 function s2Toggle(){const S=SEAT;if(!S||S.d.secret.mode==='always'||!(S.phase==='ready'||S.phase==='result'))return false;S.sig=!S.sig;if(S.sig)S.wink=performance.now()+1300;return true}
 $('#seatCanvas').addEventListener('pointerdown',e=>{const S=SEAT;if(!S)return;const rc=e.currentTarget.getBoundingClientRect(),x=e.clientX-rc.left,y=e.clientY-rc.top,tr=S.teachRect;
   if(tr&&x>=tr.x&&x<=tr.x+tr.w&&y>=tr.y&&y<=tr.y+tr.h&&S.phase!=='setup'){S.lp=setTimeout(()=>{S.lp=null;s2Toggle()},1000);return}
-  if(S.phase==='result'&&S.swap){const L=S.d.layout,cc=Math.floor((x-S.ox)/S.csx),r=Math.floor((y-S.oy)/S.csy);if(cc<0||r<0||cc>=L.cols||r>=L.rows)return;const i=r*L.cols+cc;if(L.desks[i]===undefined)return;
+  if((S.phase==='result'||S.phase==='ready')&&S.swap){const L=S.d.layout,cc=Math.floor((x-S.ox)/S.csx),r=Math.floor((y-S.oy)/S.csy);if(cc<0||r<0||cc>=L.cols||r>=L.rows)return;const i=r*L.cols+cc;if(L.desks[i]===undefined)return;
     if(S.sel<0){S.sel=i;beep(600,.04,.04);return}if(S.sel===i){S.sel=-1;return}const a=S.sel,t=S.A[a];S.A[a]=S.A[i];S.A[i]=t;S.sel=-1;S.chars=S.A.map((n,k)=>n?{n,seat:k,segs:[{k:'sit',t0:-1,t1:1e9,seat:k}]}:null).filter(Boolean);s2SaveCur();beep(800,.06,.05)}});
 $('#seatCanvas').addEventListener('pointerup',()=>{const S=SEAT;if(S&&S.lp){clearTimeout(S.lp);S.lp=null;s2Say(pick(['오늘도 사이좋게 지내요!','두근두근~','다들 준비됐나요?','자리는 운명이에요!','선생님은 아무것도 몰라요~']))}});
 $('#seatCanvas').addEventListener('pointerleave',()=>{const S=SEAT;if(S&&S.lp){clearTimeout(S.lp);S.lp=null}});
@@ -4221,6 +4223,46 @@ document.addEventListener('keydown',e=>{const S=SEAT;if(!S)return;const tag=(doc
   if(/^(INPUT|SELECT|TEXTAREA)$/.test(tag))return;if(!$('#sNote').hidden||!$('#sEdit').hidden||!$('#sChart').hidden)return;
   if(e.key.toLowerCase()===S.d.secret.key&&!e.ctrlKey&&!e.metaKey&&!e.altKey){if(s2Toggle())e.preventDefault();return}
   if(e.key===' '||e.code==='Space'){e.preventDefault();if(S.phase==='ready')s2Start();else if(S.phase==='anim')s2Done()}});
+
+/* ---------- 저장된 자리 ---------- */
+function s2HistLbl(h){const t=new Date(h.at);return h.label||((t.getMonth()+1)+'월 '+t.getDate()+'일 '+pad(t.getHours())+':'+pad(t.getMinutes())+' 자리')}
+function s2SavedOpen(){const S=SEAT;if(!S)return;let m=$('#sSaved');if(!m){m=document.createElement('div');m.className='s-modal s-chart';m.id='sSaved';$('#seatView').append(m);m.addEventListener('click',s2SavedClick)}m.hidden=false;s2SavedRender()}
+function s2SavedRender(){const S=SEAT,d=S.d,m=$('#sSaved');const list=d.hist.slice().reverse();
+  m.innerHTML='<div class="s-mbox" style="width:min(640px,100%)"><div class="s-mhead"><h4>저장된 자리</h4><p>'+escapeHtml(S.c.name)+' · 고르면 친구들이 그 자리로 옮겨 앉아요</p><button type="button" class="s-x" data-sv="close" aria-label="닫기">✕</button></div><div class="s-mbody" style="display:flex;flex-direction:column;gap:8px">'+
+    (S.A&&S.A.some(Boolean)?'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;background:#fff;border:2px solid #efe4d2;border-radius:12px;padding:10px"><b style="font-size:14px">지금 자리 저장</b><input id="s2SvName" maxlength="20" placeholder="예: 11월 3주" style="flex:1;min-width:120px;border:2px solid #d8c7ab;border-radius:8px;padding:6px 10px;font-weight:700"><button type="button" class="s-btn dark sm" data-sv="save">저장하기</button></div>':'')+
+    (list.length?list.map(h=>{const i=d.hist.indexOf(h),now=h===d.cur,n=Object.keys(h.seats).length;return'<div style="display:flex;gap:8px;align-items:center;background:'+(now?'#fff6d6':'#fff')+';border:2px solid '+(now?'#f2b824':'#efe4d2')+';border-radius:12px;padding:8px 12px"><span style="flex:1;font-weight:900">'+escapeHtml(s2HistLbl(h))+'<small style="display:block;font-weight:700;color:#8a95a0">'+n+'명'+(now?' · 지금 자리':'')+'</small></span><button type="button" class="s-btn red sm" data-sv="go:'+i+'">이 자리로 가기</button><button type="button" class="s-btn sm" data-sv="del:'+i+'">✕</button></div>'}).join(''):'<p class="s-hint">아직 저장된 자리가 없어요. 자리 바꾸기가 끝나면 자동으로 저장돼요.</p>')+
+    '</div></div>'}
+function s2SavedClick(e){const S=SEAT;if(!S)return;const b=e.target.closest('[data-sv]');if(!b)return;const a=b.dataset.sv,d=S.d;
+  if(a==='close'){$('#sSaved').hidden=true;return}
+  if(a==='save'){const nm=($('#s2SvName').value||'').trim();const seats={};S.A.forEach((n,i)=>{if(n)seats[i]=n});const h={at:Date.now(),label:nm||null,layout:JSON.parse(JSON.stringify(d.layout)),seats};d.hist.push(h);if(d.hist.length>20)d.hist.shift();d.cur=h;persist();s2SavedRender();toast('지금 자리를 저장했어요');return}
+  const[k,v]=a.split(':'),h=d.hist[+v];if(!h)return;
+  if(k==='del'){d.hist.splice(+v,1);if(d.cur===h)d.cur=d.hist[d.hist.length-1]||null;persist();s2SavedRender();return}
+  if(k==='go'){$('#sSaved').hidden=true;s2MoveTo(h)}}
+function s2MoveTo(h){const S=SEAT,d=S.d;if(!S||S.phase==='anim')return;S.swap=false;S.sel=-1;
+  const oldL=d.layout,prevPos=new Map();S.chars.forEach(ch=>{const sg=ch.segs[ch.segs.length-1];if(sg&&sg.k==='sit'){const p=s2Chair(oldL,sg.seat);prevPos.set(ch.n,[s2X(p[0]),s2Y(p[1])])}});
+  if(!s2SameLayout(h.layout,d.layout)){d.layout=JSON.parse(JSON.stringify(h.layout));d.preset='custom'}s2Layout();
+  const L=d.layout,G=s2Geo(L),studs=participants(S.c),live=new Set(studs),A=new Array(L.rows*L.cols).fill(0),placed=new Set();
+  Object.entries(h.seats).forEach(([i,n])=>{if(live.has(n)&&L.desks[i]!==undefined){A[+i]=n;placed.add(n)}});const empty=shuffle(G.D.filter(o=>!A[o.i]).map(o=>o.i));studs.filter(n=>!placed.has(n)).forEach(n=>{const i=empty.shift();if(i!==undefined)A[i]=n});
+  S.res={A,D:{},n:studs.length,G,planned:true,load:h};const v=2.8,door=[(S.door.x+S.door.w+S.csx*.3-S.ox)/S.csx,(S.door.y+S.door.h*.9-S.oy)/S.csy],chars=[];
+  A.forEach((n,seat)=>{if(!n)return;const goal=s2Chair(L,seat),segs=[];let t,p;const pp=prevPos.get(n);
+    if(pp){p=[(pp[0]-S.ox)/S.csx,(pp[1]-S.oy)/S.csy];t=rnd(0,1);segs.push({k:'stand',t0:-1,t1:t,x:p[0],y:p[1]})}else{p=door.slice();t=rnd(0,1.5);segs.push({k:'hide',t0:-1,t1:t})}
+    const dd=Math.hypot(goal[0]-p[0],goal[1]-p[1])/v;if(dd>.05)segs.push({k:'walk',t0:t,t1:t+dd,x0:p[0],y0:p[1],x1:goal[0],y1:goal[1]});segs.push({k:'sit',t0:t+dd,t1:1e9,seat});chars.push({n,seat,segs})});
+  S.chars=chars;S.T=Math.max(1,...chars.map(c=>c.segs[c.segs.length-1].t0));S.l1=S.l2=S.l3=1;S.conf=[];S.t0=performance.now();S.doorK=1;$('#sStatus').innerHTML='저장된 자리로 옮겨요…';s2SetPhase('anim');s2Say('저장된 자리로 옮겨 앉아요~')}
+
+/* ---------- 다른 컴퓨터와 연결 (Claude 아티팩트에서만) ---------- */
+let SDB=null,s2PushT=0;const s2Synced=new Map();
+function s2Key(n){return'c'+Array.from(new TextEncoder().encode(n)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+function s2Blob(c){return JSON.stringify({name:c.name,count:c.count,names:c.names,display:c.display,seat2:c.seat2||null})}
+async function s2Pull(){if(!SDB)return false;try{const snap=await SDB.collection('seats').get();let changed=false;
+    snap.docs.forEach(dc=>{const v=dc.data();if(!v||!v.name||!v.seat2)return;const blob=JSON.stringify({name:v.name,count:v.count,names:v.names,display:v.display,seat2:v.seat2});let c=store.order.map(id=>store.classes[id]).find(x=>x.name===v.name);
+      if(c&&s2Blob(c)===blob){s2Synced.set(v.name,blob);return}if(!c){c=newClass(v.name);store.classes[c.id]=c;store.order.push(c.id)}
+      const k=JSON.parse(blob);Object.assign(c,{count:k.count,names:k.names||[],display:k.display||c.display,seat2:k.seat2});c.absent=(c.absent||[]).filter(n=>n<=c.count);s2Synced.set(v.name,blob);changed=true});
+    if(changed){try{localStorage.setItem(KEY,JSON.stringify(store))}catch(e){}render()}return changed}catch(e){return false}}
+async function s2Push(){if(!SDB)return;for(const id of store.order){const c=store.classes[id];if(!c||!c.seat2)continue;const b=s2Blob(c);if(s2Synced.get(c.name)===b)continue;s2Synced.set(c.name,b);try{await SDB.doc('seats/'+s2Key(c.name)).set(JSON.parse(b))}catch(e){s2Synced.delete(c.name)}}}
+function s2PushSoon(){if(!SDB)return;clearTimeout(s2PushT);s2PushT=setTimeout(s2Push,1200)}
+function s2SyncNote(){const el=$('#s2Sync');if(el)el.textContent=SDB?'☁ 다른 컴퓨터와 연결됨':'이 컴퓨터에만 저장돼요'}
+(async()=>{try{if(window.claude&&window.claude.use){SDB=await window.claude.use('db')}}catch(e){SDB=null}if(!SDB)return;await s2Pull();await s2Push();s2SyncNote();
+  if(SEAT&&SEAT.phase==='setup'){const c=cur();if(c){SEAT.c=c;SEAT.d=s2Data(c);s2SeatedFromCur();s2SetupRender()}}})();
 
 /* ---------- 시작 ---------- */
 if(!store.currentId||!store.classes[store.currentId])store.currentId=store.order[0]||null;
