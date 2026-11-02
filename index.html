@@ -3975,9 +3975,10 @@ function s2Fit(){const S=SEAT,d=S.d,n=participants(S.c).length;if(d.preset!=='cu
     while(s2Count(L)<n&&guard++<20){const lastR=Math.max(...Object.keys(L.desks).map(k=>Math.floor(+k/L.cols)));const row=Object.entries(L.desks).filter(([k])=>Math.floor(+k/L.cols)===lastR);L.rows++;row.forEach(([k,dir])=>{L.desks[+k+L.cols]=dir})}}
   s2Persist();s2LayRender();s2AfterLayout();toast('학생 '+n+'명에 맞췄어요')}
 function s2Export(){const S=SEAT,c=S.c;const data={app:'dalryeora-seat',v:1,class:c};const blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=c.name.replace(/\s+/g,'_')+'_자리설정.json';document.body.append(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);toast('파일로 내보냈어요')}
-$('#sFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{try{const data=JSON.parse(rd.result);const k=data.class||data;if(!k||typeof k.count!=='number'||!Array.isArray(k.names))throw 0;
-    const nc=Object.assign(newClass(k.name||'불러온 학급'),k,{id:uid()});let nm=nc.name,i=2;const used=new Set(store.order.map(id=>store.classes[id].name));while(used.has(nm))nm=nc.name+' ('+(i++)+')';nc.name=nm;
-    store.classes[nc.id]=nc;store.order.push(nc.id);store.currentId=nc.id;persist();closeSeat();openSeat();toast('「'+nm+'」 학급을 불러왔어요')}catch(er){toast('이 파일은 불러올 수 없어요')}};rd.readAsText(f);e.target.value=''});
+$('#sFile').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{let msg;try{const data=JSON.parse(rd.result);const list=Array.isArray(data.classes)?data.classes:[data.class||data];let firstId=null,rep=0,add=0;
+    list.forEach(k=>{if(!k||typeof k.count!=='number'||!Array.isArray(k.names))throw 0;const old=store.order.map(id=>store.classes[id]).find(x=>x.name===k.name);
+      if(old){Object.assign(old,k,{id:old.id,history:old.history||[]});rep++;firstId=firstId||old.id}else{const nc=Object.assign(newClass(k.name||'불러온 학급'),k,{id:uid()});store.classes[nc.id]=nc;store.order.push(nc.id);add++;firstId=firstId||nc.id}});
+    if(!firstId)throw 0;store.currentId=firstId;persist();msg=(rep?rep+'개 학급을 바꾸고 ':'')+(add?add+'개 학급을 새로 ':'')+'불러왔어요'}catch(er){toast('이 파일은 불러올 수 없어요');return}closeSeat();openSeat();toast(msg)};rd.readAsText(f);e.target.value=''});
 
 /* ---------- 자리 꾸미기 ---------- */
 function s2EditOpen(){const S=SEAT;$('#sEdit').hidden=false;s2EditRender()}
