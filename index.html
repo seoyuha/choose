@@ -513,7 +513,18 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
         </div>
       </div>
 
-      <div class="field">
+      <div class="field race-only">
+        <span class="flabel">지난 당첨자 다시 안 뽑기</span>
+        <div class="seg" data-key="avoidRace">
+          <button type="button" data-val="0">끄기</button>
+          <button type="button" data-val="1">지난 1회</button>
+          <button type="button" data-val="3">지난 3회</button>
+          <button type="button" data-val="5">지난 5회</button>
+          <button type="button" data-val="10">지난 10회</button>
+        </div>
+        <p class="hint">최근 경주에서 뽑힌 학생은 이번에 되도록 뽑히지 않아요. 출전 학생이 모자라면 다시 뽑힐 수 있어요.</p>
+      </div>
+      <div class="field machine-only">
         <span class="flabel">지난 당첨자 다시 안 뽑기</span>
         <div class="seg" data-key="avoid">
           <button type="button" data-val="0">끄기</button>
@@ -617,7 +628,7 @@ const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').m
 
 /* ---------- 데이터 ---------- */
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
-function newClass(name){return{id:uid(),name,count:25,names:[],absent:[],display:'number',pick:'first',places:1,length:'mid',size:'big',sport:'run',avoid:1,history:[]}}
+function newClass(name){return{id:uid(),name,count:25,names:[],absent:[],display:'number',pick:'first',places:1,length:'mid',size:'big',sport:'run',avoid:1,avoidRace:10,history:[]}}
 function defaultClasses(){
   const list=[];
   for(let i=1;i<=7;i++)list.push(newClass('3학년 '+i+'반'));
@@ -629,7 +640,7 @@ function load(){
   try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);if(d&&d.classes&&Array.isArray(d.order))return d}}catch(e){}
   return freshStore();
 }
-let store=load();
+let store=load();Object.values(store.classes).forEach(c=>{if(c.avoidRace===undefined)c.avoidRace=10});
 let canSave=true;
 function persist(quiet){
   try{localStorage.setItem(KEY,JSON.stringify(store));canSave=true;
@@ -2070,7 +2081,7 @@ function renderSettings(){
   const c=cur();
   document.querySelectorAll('.seg[data-key]').forEach(sg=>{const k=sg.dataset.key;sg.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(String(c[k])===b.dataset.val)))});
   document.querySelectorAll('.sport').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.sport===c.sport)));
-  const isM=!!MACHINES[c.sport];document.querySelectorAll('.race-only').forEach(el=>el.hidden=isM);
+  const isM=!!MACHINES[c.sport];document.querySelectorAll('.race-only').forEach(el=>el.hidden=isM);document.querySelectorAll('.machine-only').forEach(el=>el.hidden=!isM);
   $('#placesLabel').textContent=isM?'몇 명 뽑을까요?':'몇 등까지?';$('#placesAll').textContent=isM?'모두 차례로':'전체 순위';
   $('#btnStart').textContent=isM?'뽑기 기계 켜기':'출발선에 서기';
   const n=participants(c).length;
@@ -2091,7 +2102,7 @@ function modeText(h){if(h.pick==='machine')return'뽑기 '+h.picked.length+'명'
 function renderHistory(){
   const c=cur(),ul=$('#histList');ul.innerHTML='';
   if(!c.history.length){ul.innerHTML='<li class="empty">아직 기록이 없어요. 경주가 끝나면 뽑힌 학생이 여기에 남아요.</li>';return}
-  const avoidIds=new Set(c.history.filter(h=>!h.all).slice(0,c.avoid).map(h=>h.id));
+  const avoidIds=new Set(c.history.filter(h=>!h.all).slice(0,MACHINES[c.sport]?c.avoid:c.avoidRace).map(h=>h.id));
   c.history.slice(0,12).forEach(h=>{
     const li=document.createElement('li');
     const t=document.createElement('time');t.textContent=fmtTime(h.at);
@@ -2143,7 +2154,7 @@ document.addEventListener('click',e=>{
     if(k==='places'){const n=Math.max(1,participants(c).length);let v=c.places===0?n:c.places;v=Math.max(1,Math.min(n,v+dv));c.places=v}
     persistSoon();renderRoster();renderSettings();return}
   const sg=e.target.closest('.seg[data-key] button');
-  if(sg){const c=cur();if(!c)return;const k=sg.parentElement.dataset.key;let v=sg.dataset.val;if(k==='avoid')v=Number(v);c[k]=v;persistSoon();renderSettings();if(k==='display')renderRoster();if(k==='avoid')renderHistory();return}
+  if(sg){const c=cur();if(!c)return;const k=sg.parentElement.dataset.key;let v=sg.dataset.val;if(k==='avoid'||k==='avoidRace')v=Number(v);c[k]=v;persistSoon();renderSettings();if(k==='display')renderRoster();if(k==='avoid'||k==='avoidRace')renderHistory();return}
   const pq=e.target.closest('#placesQuick button');
   if(pq){const c=cur();c.places=Number(pq.dataset.places);persistSoon();renderSettings();return}
   const sp=e.target.closest('.sport');
@@ -2223,8 +2234,8 @@ function decide(c,parts){
   const order=shuffle(parts);
   const wIdx=[];for(let j=0;j<k;j++)wIdx.push(c.pick==='first'?j:n-1-j);
   let avoided=0,repeated=0;
-  if(!all&&c.avoid>0&&k<n){
-    const recent=new Set();c.history.filter(h=>!h.all).slice(0,c.avoid).forEach(h=>h.picked.forEach(p=>recent.add(p.n)));
+  if(!all&&c.avoidRace>0&&k<n){
+    const recent=new Set();c.history.filter(h=>!h.all).slice(0,c.avoidRace).forEach(h=>h.picked.forEach(p=>recent.add(p.n)));
     const wSet=new Set(wIdx);
     wIdx.forEach(i=>{
       if(!recent.has(order[i]))return;
