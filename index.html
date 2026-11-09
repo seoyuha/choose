@@ -386,6 +386,50 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
   #sChart .s-mbox{box-shadow:none;max-height:none;width:100%}
   #sChart .s-x,#sChart .s-vseg,#sChart .s-cact{display:none!important}
 }
+.timer .s-setup{padding-top:clamp(60px,10vh,110px)}
+.s-card-h small{display:block;font-family:var(--body);font-size:13px;color:#f2c12e;font-weight:900;margin-top:2px}
+.t-snd{display:flex;align-items:center;gap:6px;background:#fffdf7;border-radius:12px;padding-right:8px;box-shadow:0 3px 0 rgba(0,0,0,.15)}
+.t-snd .s-ic{box-shadow:none}.t-snd input{width:80px;accent-color:#2f5d50}
+.t-cls{background:#f6efe2;border:1px solid #e3d5bf;border-radius:10px;margin-bottom:12px}
+.t-clsh{display:flex;align-items:center;gap:8px;padding:8px 12px;font-size:14px;flex-wrap:wrap}
+.t-clsh select{border:2px solid #d8c7ab;border-radius:8px;padding:4px 8px;font-weight:900;color:#2f4fa0;background:#fff}
+.t-clsn{color:#2f4fa0;font-weight:900}.t-clsh .sp{flex:1}
+.t-pm{width:30px;height:30px;border-radius:8px;border:1.5px solid #d8c7ab;background:#fff;font-weight:900;font-size:18px}
+.t-clsb{padding:4px 12px 12px;display:flex;flex-direction:column;gap:8px}
+.t-recent{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:12px;font-weight:900;font-size:13px;color:#6b5a4e}
+.t-recent button{border:2px solid var(--mc);background:#fff;border-radius:999px;padding:4px 12px;font-weight:900;font-size:13px;color:#1e2a33}
+.t-cols{display:grid;grid-template-columns:1.1fr 1fr;gap:22px}
+.t-cols>section{min-width:0;display:flex;flex-direction:column;gap:10px}
+.t-cols>section+section{border-left:2px dashed #eadfcd;padding-left:20px}
+@media (max-width:900px){.t-cols{grid-template-columns:1fr}.t-cols>section+section{border-left:0;padding-left:0;border-top:2px dashed #eadfcd;padding-top:14px}}
+.t-modes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.t-mode{display:flex;align-items:center;gap:10px;border:2px solid #e3d5bf;background:#fff;border-radius:12px;padding:10px;text-align:left;color:#1e2a33}
+.t-mode i{font-style:normal;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;font-size:20px;background:color-mix(in srgb,var(--mc) 18%,#fff);flex:none}
+.t-mode b{display:block;font-size:16px}.t-mode small{display:block;font-size:12px;color:#8a95a0;font-weight:700}
+.t-mode.on{border-color:var(--mc);background:color-mix(in srgb,var(--mc) 8%,#fff);box-shadow:inset 0 0 0 1px var(--mc)}
+.t-mode.on i{background:var(--mc)}
+.t-desc{margin:0;background:#f6efe2;border-radius:10px;padding:10px 12px;font-size:13px;font-weight:700;color:#6b5a4e}
+.t-lb{font-size:14px}
+.t-in{border:2px solid #d8c7ab;border-radius:10px;padding:7px 10px;font-weight:700}
+.t-dur{display:flex;align-items:center;justify-content:center;gap:14px}
+.t-dur button{width:46px;height:46px;border-radius:50%;border:2px solid #1e2a33;background:#fff;font-size:24px;font-weight:900}
+.t-dur input{width:min(260px,52vw);text-align:center;font-family:var(--display);font-size:clamp(48px,6vw,68px);border:0;border-bottom:4px solid #1e2a33;background:none;color:#1e2a33;padding:0}
+.t-small,.t-presets{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.t-small button{border:1.5px solid #d8c7ab;background:#fff;border-radius:999px;padding:4px 12px;font-weight:900;font-size:13px}
+.t-presets button{flex:1;min-width:58px;border:2px solid #e3d5bf;background:#fff;border-radius:10px;padding:8px 4px;font-weight:900}
+.t-presets button[aria-pressed=true]{background:#1e2a33;color:#fff;border-color:#1e2a33}
+.t-end{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:900;font-size:14px}
+.t-end input{border:2px solid #d8c7ab;border-radius:8px;padding:4px 8px;font-weight:700}
+.lnkb{border:0;background:none;color:#2f4fa0;text-decoration:underline;font-weight:900;padding:4px}
+.t-will{margin:0;color:#2f4fa0;font-weight:900;font-size:14px}
+.t-speeds{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+.t-speeds button{border:2px solid #e3d5bf;background:#fff;border-radius:10px;padding:8px;font-weight:900}
+.t-speeds button small{display:block;font-size:11px;color:#8a95a0}
+.t-speeds button[aria-pressed=true]{background:#4a3320;border-color:#4a3320;color:#fff}.t-speeds button[aria-pressed=true] small{color:#e6d6c2}
+.t-spnote{text-align:center;font-weight:900;font-size:13px;margin:0 0 10px}
+#tBottom{transition:opacity .4s}#tBottom.fade{opacity:0;pointer-events:none}
+.s-bar .big.ice{background:#3b82f6;box-shadow:0 4px 0 #1d4f86}
+.timer-mini{display:grid;place-items:center;width:96px;height:72px;border-radius:12px;background:#2f5d50;box-shadow:inset 0 0 0 4px #8a5a2e;color:#ffd75e;font-family:var(--display);font-size:30px;flex:none}
 </style>
 
 <div class="app">
@@ -451,6 +495,13 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
         <div class="seat-mini" aria-hidden="true"><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i><i></i><i></i><i class="gap"></i></div>
         <div class="seat-entry-txt"><h2 id="hSeat">두근두근 자리 바꾸기</h2><p>번호표를 단 친구들이 교실에 들어와 돌아다니다 새 자리를 찾아 앉아요. 9가지 배치, 같은 자리·지난번 짝 피하기, 남녀 규칙과 선생님 비밀 수첩까지 있어요.</p></div>
         <button class="start" id="btnSeat" type="button">자리 바꾸러 가기</button>
+      </div>
+    </section>
+<section class="panel seat-entry" aria-labelledby="hTimer">
+      <div class="seat-entry-in" style="background:linear-gradient(120deg,#e8f4ec,#d6eadb)">
+        <div class="timer-mini" aria-hidden="true">9:52</div>
+        <div class="seat-entry-txt"><h2 id="hTimer">딩동댕 교실 타이머</h2><p>칠판 시간이 줄어드는 동안 우리 반 친구들이 우리 반 자리에서 놀다 앉고, 책을 펴고, 정리하고, 줄을 서요. 쉬는 시간·활동·정리·발표·줄서기.</p></div>
+        <button class="start" id="btnTimer" type="button">타이머 켜기</button>
       </div>
     </section>
     </div>
@@ -615,6 +666,23 @@ textarea{resize:vertical;min-height:150px;line-height:1.7;font-variant-numeric:t
   <div class="s-modal s-edit" id="sEdit" hidden></div>
   <div class="s-modal s-chart" id="sChart" hidden></div>
   <input type="file" id="sFile" accept=".json,application/json" hidden>
+</div>
+
+<div class="seat timer" id="timerView" hidden>
+  <canvas id="timerCanvas"></canvas>
+  <div class="s-top">
+    <button type="button" class="s-badge" id="tBadge" title="선생님"><canvas id="tBadgeIc" width="18" height="18"></canvas><span><b>선생님</b><small id="tBadgeCls"></small></span></button>
+    <button type="button" class="s-pill" id="tBack" hidden>‹ 설정</button>
+    <span class="s-chip" id="tChip" hidden></span>
+    <div class="s-tr">
+      <span class="t-snd"><button type="button" class="s-ic" id="tSound" title="소리">🔊</button><input type="range" id="tVol" min="0" max="100" aria-label="소리 크기"></span>
+      <button type="button" class="s-ic" id="tFull" title="전체 화면">⛶</button>
+      <button type="button" class="s-pill" id="tHome">처음 화면</button>
+    </div>
+  </div>
+  <div class="s-setup" id="tSetup"></div>
+  <div class="s-bottom" id="tBottom" hidden></div>
+  <div class="s-modal" id="tNote" hidden></div>
 </div>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -2215,7 +2283,7 @@ function playMusic(key){
   bgmKey=key;bgmTry=0;loadTry();
 }
 function stopMusic(ms){stopSynth();const k=bgmKey;bgmKey=null;fadeTo(0,ms||500,()=>{if(!bgmKey)bgm.pause()});return k}
-function sceneMusic(){if(SEAT){if(SEAT.phase==='setup')stopMusic(400);else playMusic('seat');return}if(MC){playMusic(MC.type);return}if(R){playMusic(TRACKS[R.sport]||SYNTH_FOR[R.sport]?R.sport:'random');return}stopMusic(400)}
+function sceneMusic(){if(TM){stopMusic(300);return}if(SEAT){if(SEAT.phase==='setup')stopMusic(400);else playMusic('seat');return}if(MC){playMusic(MC.type);return}if(R){playMusic(TRACKS[R.sport]||SYNTH_FOR[R.sport]?R.sport:'random');return}stopMusic(400)}
 function updateMusicUI(){
   const v=$('#musicVol');if(v){if(document.activeElement!==v)v.value=Math.round(store.musicVol*100);v.disabled=!store.musicOn}
   const b=$('#btnMusic');if(b)b.textContent=store.musicOn?'음악 켬':'음악 끔';
@@ -3826,7 +3894,7 @@ function drawPaperTile(c,W,H,t){c.fillStyle='#f4a62a';c.fillRect(0,0,W,H);heartP
 
 
 /* ===== 두근두근 자리 바꾸기 ===== */
-let SEAT=null,sraf=0;
+let SEAT=null,sraf=0,SC=null;
 const S_PRESETS=[['pair3','짝꿍 3분단'],['pair4','짝꿍 4분단'],['single','혼자 앉기'],['trio','3인 책상'],['group4','4인 모둠'],['group6','6인 모둠'],['u','ㄷ자'],['u2','이중 ㄷ자'],['square','ㅁ자 토론']];
 const S_DAYS=['일','월','화','수','목','금','토'];
 function s2Defaults(){return{preset:'pair3',layout:null,rules:{gender:false,genderMode:'mixed',genderMix:false,partner:true,sameSeat:true,emptyBack:true},len:'short',gender:{},secret:{stick:[],apart:[],front:[],frontRange:1,fixed:{},mode:'signal',key:'s'},hist:[],cur:null,next:null,motto:'함께 웃는 우리 반'}}
@@ -3901,7 +3969,7 @@ function s2Plant(){return skyImg('plant',()=>pxMake(12,15,(set,rect)=>{rect(2,10
 /* ---------- 열기 · 닫기 ---------- */
 function openSeat(){const c=cur();if(!c){toast('먼저 학급을 골라 주세요');return}if(SDB&&!openSeat.pulling){openSeat.pulling=true;s2Pull().then(ch=>{openSeat.pulling=false;if(ch&&SEAT&&SEAT.phase==='setup'){const c2=cur();SEAT.c=c2;SEAT.d=s2Data(c2);s2SeatedFromCur();s2SetupRender()}})}ensureAudio();const d=s2Data(c);
   SEAT={c,d,phase:'setup',kidsMode:'abs',swap:false,sel:-1,chars:[],conf:[],sig:false,wink:0,tsay:null,doorK:0,note:{tab:'stick',pick:0,sel:new Set(),fix:-1},ed:{mode:'add'},chartView:'student'};
-  $('#seatView').hidden=false;document.body.style.overflow='hidden';stopTiles();
+  SC=SEAT;$('#seatView').hidden=false;document.body.style.overflow='hidden';stopTiles();
   const bc=$('#sBadgeIc').getContext('2d');bc.imageSmoothingEnabled=false;bc.clearRect(0,0,18,18);bc.drawImage(s2Teacher(0),1,0,22,24,0,0,18,20);
   s2SeatedFromCur();s2SetPhase('setup');s2Layout();cancelAnimationFrame(sraf);sraf=requestAnimationFrame(s2Frame);sceneMusic()}
 function closeSeat(){if(!SEAT)return;cancelAnimationFrame(sraf);SEAT=null;['#sNote','#sEdit','#sChart'].forEach(s=>$(s).hidden=true);$('#seatView').hidden=true;document.body.style.overflow='';try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}render();startTiles();sceneMusic()}
@@ -4065,7 +4133,7 @@ function s2Layout(){const S=SEAT;if(!S)return;const cv=$('#seatCanvas'),r=cv.get
   const W=S.W,H=S.H,L=S.d.layout;S.wallH=Math.max(96,H*.19);const pw=Math.min(W*.2,280),ph=Math.max(46,H*.08);S.pod={x:W/2,y:S.wallH+H*.045,w:pw,h:ph};
   const top=S.pod.y+ph+H*.035,bot=H-Math.max(78,H*.1),left=W*.06,right=W*.94;let csy=Math.min((bot-top)/L.rows,H*.2),csx=Math.min((right-left)/L.cols,csy*1.75);csy=Math.min(csy,csx*1.05);S.csx=csx;S.csy=csy;S.cs=Math.min(csx,csy);S.ox=(left+right)/2-csx*L.cols/2;S.oy=top+((bot-top)-csy*L.rows)*.35;
   S.door={x:0,y:S.wallH+H*.03,w:Math.max(22,W*.025),h:H*.2}}
-const s2X=u=>SEAT.ox+u*SEAT.csx,s2Y=v=>SEAT.oy+v*SEAT.csy;
+const s2X=u=>SC.ox+u*SC.csx,s2Y=v=>SC.oy+v*SC.csy;
 function s2Chair(L,i){const r=Math.floor(i/L.cols),cc=i%L.cols,dir=L.desks[i]||0,o=[[0,.3],[-.3,0],[0,-.3],[.3,0]][dir];return[cc+.5+o[0],r+.5+o[1]]}
 function s2DrawDesk(c,S,i,dir){const L=S.d.layout,cs=S.cs,X=S.csx,Yc=S.csy,r=Math.floor(i/L.cols),cc=i%L.cols,x=s2X(cc),y=s2Y(r);const v=dir%2===0;let dx,dy,dw,dh,hx,hy,hw,hh2;
   if(v){dw=X*.88;dh=Yc*.44;dx=x+X*.06;dy=dir===0?y+Yc*.1:y+Yc*.46;hw=Math.min(X*.42,Yc*.6);hh2=Yc*.2;hx=x+X/2-hw/2;hy=dir===0?y+Yc*.62:y+Yc*.16}
@@ -4075,7 +4143,7 @@ function s2DrawDesk(c,S,i,dir){const L=S.d.layout,cs=S.cs,X=S.csx,Yc=S.csy,r=Mat
   c.fillStyle='#d9a86b';roundRect(c,dx,dy+cs*.05,dw,dh,cs*.05);c.fill();c.fillStyle='#f3d6a4';roundRect(c,dx,dy,dw,dh-cs*.03,cs*.05);c.fill();c.fillStyle='rgba(255,255,255,.35)';c.fillRect(dx+cs*.05,dy+cs*.04,dw-cs*.1,Math.max(1,cs*.025))}
 function s2Head(c,x,y,hr,n,lbl){const S=SEAT;c.font='900 '+Math.round(hr*1.05)+'px "Noto Sans KR",sans-serif';const tw=c.measureText(lbl).width,w=Math.max(hr*2,tw+hr*.8);
   c.fillStyle='#ffffff';c.strokeStyle='#1e2a33';c.lineWidth=Math.max(2,hr*.14);roundRect(c,x-w/2,y-hr,w,hr*2,hr);c.fill();c.stroke();c.fillStyle='#1e2a33';c.textAlign='center';c.textBaseline='middle';c.fillText(lbl,x,y+hr*.05);c.textAlign='left'}
-function s2Kid(c,x,y,n,o){const S=SEAT,s=Math.max(28,Math.min(S.csy*.9,S.csx*.8)),hr=Math.max(11,s*.2),co=colorFor(n),lbl=S.c.display==='name'&&nameOf(S.c,n)?nameOf(S.c,n):String(n);
+function s2Kid(c,x,y,n,o){const S=SC,s=Math.max(28,Math.min(S.csy*.9,S.csx*.8)),hr=Math.max(11,s*.2),co=colorFor(n),lbl=S.c.display==='name'&&nameOf(S.c,n)?nameOf(S.c,n):String(n);
   if(o.seated){const by=y;c.fillStyle=co.col;roundRect(c,x-s*.2,by-s*.2,s*.4,s*.32,s*.12);c.fill();c.strokeStyle='#1e2a33';c.lineWidth=Math.max(1.5,s*.04);c.stroke();
     c.fillStyle=co.dark;c.beginPath();c.moveTo(x-s*.05,by-s*.2);c.lineTo(x+s*.05,by-s*.2);c.lineTo(x,by+s*.02);c.closePath();c.fill();s2Head(c,x,by-s*.34,hr,n,lbl);return{x,y:by-s*.34-hr}}
   const ph=o.ph||0,act=o.act,au=o.au||0;let hop=0,sway=0,armL=[-.2,.32],armR=[.2,.32];
@@ -4125,7 +4193,7 @@ function s2Teach(c,S,now){const P=S.pod,tw=P.h*1.6,th=tw*22/20;let f=0;if(now<S.
   const sp=P.h*.6;c.drawImage(s2Sprout(s2SecretOn()?1:0),P.x-P.w*.42,P.y-sp*.95,sp*.85,sp*1.02);
   if(S.tsay&&now-S.tsay.t<(S.tsay.keep||3200))s2Bubble(c,S.tsay.txt,P.x,P.y-th*.62-2,Math.round(Math.max(13,Math.min(26,S.H*.032,S.W*.036))),S.W)}
 function s2Say(txt,keep){if(SEAT)SEAT.tsay={txt,t:performance.now(),keep:keep||3200}}
-function s2Frame(now){const S=SEAT;if(!S)return;const c=$('#seatCanvas').getContext('2d');c.setTransform(S.dpr,0,0,S.dpr,0,0);
+function s2Frame(now){const S=SEAT;if(!S)return;SC=S;const c=$('#seatCanvas').getContext('2d');c.setTransform(S.dpr,0,0,S.dpr,0,0);
   if(S.phase==='ready'&&S.doorK<1)S.doorK=Math.min(1,S.doorK+.04);
   s2Room(c,S,now);const L=S.d.layout;Object.entries(L.desks).forEach(([i,dir])=>s2DrawDesk(c,S,+i,dir));
   if((S.phase==='result'||S.phase==='ready')&&S.swap&&S.sel>=0){const r=Math.floor(S.sel/L.cols),cc=S.sel%L.cols;c.setLineDash([8,6]);c.strokeStyle='#f2b824';c.lineWidth=4;roundRect(c,s2X(cc)+2,s2Y(r)+2,S.csx-4,S.csy-4,10);c.stroke();c.setLineDash([])}
@@ -4263,6 +4331,273 @@ function s2PushSoon(){if(!SDB)return;clearTimeout(s2PushT);s2PushT=setTimeout(s2
 function s2SyncNote(){const el=$('#s2Sync');if(el)el.textContent=SDB?'☁ 다른 컴퓨터와 연결됨':'이 컴퓨터에만 저장돼요'}
 (async()=>{try{if(window.claude&&window.claude.use){SDB=await window.claude.use('db')}}catch(e){SDB=null}if(!SDB)return;await s2Pull();await s2Push();s2SyncNote();
   if(SEAT&&SEAT.phase==='setup'){const c=cur();if(c){SEAT.c=c;SEAT.d=s2Data(c);s2SeatedFromCur();s2SetupRender()}}})();
+
+
+/* ===== 딩동댕 교실 타이머 ===== */
+let TM=null,traf=0;
+const T_MODES=[['break','쉬는 시간','놀다가 하나둘 자리로','🔔','#e0472f'],['act','활동','활동지·그리기·토의 등','✏️','#3b82f6'],['clean','정리 시간','교실이 점점 깨끗해져요','🧹','#14a3b8'],['pres','발표','한 명씩·모둠별 차례대로','🎤','#8a5cd6'],['line','줄서기','이동 수업 준비','🚶','#d99a10']];
+const T_ACTS=[['sheet','활동지'],['draw','그리기'],['make','만들기'],['read','독서'],['test','시험'],['talk','토의']];
+const T_BREAK=[['room','교실에서','쉬는 시간'],['mid','중간놀이','밖에서 놀다 와요'],['lunch','점심시간','급식 먹고 놀다 와요']];
+const T_DEST=['도서실','체육관','운동장','과학실','음악실','급식실'];
+const T_DESC={break:'학생들이 놀다가 시간이 다가올수록 하나둘 자리에 앉아요. 종이 치면 모두 책을 펴고 수업 준비 끝!',act:'고른 활동을 화면 속 친구들도 함께 해요. 활동 중에는 효과음 없이 마지막 10초와 종소리로 알려 줘요.',clean:'바닥의 쓰레기를 줍고 흐트러진 물건을 정리하면서 교실이 점점 깨끗해져요.',pres:'지금 발표하는 친구나 모둠의 남은 시간이 칠판에 크게 나와요.',line:'친구들이 의자를 넣고 교실 뒤에 줄을 서요. 시간이 끝나면 함께 출발해요!'};
+const T_SPEEDS=[[.5,'0.5배','천천히'],[.8,'0.8배','천천히'],[1,'보통','1배'],[1.2,'1.2배','빨리'],[1.5,'1.5배','빨리'],[2,'2배','빨리']];
+function tDefaults(){return{mode:'break',brk:'room',act:'draw',pres:'one',presOrder:'seq',presAuto:true,dest:'도서실',dur:{break:600,act:600,clean:180,pres:120,line:60},recent:[],bells:['09:40','10:30','11:20','12:10','13:50','14:40','15:30'],vol:.7,mute:false,speed:1.5,sMode:'signal',key:'s',openCls:false}}
+function tCfg(){if(!store.timer)store.timer=tDefaults();const d=store.timer,df=tDefaults();for(const k in df)if(d[k]===undefined)d[k]=df[k];for(const k in df.dur)if(d.dur[k]===undefined)d.dur[k]=df.dur[k];return d}
+function tFmt(s){s=Math.max(0,Math.ceil(s-1e-6));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?h+':'+pad(m)+':'+pad(x):m+':'+pad(x)}
+function tDurTxt(s){s=Math.round(s);const m=Math.floor(s/60),x=s%60;return m&&x?m+'분 '+x+'초':m?m+'분':x+'초'}
+function tClock(ms){const d=new Date(ms),h=d.getHours()%12||12;return h+':'+pad(d.getMinutes())}
+function tParse(str){str=String(str||'').trim().replace(/\s+/g,'');if(!str)return null;let m;
+  if((m=str.match(/^(\d+):(\d{1,2})$/)))return +m[1]*60+ +m[2];if((m=str.match(/^(\d+)분(\d+)초?$/)))return +m[1]*60+ +m[2];if((m=str.match(/^(\d+)초$/)))return +m[1];if((m=str.match(/^(\d+(?:\.\d+)?)분?$/)))return Math.round(+m[1]*60);return null}
+function tTone(f,d,v,type,at){if(!actx||TM&&TM.cfg.mute)return;const vol=(TM?TM.cfg.vol:.7);if(vol<=0)return;try{const t=(at||actx.currentTime),o=actx.createOscillator(),g=actx.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(v*vol,t+.01);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+d+.05)}catch(e){}}
+function tBell(){if(!actx)return;const t0=actx.currentTime+.05,seq=[659,523,587,392,392,587,659,523];seq.forEach((f,i)=>{const t=t0+i*.62+(i>=4?.35:0);tTone(f,1.9,.22,'sine',t);tTone(f*2,1.2,.06,'triangle',t)})}
+function tCurName(){const c=cur();return c?c.name:''}
+
+/* ---------- 열기 · 닫기 ---------- */
+function openTimer(){const c=cur();if(!c){toast('먼저 학급을 골라 주세요');return}ensureAudio();const cfg=tCfg();
+  TM={c,cfg,phase:'setup',kids:[],trash:[],snow:[],tsay:null,wink:0,sig:false,frozen:false,rem:0,T:0,lastT:performance.now(),anim:0,doorK:0,barT:performance.now()};SC=TM;
+  $('#timerView').hidden=false;document.body.style.overflow='hidden';stopTiles();
+  const bc=$('#tBadgeIc').getContext('2d');bc.imageSmoothingEnabled=false;bc.clearRect(0,0,18,18);bc.drawImage(s2Teacher(0),1,0,22,24,0,0,18,20);
+  tPrepClass();tLayout();tSeatAll();tPhase('setup');cancelAnimationFrame(traf);traf=requestAnimationFrame(tFrame);sceneMusic()}
+function closeTimer(){if(!TM)return;cancelAnimationFrame(traf);TM=null;SC=SEAT;['#tNote','#tBells'].forEach(s=>{const e=$(s);if(e)e.hidden=true});$('#timerView').hidden=true;document.body.style.overflow='';try{if(document.fullscreenElement)document.exitFullscreen()}catch(e){}render();startTiles();sceneMusic()}
+function tPrepClass(){const T=TM,c=cur();T.c=c;const d=s2Data(c),studs=participants(c);let L=d.layout;if(s2Count(L)<studs.length)L=s2Preset(d.preset!=='custom'?d.preset:'pair3',studs.length);
+  T.d={layout:L,motto:d.motto||'함께 웃는 우리 반'};const G=s2Geo(L);T.G=G;const seatOf=new Map(),used=new Set(),live=new Set(studs);
+  if(d.cur&&s2SameLayout(d.cur.layout,L))Object.entries(d.cur.seats).forEach(([i,n])=>{if(live.has(n)&&G.at.has(+i)&&!used.has(+i)){seatOf.set(n,+i);used.add(+i)}});
+  const free=G.D.filter(o=>!used.has(o.i)).sort((a,b)=>a.r-b.r||a.c-b.c).map(o=>o.i);studs.filter(n=>!seatOf.has(n)).forEach(n=>{const i=free.shift();if(i!==undefined)seatOf.set(n,i)});T.seatOf=seatOf}
+function tSeatAll(){const T=TM;T.kids=[...T.seatOf].map(([n,seat])=>{const p=s2Chair(T.d.layout,seat);return{n,seat,u:p[0],v:p[1],st:'sit',ph:Math.random()*6}});T.trash=[]}
+function tPhase(p){const T=TM;T.phase=p;const run=p!=='setup';$('#tSetup').hidden=run;$('#tBadge').hidden=run;$('#tBack').hidden=!run;$('#tChip').hidden=!run;
+  $('#tChip').textContent=T.c.name+' · '+participants(T.c).length+'명';$('#tBadgeCls').textContent=T.c.name;if(p==='setup'){T.tsay=null;tSetupRender()}tBar();tSoundUI()}
+
+/* ---------- 설정 카드 ---------- */
+function tSetupRender(){const T=TM,cfg=T.cfg,c=T.c,mode=cfg.mode,named=c.display==='name';
+  const modeBtns=T_MODES.map(([k,t,sub,ic,col])=>'<button type="button" class="t-mode'+(mode===k?' on':'')+'" data-tm="'+k+'" style="--mc:'+col+'"><i>'+ic+'</i><span><b>'+t+'</b><small>'+sub+'</small></span></button>').join('');
+  let sub='';if(mode==='break')sub='<b class="t-lb">어디서 놀아요?</b>'+s2Seg('data-tbrk',T_BREAK.map(([k,t,s])=>[k,t,s]),cfg.brk,'s-seg3');
+  else if(mode==='act')sub='<b class="t-lb">어떤 활동이에요?</b><div class="s-seg2 s-seg3">'+T_ACTS.map(([k,t])=>'<button type="button" data-tact="'+k+'" aria-pressed="'+(cfg.act===k)+'">'+t+'</button>').join('')+'</div>';
+  else if(mode==='pres')sub='<b class="t-lb">누가 발표해요?</b>'+s2Seg('data-tpres',[['one','한 명씩'],['group','모둠별']],cfg.pres)+'<b class="t-lb">순서</b>'+s2Seg('data-tporder',[['seq','순서대로'],['rand','무작위']],cfg.presOrder)+
+    '<label class="s-tg"><span>시간이 끝나면 다음 차례로<small>끄면 「다음 차례」 단추로 넘겨요</small></span><input type="checkbox" data-tauto'+(cfg.presAuto?' checked':'')+'></label>';
+  else if(mode==='line')sub='<b class="t-lb">어디로 가요?</b><div class="s-seg2 s-seg3">'+T_DEST.map(d=>'<button type="button" data-tdest="'+d+'" aria-pressed="'+(cfg.dest===d)+'">'+d+'</button>').join('')+'</div><input class="t-in" id="tDestIn" maxlength="12" placeholder="직접 적기 (예: 컴퓨터실)" value="'+(T_DEST.includes(cfg.dest)?'':escapeHtml(cfg.dest))+'">';
+  const dur=cfg.dur[mode],pres=mode==='pres',presets=(pres||mode==='line')?[30,60,120,180,300]:[60,180,300,600,900,1200];
+  const recent=cfg.recent.length?'<div class="t-recent"><span>최근</span>'+cfg.recent.map((r,i)=>'<button type="button" data-trec="'+i+'" style="--mc:'+((T_MODES.find(m=>m[0]===r.mode)||[])[4]||'#888')+'">▸ '+escapeHtml(tRecLabel(r))+'</button>').join('')+'</div>':'';
+  $('#tSetup').innerHTML='<div class="s-card"><div class="s-card-h">딩동댕 교실 타이머<small>우리 반 교실 타이머</small></div><div class="s-card-b">'+
+    '<div class="t-cls"><div class="t-clsh"><b>우리 반</b><select id="tCls">'+store.order.map(id=>'<option value="'+id+'"'+(id===c.id?' selected':'')+'>'+escapeHtml(store.classes[id].name)+'</option>').join('')+'</select><span class="t-clsn">'+(named?'이름':'번호')+' '+participants(c).length+'명</span><span class="sp"></span><button type="button" class="t-pm" data-ta="cls">'+(cfg.openCls?'−':'+')+'</button></div>'+
+    (cfg.openCls?'<div class="t-clsb">'+s2Seg('data-tdisp',[['number','번호로 보기'],['name','이름으로 보기']],c.display)+(named?'<p class="s-hint">한 줄에 한 명씩 입력하거나 엑셀 명단을 붙여넣어 주세요.</p><textarea class="s-area" id="tNames" spellcheck="false">'+escapeHtml(c.names.slice(0,c.count).join('\n'))+'</textarea><p class="s-hint">이름 '+c.count+'명 · 최대 40명</p>':'<div class="s-count"><button type="button" data-tcnt="-1">−</button><output>'+c.count+'</output><span>명</span><button type="button" data-tcnt="1">＋</button></div>')+'<p class="s-hint">책상은 자리 바꾸기에서 정한 우리 반 자리대로 놓여요.</p></div>':'')+'</div>'+recent+
+    '<div class="t-cols"><section><h5 class="s-h5">어떤 시간이에요?</h5><div class="t-modes">'+modeBtns+'</div><p class="t-desc">'+T_DESC[mode]+'</p>'+sub+'</section>'+
+    '<section><h5 class="s-h5">'+(pres?'한 차례에 얼마 동안?':'얼마 동안?')+'</h5><div class="t-dur"><button type="button" data-tadd="-60">−</button><input id="tDurIn" value="'+tFmt(dur)+'" inputmode="text" aria-label="시간"><button type="button" data-tadd="60">＋</button></div>'+
+    '<p class="s-hint" style="text-align:center">숫자를 눌러 바로 쓸 수 있어요 · 7 → 7분 · 1:30 → 1분 30초 · 45초</p><div class="t-small"><button type="button" data-tadd="-10">−10초</button><button type="button" data-tadd="10">+10초</button><button type="button" data-tadd="30">+30초</button></div>'+
+    '<div class="t-presets">'+presets.map(s=>'<button type="button" data-tset="'+s+'" aria-pressed="'+(dur===s)+'">'+tDurTxt(s)+'</button>').join('')+'</div>'+
+    (pres?'':'<div class="t-end"><span>끝나는 시각</span><input type="time" id="tEndIn"><button type="button" class="s-btn yellow sm" data-ta="nextbell">다음 종까지</button><button type="button" class="lnkb" data-ta="bells">종 시각 바꾸기</button></div>')+
+    '<p class="t-will" id="tWill"></p><button type="button" class="s-open" data-ta="start">시작!</button><p class="s-hint" style="text-align:center">스페이스 얼음·땡 · ↑↓ 1분 · F 전체 화면</p></section></div></div></div>';
+  tWill()}
+function tWill(){const T=TM;if(!T||T.phase!=='setup')return;const cfg=T.cfg,el=$('#tWill');if(!el)return;const dur=cfg.dur[cfg.mode];
+  if(cfg.mode==='pres'){const n=tTurns().length;el.innerHTML=n+(cfg.pres==='group'?'모둠':'명')+' × '+tDurTxt(dur)+' = 모두 <b>'+tDurTxt(n*dur)+'</b>';return}
+  el.innerHTML='지금 시작하면 <b>'+tClock(Date.now()+dur*1000)+'</b>에 종이 울려요'}
+function tRecLabel(r){const m=T_MODES.find(x=>x[0]===r.mode);let s;if(r.mode==='break')s=(T_BREAK.find(b=>b[0]===r.brk)||T_BREAK[0])[0]==='room'?'쉬는 시간':(T_BREAK.find(b=>b[0]===r.brk))[1];else if(r.mode==='act')s=(T_ACTS.find(a=>a[0]===r.act)||[0,'활동'])[1];else if(r.mode==='pres')s=(r.pres==='group'?'모둠 발표 ':'발표 ')+tDurTxt(r.dur)+'씩';else if(r.mode==='line')s='줄서기 '+tDurTxt(r.dur)+' · '+r.dest;else s=m[1];
+  return r.mode==='pres'||r.mode==='line'?s:s+' '+tDurTxt(r.dur)}
+function tSetDur(s){const T=TM,cfg=T.cfg;cfg.dur[cfg.mode]=Math.max(5,Math.min(3*3600,Math.round(s)));persistSoon();const inp=$('#tDurIn');if(inp)inp.value=tFmt(cfg.dur[cfg.mode]);document.querySelectorAll('#tSetup [data-tset]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tset===cfg.dur[cfg.mode])));tWill()}
+$('#tSetup').addEventListener('click',e=>{const T=TM;if(!T)return;const b=e.target.closest('button');if(!b)return;const cfg=T.cfg,c=T.c;
+  if(b.dataset.tm){cfg.mode=b.dataset.tm;persistSoon();tSetupRender();return}
+  if(b.dataset.tbrk){cfg.brk=b.dataset.tbrk;persistSoon();tSetupRender();return}
+  if(b.dataset.tact){cfg.act=b.dataset.tact;persistSoon();tSetupRender();return}
+  if(b.dataset.tpres){cfg.pres=b.dataset.tpres;persistSoon();tSetupRender();return}
+  if(b.dataset.tporder){cfg.presOrder=b.dataset.tporder;persistSoon();tSetupRender();return}
+  if(b.dataset.tdest){cfg.dest=b.dataset.tdest;persistSoon();tSetupRender();return}
+  if(b.dataset.tadd){tSetDur(cfg.dur[cfg.mode]+Number(b.dataset.tadd));return}
+  if(b.dataset.tset){tSetDur(+b.dataset.tset);return}
+  if(b.dataset.trec){const r=cfg.recent[+b.dataset.trec];if(!r)return;Object.assign(cfg,{mode:r.mode,brk:r.brk||cfg.brk,act:r.act||cfg.act,pres:r.pres||cfg.pres,presOrder:r.presOrder||cfg.presOrder,presAuto:r.presAuto!==undefined?r.presAuto:cfg.presAuto,dest:r.dest||cfg.dest});cfg.dur[r.mode]=r.dur;persistSoon();tStart();return}
+  if(b.dataset.tdisp){c.display=b.dataset.tdisp;persistSoon();tSetupRender();return}
+  if(b.dataset.tcnt){c.count=Math.max(1,Math.min(40,c.count+Number(b.dataset.tcnt)));c.absent=c.absent.filter(n=>n<=c.count);persistSoon();tPrepClass();tLayout();tSeatAll();tSetupRender();return}
+  const a=b.dataset.ta;if(a==='cls'){cfg.openCls=!cfg.openCls;persistSoon();tSetupRender()}else if(a==='start')tStart();
+  else if(a==='nextbell'){const now=new Date(),nm=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;const nb=cfg.bells.map(s=>{const[h,m]=s.split(':').map(Number);return h*60+m}).filter(x=>x>nm+.2).sort((x,y)=>x-y)[0];if(nb===undefined){toast('오늘 남은 종 시각이 없어요');return}tSetDur((nb-nm)*60);const ei=$('#tEndIn');if(ei)ei.value=pad(Math.floor(nb/60))+':'+pad(nb%60)}
+  else if(a==='bells')tBellsOpen()});
+$('#tSetup').addEventListener('change',e=>{const T=TM;if(!T)return;const t=e.target;
+  if(t.id==='tCls'){store.currentId=t.value;persist();T.c=cur();tPrepClass();tLayout();tSeatAll();tPhase('setup');return}
+  if(t.id==='tDurIn'){const s=tParse(t.value);if(s===null){toast('예: 7, 1:30, 45초 처럼 써 주세요');t.value=tFmt(T.cfg.dur[T.cfg.mode]);return}tSetDur(s)}
+  if(t.id==='tEndIn'&&t.value){const[h,m]=t.value.split(':').map(Number),now=new Date(),target=new Date(now);target.setHours(h,m,0,0);let s=(target-now)/1000;if(s<5){toast('지금보다 뒤의 시각을 골라 주세요');return}tSetDur(s)}
+  if(t.dataset.tauto!==undefined){T.cfg.presAuto=t.checked;persistSoon()}
+  if(t.id==='tDestIn'&&t.value.trim()){T.cfg.dest=t.value.trim();persistSoon();tSetupRender()}});
+$('#tSetup').addEventListener('keydown',e=>{if(e.target.id==='tDurIn'&&e.key==='Enter'){e.preventDefault();e.target.blur()}});
+$('#tSetup').addEventListener('input',e=>{const T=TM;if(!T||e.target.id!=='tNames')return;const c=T.c;const names=e.target.value.split(/\r?\n/).map(s=>s.split(/\t|,/)[0].trim()).filter(Boolean).slice(0,40);c.names=names;if(names.length){c.count=names.length;c.absent=c.absent.filter(n=>n<=c.count)}persistSoon();tPrepClass();tLayout();tSeatAll();
+  const sp=$('#tSetup .t-clsn');if(sp)sp.textContent='이름 '+participants(c).length+'명';$('#tChip').textContent=c.name+' · '+participants(c).length+'명'});
+function tBellsOpen(){const T=TM;let m=$('#tBells');if(!m){m=document.createElement('div');m.className='s-modal';m.id='tBells';$('#timerView').append(m);m.addEventListener('click',ev=>{const b=ev.target.closest('[data-tb]');if(!b)return;if(b.dataset.tb==='save'){const v=$('#tBellIn').value.split(/[,\s\n]+/).map(s=>s.trim()).filter(s=>/^\d{1,2}:\d{2}$/.test(s)).map(s=>{const[h,mm]=s.split(':');return pad(+h)+':'+mm}).sort();if(!v.length){toast('예: 09:40, 10:30 처럼 적어 주세요');return}TM.cfg.bells=v;persistSoon();toast('종 시각을 저장했어요')}m.hidden=true})}
+  m.hidden=false;m.innerHTML='<div class="s-mbox" style="width:min(460px,100%)"><div class="s-mhead" style="background:#2f5d50;color:#fff"><h4>종 시각 바꾸기</h4><p>우리 학교 시간표의 종 시각을 적어 주세요</p></div><div class="s-mbody"><textarea id="tBellIn" class="s-area" style="min-height:120px">'+T.cfg.bells.join(', ')+'</textarea><p class="s-hint">쉼표나 줄바꿈으로 나눠요 · 예: 09:40, 10:30, 13:50</p></div><div class="s-mfoot"><span class="sp"></span><button type="button" class="s-btn" data-tb="close">닫기</button><button type="button" class="s-btn red" data-tb="save">저장</button></div></div>'}
+
+/* ---------- 비밀 수첩 ---------- */
+function tNoteOpen(){const m=$('#tNote');m.hidden=false;tNoteRender()}
+function tNoteRender(){const T=TM,cfg=T.cfg,sp=cfg.speed,real=600/sp;
+  $('#tNote').innerHTML='<div class="s-mbox" style="width:min(560px,100%)"><div class="s-mhead" style="background:linear-gradient(#5a3a22,#3f2816);color:#ffe9c9"><h4>선생님 비밀 수첩</h4><p>칠판 시간이 흐르는 빠르기를 몰래 바꿔요. 학생들한테는 비밀!</p><button type="button" class="s-x" data-tn="close" aria-label="닫기">✕</button></div><div class="s-mbody">'+
+    '<div class="t-speeds">'+T_SPEEDS.map(([v,t,s])=>'<button type="button" data-tsp="'+v+'" aria-pressed="'+(sp===v)+'"><b>'+t+'</b><small>'+s+'</small></button>').join('')+'</div>'+
+    '<p class="t-spnote">'+(sp===1?'보통 빠르기예요. 칠판 시간과 실제 시간이 같아요.':'칠판의 10분이 실제로는 <b>'+tDurTxt(real)+'</b> 동안 흘러요.')+'</p>'+
+    '<b class="t-lb">언제 적용할까요?</b>'+s2Seg('data-tsm',[['signal','신호 줄 때만','교실 화면에서 몰래 켜기'],['always','항상 적용','시작할 때부터 켜져 있어요']],cfg.sMode)+
+    '<div class="s-howto"><h6>몰래 켜고 끄는 법</h6>새로 시작할 때마다 꺼진 채로 시작해요. 교실 화면에서 이렇게 켜요.<ol><li>교실 화면에서 <b>선생님을 1초 꾹</b> 누르기</li><li>또는 키보드 <kbd>'+escapeHtml(cfg.key.toUpperCase())+'</kbd> 키 누르기 <button type="button" class="s-btn sm" data-tn="key">'+(T.waitKey?'바꿀 키를 누르세요…':'키 바꾸기')+'</button></li></ol>켜지면 선생님이 살짝 윙크하고 <b>선생님 책상 위 새싹에 노란 꽃</b>이 피어요. 한 번 더 하면 꽃이 지고 보통 빠르기로 돌아와요.<br><small style="color:#8a6f5d">선생님을 짧게 누르면 그냥 말만 해요. 학생들 눈속임용으로 쓰세요.</small></div>'+
+    '</div><div class="s-mfoot"><span class="sp"></span><button type="button" class="s-btn red" data-tn="close">닫기</button></div></div>'}
+$('#tNote').addEventListener('click',e=>{const T=TM;if(!T)return;const b=e.target.closest('button');if(!b)return;const cfg=T.cfg;
+  if(b.dataset.tsp){cfg.speed=+b.dataset.tsp;persistSoon();tNoteRender();return}if(b.dataset.tsm){cfg.sMode=b.dataset.tsm;persistSoon();tNoteRender();return}
+  if(b.dataset.tn==='key'){T.waitKey=true;tNoteRender()}else if(b.dataset.tn==='close'){$('#tNote').hidden=true;T.waitKey=false}});
+function tSecretOn(){const T=TM;return T.cfg.sMode==='always'||T.sig}
+function tToggle(){const T=TM;if(!T||T.cfg.sMode==='always'||T.phase!=='run')return false;T.sig=!T.sig;if(T.sig)T.wink=performance.now()+1300;return true}
+
+/* ---------- 시작 · 진행 ---------- */
+function tTurns(){const T=TM,cfg=T.cfg,kids=[...T.seatOf.keys()].sort((a,b)=>a-b);if(cfg.pres!=='group')return(cfg.presOrder==='rand'?shuffle(kids.slice()):kids).map(n=>({label:n+'번',who:[n],name:s2Lbl(T.c,n)}));
+  const G=T.G,L=T.d.layout,gs=new Map();let tot=0;G.D.forEach(o=>{gs.set(o.g,(gs.get(o.g)||0)+1);tot++});const avg=tot/Math.max(1,gs.size);const key=o=>avg>=3?'g'+o.g:'b'+Math.floor(o.c/3)+'-'+Math.floor(o.r/2);
+  const groups=new Map();[...T.seatOf].forEach(([n,seat])=>{const o=G.at.get(seat);if(!o)return;const k=key(o);if(!groups.has(k))groups.set(k,{who:[],r:o.r,c:o.c});const g=groups.get(k);g.who.push(n);g.r=Math.min(g.r,o.r);g.c=Math.min(g.c,o.c)});
+  let list=[...groups.values()].sort((a,b)=>a.r-b.r||a.c-b.c);list.forEach((g,i)=>{g.label=(i+1)+'모둠';g.name=g.label;g.who.sort((a,b)=>a-b)});if(cfg.presOrder==='rand')list=shuffle(list);return list}
+function tStart(){const T=TM,cfg=T.cfg;ensureAudio();if(!T.seatOf.size){toast('앉을 학생이 없어요');return}
+  if(cfg.mode==='line'){const v=($('#tDestIn')||{}).value;if(v&&v.trim())cfg.dest=v.trim()}
+  const rec={mode:cfg.mode,brk:cfg.brk,act:cfg.act,pres:cfg.pres,presOrder:cfg.presOrder,presAuto:cfg.presAuto,dest:cfg.dest,dur:cfg.dur[cfg.mode]};const key=JSON.stringify(rec);cfg.recent=[rec].concat(cfg.recent.filter(r=>JSON.stringify(r)!==key)).slice(0,4);persistSoon();
+  T.mode=cfg.mode;T.sub=cfg.mode==='break'?cfg.brk:cfg.mode==='act'?cfg.act:cfg.mode==='line'?cfg.dest:cfg.pres;T.frozen=false;T.sig=false;T.ended=false;T.turnIdx=0;T.tsay=null;T.conf=[];T.snow=[];T.lastTick=-1;
+  tPrepClass();tLayout();tSeatAll();
+  if(T.mode==='pres'){T.turns=tTurns();T.T=cfg.dur.pres;T.rem=T.T;T.endWall=Date.now()+T.T*T.turns.length*1000;T.waitNext=false}else{T.T=cfg.dur[T.mode];T.rem=T.T;T.endWall=Date.now()+T.T*1000}
+  const now=performance.now();T.t0=now;T.lastT=now;T.elapsed=0;
+  T.kids.forEach((k,i)=>{k.wake=rnd(.2,T.mode==='line'?Math.min(6,T.T*.3):3);k.st='sit';k.say=null;k.sayUntil=0;k.idleT=0});
+  if(T.mode==='break'){const win=Math.min(T.T*.4,Math.max(20,Math.min(120,T.T*.3)));shuffle(T.kids.slice()).forEach((k,i,a)=>{k.sitAt=1.5+win*(1-(i/(a.length-1||1)))*rnd(.85,1);k.backAt=k.sitAt+2})}
+  if(T.mode==='clean'){const n=Math.max(12,T.kids.length*2);T.trash=[];for(let i=0;i<n;i++){const p=tFloorPt(true);T.trash.push({u:p[0],v:p[1],type:pick(['ball','sheet','sheet','crayon','eraser','book','ball']),rot:Math.random()*6,col:pick(['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6','#ff8fb8'])})}T.trashTotal=n;
+    const win=Math.min(T.T*.18,40);T.kids.forEach(k=>{k.sitAt=rnd(1,win)})}
+  if(T.mode==='line'){const order=T.kids.slice().sort((a,b)=>a.n-b.n);const per=Math.max(6,Math.min(14,Math.floor((T.uMax-T.uMin)/.62)));order.forEach((k,i)=>{k.lineIdx=i;k.lu=T.uMin+.5+(i%per)*.62+(Math.floor(i/per)%2)*.3;k.lv=T.lineV+Math.floor(i/per)*.75})}
+  tPhase('run');tSay(tStartLine(),3600);tBellMini();T.barT=performance.now()}
+function tStartLine(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간이에요! 교실에서는 걸어요!':T.sub==='mid'?'중간놀이 시간! 재미있게 놀다 와요~':'점심시간! 맛있게 먹고 와요~';
+  if(T.mode==='act')return (T_ACTS.find(a=>a[0]===T.sub)||[0,'활동'])[1]+' 시간 시작!';if(T.mode==='clean')return'깨끗하게 정리해요!';if(T.mode==='pres')return'발표 시작! 잘 들어 줘요';return T.cfg.dest+'에 갈 준비해요! 의자 넣고 줄 서요~'}
+function tBellMini(){if(!actx)return;const t=actx.currentTime+.03;tTone(784,.5,.14,'sine',t);tTone(1046,.7,.14,'sine',t+.18)}
+function tSay(txt,keep){if(TM)TM.tsay={txt,t:performance.now(),keep:keep||3200}}
+function tLabel(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간':T.sub==='mid'?'중간놀이':'점심시간';if(T.mode==='act')return(T_ACTS.find(a=>a[0]===T.sub)||[0,'활동'])[1]+' 시간';if(T.mode==='clean')return'정리 시간';
+  if(T.mode==='pres')return(T.cfg.pres==='group'?'모둠 발표 ':'발표 ')+Math.min(T.turns.length,T.turnIdx+1)+' / '+T.turns.length;return'줄서기 · '+T.cfg.dest}
+function tRight(){const T=TM;if(T.mode==='pres'){const nx=T.turns[T.turnIdx+1];return T.ended?'':nx?'다음 '+(T.cfg.pres==='group'?nx.label:nx.name):'마지막 차례'}const t=tClock(T.endWall);return T.mode==='break'?t+' 수업 시작':T.mode==='line'?t+' 출발':t+'까지'}
+function tCenter(){const T=TM;if(T.frozen)return'얼음!';if(T.ended)return T.mode==='break'?'수업 시작!':T.mode==='line'?'출발!':T.mode==='pres'?'발표 끝!':'끝!';if(T.mode==='pres'){if(T.waitNext)return'시간 끝!';const t=T.turns[T.turnIdx];return t?(T.cfg.pres==='group'?t.label:t.name)+' 발표 중':''}return''}
+function tFreeze(){const T=TM;if(!T||T.phase!=='run'||T.ended)return;T.frozen=!T.frozen;if(T.frozen){T.frozeAt=Date.now();tSay('얼음!',99999);tTone(1200,.25,.15,'triangle');T.snow=[]}else{T.endWall+=Date.now()-T.frozeAt;tSay('땡!',1500);tTone(660,.2,.15,'triangle')}tBar()}
+function tAdd(s){const T=TM;if(!T||T.phase!=='run')return;if(T.ended){if(s>0){T.ended=false;T.rem=s;T.T=Math.max(T.T,s);T.endWall=Date.now()+s*1000;tBar()}return}T.rem=Math.max(1,T.rem+s);if(s>0)T.T=Math.max(T.T,T.rem);T.endWall+=s*1000;tToast(s>0?'+1분':'−1분')}
+function tToast(t){toast(t)}
+function tNextTurn(){const T=TM;if(!T||T.mode!=='pres'||T.ended)return;if(T.turnIdx>=T.turns.length-1){tEnd();return}T.turnIdx++;T.rem=T.T;T.waitNext=false;const t=T.turns[T.turnIdx];tSay('다음은 '+(T.cfg.pres==='group'?t.label:t.name)+' 차례!');tBellMini();T.endWall=Date.now()+(T.turns.length-T.turnIdx)*T.T*1000;tBar()}
+function tEnd(){const T=TM;if(T.ended)return;T.ended=true;T.rem=0;T.frozen=false;tBell();const L=T.d.layout;
+  if(T.mode==='break'){tSay('수업 시작! 책을 펴요',6000);T.kids.forEach(k=>{if(k.st==='out'){const D=tDoor();k.u=D[0];k.v=D[1]}if(k.st!=='sit'){k.st='go';k.fast=true}})}
+  else if(T.mode==='act')tSay('그만! 모두 수고했어요',5000);else if(T.mode==='clean'){tSay('반짝반짝 깨끗해졌어요!',5000);T.trash=[];T.kids.forEach(k=>{if(k.st!=='sit'){k.st='go';k.fast=true}})}
+  else if(T.mode==='pres'){tSay('모두 발표 잘했어요!',5000);T.kids.forEach(k=>{if(k.st!=='sit'){k.st='go';k.fast=true}})}else{tSay('출발!',5000);T.kids.sort((a,b)=>a.lineIdx-b.lineIdx).forEach((k,i)=>{k.exitAt=performance.now()+i*350})}
+  const cols=['#ffd23f','#f0641c','#4fd3ff','#7cff6b','#ff4f8b','#c08cff'];for(let i=0;i<90;i++)T.conf.push({x:Math.random()*T.W,y:-Math.random()*T.H*.4,vx:(Math.random()-.5)*1.5,vy:1+Math.random()*2,r:Math.random()*6,vr:(Math.random()-.5)*.2,col:cols[i%6]});tBar()}
+function tBar(){const T=TM,b=$('#tBottom');if(!T||T.phase!=='run'){b.hidden=true;return}b.hidden=false;
+  b.innerHTML='<div class="s-bar">'+(T.ended?'<button type="button" class="big" data-tb2="again">다시 시작</button><button type="button" class="s-btn" data-tb2="add">+1분 더</button>':'<button type="button" class="big'+(T.frozen?' ice':'')+'" data-tb2="freeze">'+(T.frozen?'땡!':'얼음!')+'</button><button type="button" class="s-btn" data-tb2="m1">−1분</button><button type="button" class="s-btn" data-tb2="p1">+1분</button>'+(T.mode==='pres'?'<button type="button" class="s-btn dark" data-tb2="next">다음 차례</button>':''))+'<button type="button" class="s-btn" data-tb2="stop">'+(T.ended?'설정으로':'끝내기')+'</button></div>';b.classList.remove('fade');T.barT=performance.now()}
+$('#tBottom').addEventListener('click',e=>{const b=e.target.closest('[data-tb2]');if(!b||!TM)return;const a=b.dataset.tb2;ensureAudio();
+  if(a==='freeze')tFreeze();else if(a==='m1')tAdd(-60);else if(a==='p1')tAdd(60);else if(a==='next')tNextTurn();else if(a==='again')tStart();else if(a==='add')tAdd(60);else if(a==='stop'){if(TM.ended)tPhase('setup');else{tEnd()}}});
+
+/* ---------- 교실 배치 ---------- */
+function tLayout(){const T=TM;if(!T)return;const cv=$('#timerCanvas'),r=cv.getBoundingClientRect(),dpr=Math.min(2,window.devicePixelRatio||1);T.W=Math.max(300,r.width);T.H=Math.max(300,r.height);T.dpr=dpr;cv.width=Math.round(T.W*dpr);cv.height=Math.round(T.H*dpr);
+  const W=T.W,H=T.H,L=T.d.layout;T.wallH=Math.max(130,H*.34);const bw=Math.min(W*.6,980),bh=T.wallH*.86;T.board={x:W/2-bw/2,y:T.wallH*.06,w:bw,h:bh};
+  const tw=Math.min(W*.1,120);T.tdesk={x:W*.93-tw/2,y:T.wallH+H*.07,w:tw,h:Math.max(30,H*.06)};
+  const top=T.wallH+H*.06,shelf=H-Math.max(26,H*.04),lineSpace=Math.max(60,H*.13),bot=shelf-lineSpace,left=W*.09,right=W*.84;
+  let csy=Math.min((bot-top)/L.rows,H*.16),csx=Math.min((right-left)/L.cols,csy*1.75);csy=Math.min(csy,csx*1.05);T.csx=csx;T.csy=csy;T.cs=Math.min(csx,csy);T.ox=(left+right)/2-csx*L.cols/2;T.oy=top+((bot-top)-csy*L.rows)*.3;
+  T.door={x:0,y:T.wallH+H*.03,w:Math.max(22,W*.025),h:H*.2};T.shelfY=shelf;T.uMin=(W*.06-T.ox)/csx;T.uMax=(W*.82-T.ox)/csx;T.vMin=(T.wallH+H*.02-T.oy)/csy;T.lineV=(shelf-lineSpace*.55-T.oy)/csy;
+  const way=[];for(let r=-1;r<=L.rows;r++)for(let cc=-1;cc<=L.cols;cc++){if(r>=0&&cc>=0&&r<L.rows&&cc<L.cols&&L.desks[r*L.cols+cc]!==undefined)continue;const u=cc+.5,v=r+.5;if(u<T.uMin||u>T.uMax||v<T.vMin+.3||v>T.lineV+.3)continue;way.push([u,v])}
+  for(let k=0;k<8;k++)way.push([rnd(T.uMin+.3,T.uMax-.3),rnd(T.vMin+.4,-.15)]);T.way=way.length?way:[[L.cols/2,-.3]];
+  T.presSpots=[];const n=12;for(let i=0;i<n;i++)T.presSpots.push([L.cols/2+(i-(n-1)/2)*.55,Math.max(T.vMin+.55,-.45)])}
+function tDoor(){const T=TM;return[(T.door.x+T.door.w+T.csx*.25-T.ox)/T.csx,(T.door.y+T.door.h*.85-T.oy)/T.csy]}
+function tFloorPt(avoidDesk){const T=TM,L=T.d.layout;for(let g=0;g<20;g++){const u=rnd(Math.max(T.uMin+.2,-.4),Math.min(T.uMax-.2,L.cols+.4)),v=rnd(Math.max(T.vMin+.4,-.4),L.rows+.3);const cc=Math.floor(u),r=Math.floor(v);
+    if(avoidDesk&&r>=0&&cc>=0&&r<L.rows&&cc<L.cols&&L.desks[r*L.cols+cc]!==undefined){const fu=u-cc,fv=v-r,dir=L.desks[r*L.cols+cc];if(dir%2===0?(dir===0?fv<.55:fv>.45):true)continue}return[u,v]}return pick(T.way)}
+
+/* ---------- 학생 움직임 ---------- */
+const T_TALK={break:['같이 놀자!','술래잡기 하자','물 마시러 가자','어제 그거 봤어?','히히','쉿!','안녕~','화장실 갔다 올게','여기도 없고…','기지개 쭉~'],talk:['내 생각엔…','좋은 생각이다!','그건 왜?','맞아 맞아','이렇게 해 볼까?','나도 그렇게 생각해'],clean:['주웠다!','내 거 고마워~','깨끗해!','이거 누구 거야?','쓰레기 발견!'],pres:['이 그림을 보면…','저희 모둠은…','질문 있나요?','감사합니다!'],line:['빨리 가고 싶다','어디 가?','내 앞에 누구야?','줄 서자~','신난다!']};
+function tGo(k,u,v,then){k.st='walk';k.tu=u;k.tv=v;k.then=then}
+function tKidSay(k,list,p){if(Math.random()<(p||1)){k.say=pick(list);k.sayUntil=TM.anim+2.4;const T=TM;if(T.mode!=='act'&&T.mode!=='pres'&&!T.frozen)tTone(500+Math.random()*500,.06,.04,'square')}}
+function tKidTick(k,dt){const T=TM,L=T.d.layout,seat=s2Chair(L,k.seat),now=T.anim,el=T.elapsed;
+  if(k.st==='walk'){const sp=(k.fast?4.2:2.3)*dt,dx=k.tu-k.u,dy=k.tv-k.v,d=Math.hypot(dx,dy);k.ph+=dt*11;if(d<=sp){k.u=k.tu;k.v=k.tv;const f=k.then;k.then=null;k.st='idle';if(f)f()}else{k.u+=dx/d*sp;k.v+=dy/d*sp}return}
+  if(k.st==='act'){k.actT+=dt;if(k.actT>=k.actDur){k.st='idle';if(k.after){const f=k.after;k.after=null;f()}}return}
+  if(k.st==='go'){tGo(k,seat[0],seat[1],()=>{k.st='sit';k.fast=false});return}
+  if(k.st==='out'||k.st==='gone'){if(T.mode==='break'&&k.st==='out'&&(T.rem<=k.backAt||T.ended)){const D=tDoor();k.u=D[0];k.v=D[1];k.st='go'}return}
+  const rem=T.rem,M=T.mode;
+  if(M==='break'){if(T.ended)return;if(k.st==='sit'){if(el>=k.wake&&rem>k.sitAt+3)k.st='idle';return}
+    if(k.st==='line'||k.st==='pres')k.st='idle';
+    if(k.st==='idle'){if(rem<=k.sitAt){k.st='go';return}if(T.sub!=='room'&&!k.wentOut){k.wentOut=true;const D=tDoor();tGo(k,D[0],D[1],()=>{k.st='out'});return}
+      if(Math.random()<.5){const w=pick(T.way);tGo(k,w[0],w[1])}else{k.st='act';k.act=pick(['stretch','chat','sneeze','look','dance','jump','wave']);k.actT=0;k.actDur=rnd(1.4,3);if(Math.random()<.45)tKidSay(k,k.act==='sneeze'?['에취!']:k.act==='stretch'?['기지개 쭉~','하암~']:T_TALK.break)}}return}
+  if(M==='clean'){if(T.ended)return;if(k.st==='sit'){if(el>=k.wake&&rem>k.sitAt+3)k.st='idle';return}
+    if(k.st==='idle'){if(rem<=k.sitAt){k.st='go';return}const allow=T.trash.length>T.trashTotal*(rem/T.T)-1;const free=T.trash.filter(t=>!t.claim);
+      if(allow&&free.length){let best=null,bd=1e9;free.forEach(t=>{const d=Math.hypot(t.u-k.u,t.v-k.v);if(d<bd){bd=d;best=t}});best.claim=k.n;tGo(k,best.u,best.v-.05,()=>{k.st='act';k.act='jump';k.actT=0;k.actDur=.7;k.after=()=>{const i=T.trash.indexOf(best);if(i>=0)T.trash.splice(i,1);if(Math.random()<.3)tKidSay(k,T_TALK.clean)}})}
+      else if(Math.random()<.5){const w=pick(T.way);tGo(k,w[0],w[1])}else{k.st='act';k.act='look';k.actT=0;k.actDur=rnd(1,2)}}return}
+  if(M==='act'){if(k.st!=='sit'){k.st='go';return}if(T.sub==='talk'&&!T.ended&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(5,14);if(Math.random()<.5)tKidSay(k,T_TALK.talk)}return}
+  if(M==='pres'){const turn=T.turns[T.turnIdx],mine=!T.ended&&turn&&turn.who.includes(k.n);
+    if(mine){const idx=turn.who.indexOf(k.n),spot=[L.cols/2+(idx-(turn.who.length-1)/2)*.62,T.presSpots[0][1]];if(k.st==='sit'||k.st==='idle'&&(Math.abs(k.u-spot[0])>.05||Math.abs(k.v-spot[1])>.05)){tGo(k,spot[0],spot[1],()=>{k.st='pres'})}
+      else if(k.st==='pres'&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(4,9);if(Math.random()<.6)tKidSay(k,T_TALK.pres)}return}
+    if(k.st==='pres'||k.st==='idle')k.st='go';return}
+  if(M==='line'){if(T.ended){if(k.st!=='gone'&&k.exitAt&&performance.now()>=k.exitAt&&k.st!=='walk'){const D=tDoor();tGo(k,D[0],D[1]-.2,()=>{k.st='gone'})}return}
+    if(k.st==='sit'){if(el>=k.wake){k.st='idle';k.leftSeat=true}return}
+    if(k.st==='idle'){tGo(k,k.lu,k.lv,()=>{k.st='line'})}else if(k.st==='line'&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(6,16);if(Math.random()<.35)tKidSay(k,T_TALK.line)}return}}
+
+/* ---------- 그리기 ---------- */
+function tRoom(c,T,now){const W=T.W,H=T.H,wh=T.wallH,t=new Date();
+  c.fillStyle='#e3b981';c.fillRect(0,wh,W,H-wh);const ph2=Math.max(22,H*.045);for(let y=wh,k=0;y<H;y+=ph2,k++){c.fillStyle=k%2?'#deb37a':'#e8c08a';c.fillRect(0,y,W,ph2-2);c.fillStyle='#cf9f66';c.fillRect(0,y+ph2-2,W,2);for(let x=(k%3)*90;x<W;x+=270)c.fillRect(x,y,2,ph2-2)}
+  c.fillStyle='#f6efe4';c.fillRect(0,0,W,wh);c.fillStyle='#e9dcc6';c.fillRect(0,wh-14,W,14);c.fillStyle='#c9a77a';c.fillRect(0,wh-4,W,4);
+  c.strokeStyle='#8a6f5d';c.lineWidth=1.5;c.beginPath();c.moveTo(0,6);c.quadraticCurveTo(W/2,24,W,6);c.stroke();const bc=['#e8463a','#f2c12e','#3a8fd0','#4cb36b','#e0588f','#8a6cd8'];for(let i=0;i<Math.ceil(W/44);i++){const x=i*44+10,y=6+Math.sin(Math.PI*x/W)*14;c.fillStyle=bc[i%6];c.beginPath();c.moveTo(x,y);c.lineTo(x+22,y+1);c.lineTo(x+11,y+18);c.closePath();c.fill()}
+  const B=T.board,lx=B.x/2;const cr=Math.min(wh*.13,W*.028),cx=lx,cy=wh*.25;c.fillStyle='#ffffff';c.beginPath();c.arc(cx,cy,cr,0,Math.PI*2);c.fill();c.lineWidth=Math.max(3,cr*.14);c.strokeStyle='#3a4652';c.stroke();
+  const hA=((t.getHours()%12)+t.getMinutes()/60)/12*Math.PI*2-Math.PI/2,mA=t.getMinutes()/60*Math.PI*2-Math.PI/2;c.lineCap='round';c.lineWidth=Math.max(2,cr*.12);c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(hA)*cr*.5,cy+Math.sin(hA)*cr*.5);c.stroke();c.lineWidth=Math.max(1.5,cr*.07);c.strokeStyle='#e0472f';c.beginPath();c.moveTo(cx,cy);c.lineTo(cx+Math.cos(mA)*cr*.78,cy+Math.sin(mA)*cr*.78);c.stroke();
+  const fw=Math.min(B.x*.8,190),fh=wh*.26,fx=lx-fw/2,fy=wh*.5;c.fillStyle='#8a5a2e';c.fillRect(fx-5,fy-5,fw+10,fh+10);c.fillStyle='#fffaf0';c.fillRect(fx,fy,fw,fh);c.textAlign='center';c.textBaseline='middle';c.fillStyle='#d6336c';c.font='900 '+Math.round(fh*.2)+'px "Noto Sans KR",sans-serif';c.fillText('급훈',fx+fw/2,fy+fh*.27);
+  c.fillStyle='#1e2a33';c.font='900 '+Math.round(Math.min(fh*.26,fw/(T.d.motto.length*.9+1)))+'px "Noto Sans KR",sans-serif';c.fillText(T.d.motto,fx+fw/2,fy+fh*.66);
+  const rx=(B.x+B.w+W)/2,pw=Math.min(W-B.x-B.w-30,170),ph=wh*.5,px=rx-pw/2,py=wh*.16;c.fillStyle='#8a5a2e';c.fillRect(px-5,py-5,pw+10,ph+10);c.fillStyle='#d9a86b';c.fillRect(px,py,pw,ph);
+  [['#ffffff',.08,.1],['#cfe9f7',.38,.08],['#ffd6e0',.68,.12],['#fff3a0',.12,.52],['#ffffff',.42,.5],['#d8f5d0',.7,.55]].forEach(([col,ax,ay],i)=>{const w2=pw*.24,h2=ph*.36,x2=px+pw*ax,y2=py+ph*ay;c.save();c.translate(x2+w2/2,y2+h2/2);c.rotate((i%3-1)*.06);c.fillStyle=col;c.fillRect(-w2/2,-h2/2,w2,h2);c.strokeStyle='#3b82f6';c.lineWidth=1.5;c.strokeRect(-w2*.3,-h2*.25,w2*.6,h2*.4);c.fillStyle='#e8463a';c.beginPath();c.arc(0,-h2/2+3,2.5,0,7);c.fill();c.restore()});
+  tBoard(c,T,now);
+  const D=T.door;c.fillStyle='#5f3b1c';c.fillRect(D.x,D.y-4,D.w+6,D.h+8);c.fillStyle='#3a2a1c';c.fillRect(D.x,D.y,D.w,D.h);const dk=T.doorK||0;c.fillStyle='#b98450';c.fillRect(D.x,D.y,D.w*(1-dk*.85),D.h);c.fillStyle='#cfe9f7';c.fillRect(D.x+D.w*.2*(1-dk*.85),D.y+D.h*.12,D.w*.55*(1-dk*.85),D.h*.25);
+  for(let i=0;i<3;i++){const y=wh+H*.05+i*H*.2;c.fillStyle='#8fc6e8';c.fillRect(W-10,y,10,H*.15);c.fillStyle='#ffffff';c.fillRect(W-10,y+H*.075,10,3)}
+  c.imageSmoothingEnabled=false;[.5,.7].forEach(k=>{const pw2=Math.max(28,W*.03);c.drawImage(s2Plant(),W-pw2-12,H*k,pw2,pw2*1.25)});
+  const sy=T.shelfY,sh=H-sy;c.fillStyle='#8a5a2e';c.fillRect(W*.06,sy,W*.8,sh);const bk=['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6','#e0588f','#14a3b8','#f08a24'];for(let x=W*.065,i=0;x<W*.855;x+=Math.max(7,sh*.32),i++){c.fillStyle=bk[(i*7)%8];c.fillRect(x,sy+2,Math.max(5,sh*.26),sh-3)}
+  c.fillStyle='#ffffff';c.fillRect(W*.88,sy-sh*.4,W*.08,sh*1.3);c.fillStyle='#1e2a33';c.font='900 '+Math.round(Math.max(10,sh*.5))+'px "Noto Sans KR",sans-serif';c.fillText('학급문고',W*.92,sy+sh*.25);c.textAlign='left';c.textBaseline='alphabetic'}
+function tBoard(c,T,now){const B=T.board,{x,y,w,h}=B;c.fillStyle='#a8693a';c.fillRect(x-8,y-8,w+16,h+16);c.fillStyle='#2f5d50';c.fillRect(x,y,w,h);c.fillStyle='rgba(255,255,255,.04)';c.fillRect(x+w*.1,y+h*.55,w*.5,h*.12);c.fillRect(x+w*.6,y+h*.2,w*.3,h*.08);
+  const fs=Math.max(14,h*.085),run=T.phase==='run';c.textBaseline='middle';
+  if(!run){c.textAlign='center';c.fillStyle='rgba(244,247,240,.35)';c.font=Math.round(h*.5)+'px "Black Han Sans","Noto Sans KR",sans-serif';c.fillText(tFmt(T.cfg.dur[T.cfg.mode]),x+w/2,y+h*.56);c.textAlign='left';c.textBaseline='alphabetic';return}
+  const hc=T.mode==='break'?'#ffd75e':T.frozen?'#bfe6ff':'#f4f7f0';c.font='900 '+Math.round(fs)+'px "Noto Sans KR",sans-serif';c.fillStyle=T.mode==='break'?'#ffd75e':'#bfe6c8';c.textAlign='left';c.fillText(tLabel(),x+w*.035,y+h*.12);
+  c.fillStyle='rgba(255,255,255,.7)';c.fillRect(x+w*.035,y+h*.12+fs*.62,c.measureText(tLabel()).width,2);
+  c.textAlign='right';c.fillStyle='#f4f7f0';c.fillText(tRight(),x+w*.965,y+h*.12);c.textAlign='center';const ct=tCenter();if(ct){c.fillStyle=T.frozen?'#bfe6ff':'#ffd75e';c.fillText(ct,x+w/2,y+h*.12)}
+  const last=!T.ended&&!T.frozen&&T.rem<=10&&T.rem>0,pulse=last?1+.06*Math.sin(now/90):1;let col=T.frozen?'#bfe6ff':T.mode==='break'?'#ffd75e':'#f4f7f0';if(last)col='#ff8a80';
+  c.save();c.translate(x+w/2,y+h*.56);c.scale(pulse,pulse);c.font=Math.round(h*.6)+'px "Black Han Sans","Noto Sans KR",sans-serif';c.fillStyle='rgba(0,0,0,.18)';c.fillText(tFmt(T.rem),4,6);c.fillStyle=col;c.fillText(tFmt(T.rem),0,0);
+  c.globalCompositeOperation='destination-out';c.fillStyle='rgba(0,0,0,.12)';for(let i=0;i<70;i++){c.fillRect(hh(i,301)*w*.6-w*.3,hh(i,302)*h*.6-h*.3,2,2)}c.restore();
+  if(T.mode==='break'&&!T.frozen){c.font='700 '+Math.round(fs*.85)+'px "Noto Sans KR",sans-serif';c.fillStyle='rgba(255,236,160,.55)';c.textAlign='left';c.fillText('야호',x+w*.04,y+h*.42);c.fillText('헤헤',x+w*.04,y+h*.72);c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=2;c.beginPath();c.arc(x+w*.92,y+h*.48,h*.06,0,7);c.stroke()}
+  const frac=T.mode==='pres'?T.rem/T.T:T.rem/Math.max(1,T.T),lx0=x+w*.12,lw=w*.76,ly=y+h*.9;c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw,ly);c.stroke();c.strokeStyle=T.mode==='break'?'#ffd75e':'#f4f7f0';c.lineWidth=4;c.setLineDash([10,4]);c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw*cl(frac),ly);c.stroke();c.setLineDash([]);
+  c.fillStyle='#c9a77a';c.fillRect(lx0-34,ly-6,30,12);c.fillStyle='#4a5563';c.fillRect(lx0-34,ly+2,30,4);c.fillStyle='#ffffff';c.fillRect(lx0+lw*cl(frac)-2,ly-3,14,6);c.textAlign='left';c.textBaseline='alphabetic'}
+function tDeskItem(c,T,seat,n,kind,u){const L=T.d.layout,r=Math.floor(seat/L.cols),cc=seat%L.cols,dir=L.desks[seat]||0,X=T.csx,Y=T.csy,x0=s2X(cc),y0=s2Y(r);
+  let cx=x0+X/2,cy=dir===0?y0+Y*.21:dir===2?y0+Y*.72:y0+Y/2;if(dir===1)cx=x0+X*.72;if(dir===3)cx=x0+X*.28;const s=dir%2===0?Math.min(X*.3,Y*.24):Math.min(X*.24,Y*.3);
+  if(kind==='read'||kind==='book'){c.fillStyle='#ffffff';c.fillRect(cx-s*.95,cy-s*.42,s*.9,s*.75);c.fillRect(cx+s*.05,cy-s*.42,s*.9,s*.75);c.strokeStyle='#8a6f5d';c.lineWidth=1;c.strokeRect(cx-s*.95,cy-s*.42,s*1.9,s*.75);c.fillStyle=colorFor(n).col;c.fillRect(cx-s*1,cy+s*.33,s*2,s*.08);c.fillStyle='#c9ced3';for(let i=0;i<3;i++){c.fillRect(cx-s*.8,cy-s*.25+i*s*.18,s*.6,1.5);c.fillRect(cx+s*.2,cy-s*.25+i*s*.18,s*.6,1.5)}return}
+  if(kind==='sheet'||kind==='test'){c.fillStyle='#ffffff';c.fillRect(cx-s*.55,cy-s*.5,s*1.1,s*.95);c.strokeStyle='#c9ced3';c.lineWidth=1.2;const lines=Math.floor(4*(kind==='test'?Math.min(1,u*1.3):u)+.5);for(let i=0;i<4;i++){c.strokeStyle=i<lines?'#3a4652':'#e3e6ea';c.beginPath();c.moveTo(cx-s*.4,cy-s*.3+i*s*.2);c.lineTo(cx+s*.4,cy-s*.3+i*s*.2);c.stroke()}if(kind==='test'){c.fillStyle='#e0472f';c.font='900 '+Math.round(s*.3)+'px sans-serif';c.fillText('',cx,cy)}c.fillStyle='#f2c12e';c.fillRect(cx+s*.45,cy-s*.1,s*.5,s*.09);return}
+  if(kind==='draw'){c.fillStyle='#ffffff';c.fillRect(cx-s*.7,cy-s*.5,s*1.4,s*.95);const cols=['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6'];const k=Math.floor(u*8)+1;for(let i=0;i<k;i++){c.strokeStyle=cols[(n+i)%5];c.lineWidth=2;c.beginPath();const a=hh(n*13+i,7),b=hh(n*13+i,9);c.moveTo(cx-s*.5+a*s,cy-s*.35+b*s*.6);c.quadraticCurveTo(cx,cy,cx-s*.5+hh(n+i,3)*s,cy-s*.35+hh(n+i,4)*s*.6);c.stroke()}return}
+  if(kind==='make'){const cols=['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6'];const k=Math.floor(u*6)+1;for(let i=0;i<k;i++){c.fillStyle=cols[(n+i)%5];c.fillRect(cx-s*.6+(i%3)*s*.42,cy+s*.1-Math.floor(i/3)*s*.32,s*.38,s*.3)}return}}
+function tTrash(c,T,t){const x=s2X(t.u),y=s2Y(t.v),s=Math.max(6,T.cs*.12);c.save();c.translate(x,y);c.rotate(t.rot);
+  if(t.type==='ball'){c.fillStyle='#ffffff';c.beginPath();c.arc(0,0,s*.6,0,7);c.fill();c.strokeStyle='#b8c4cf';c.lineWidth=1;c.stroke();c.beginPath();c.moveTo(-s*.3,-s*.1);c.lineTo(s*.2,s*.2);c.stroke()}
+  else if(t.type==='sheet'){c.fillStyle='#ffffff';c.fillRect(-s,-s*.7,s*2,s*1.4);c.strokeStyle='#c9ced3';c.strokeRect(-s,-s*.7,s*2,s*1.4)}
+  else if(t.type==='crayon'){c.fillStyle=t.col;c.fillRect(-s*.8,-s*.18,s*1.6,s*.36)}else if(t.type==='eraser'){c.fillStyle='#ff8fb8';c.fillRect(-s*.5,-s*.3,s,s*.6);c.fillStyle='#3b82f6';c.fillRect(-s*.5,-s*.3,s*.35,s*.6)}else{c.fillStyle=t.col;c.fillRect(-s*.9,-s*.6,s*1.8,s*1.2);c.fillStyle='#ffffff';c.fillRect(-s*.75,-s*.45,s*.2,s*.9)}c.restore()}
+function tDrawDesk(c,T,i,dir,pushed){if(!pushed){s2DrawDesk(c,T,i,dir);return}const L=T.d.layout,X=T.csx,Y=T.csy,r=Math.floor(i/L.cols),cc=i%L.cols,x=s2X(cc),y=s2Y(r);c.save();
+  const off=[[0,-Y*.14],[X*.14,0],[0,Y*.14],[-X*.14,0]][dir];c.translate(off[0],off[1]);c.beginPath();if(dir===0)c.rect(x,y+Y*.55,X,Y);else if(dir===2)c.rect(x,y-Y,X,Y*1.45);else if(dir===1)c.rect(x-X,y,X*1.45,Y);else c.rect(x+X*.55,y,X,Y);c.clip();s2DrawDesk(c,T,i,dir);c.restore();
+  c.save();c.beginPath();if(dir===0)c.rect(x,y,X,Y*.55);else if(dir===2)c.rect(x,y+Y*.45,X,Y*.55);else if(dir===1)c.rect(x+X*.45,y,X*.55,Y);else c.rect(x,y,X*.55,Y);c.clip();s2DrawDesk(c,T,i,dir);c.restore()}
+function tFrame(now){const T=TM;if(!T)return;SC=T;const c=$('#timerCanvas').getContext('2d');c.setTransform(T.dpr,0,0,T.dpr,0,0);
+  const rdt=Math.min(.1,(now-T.lastT)/1000);T.lastT=now;const run=T.phase==='run',dt=run&&!T.frozen?rdt:0;T.anim+=dt;
+  if(run&&!T.frozen&&!T.ended&&!T.waitNext){const sp=tSecretOn()?T.cfg.speed:1;T.rem-=rdt*sp;T.elapsed+=rdt;const sec=Math.ceil(T.rem);if(sec<=10&&sec>0&&sec!==T.lastTick){T.lastTick=sec;tTone(sec<=3?1046:880,.08,.12,'square')}
+    if(T.rem<=0){if(T.mode==='pres'&&T.turnIdx<T.turns.length-1){if(T.cfg.presAuto)tNextTurn();else{T.rem=0;T.waitNext=true;tTone(880,.3,.15,'sine');tSay('시간 끝! 다음 차례로 넘겨 주세요')}}else tEnd()}}
+  if(run&&T.mode==='break'&&T.sub!=='room'||run&&T.mode==='line'&&T.ended)T.doorK=Math.min(1,(T.doorK||0)+rdt*2);else T.doorK=Math.max(0,(T.doorK||0)-rdt);
+  if(run&&dt>0)T.kids.forEach(k=>tKidTick(k,dt));else if(run&&T.ended&&T.frozen===false)T.kids.forEach(k=>tKidTick(k,rdt));
+  tRoom(c,T,now);T.trash.forEach(t=>tTrash(c,T,t));const L=T.d.layout,occupied=new Set(T.kids.filter(k=>k.st==='sit').map(k=>k.seat));
+  Object.entries(L.desks).forEach(([i,dir])=>{i=+i;const owner=T.kids.find(k=>k.seat===i);tDrawDesk(c,T,i,dir,run&&T.mode==='line'&&owner&&owner.leftSeat&&!occupied.has(i))});
+  const P=T.tdesk,tw=P.h*1.7,th=tw*22/20;let f=0;if(now<T.wink)f=1;else if(T.tsay&&now-T.tsay.t<2600&&Math.floor(now/160)%2)f=2;c.imageSmoothingEnabled=false;c.drawImage(s2Teacher(f),P.x+P.w/2-tw/2,P.y-th*.62,tw,th);T.teachRect={x:P.x+P.w/2-tw/2,y:P.y-th*.62,w:tw,h:th*.62+P.h};
+  c.fillStyle='#a8693a';c.fillRect(P.x,P.y+P.h*.2,P.w,P.h*.8);c.fillStyle='#c8874a';c.fillRect(P.x,P.y,P.w,P.h*.28);c.fillStyle='#3b82f6';c.fillRect(P.x+P.w*.08,P.y-P.h*.12,P.w*.28,P.h*.2);c.fillStyle='#ffffff';c.fillRect(P.x+P.w*.08,P.y-P.h*.2,P.w*.28,P.h*.1);
+  c.drawImage(s2Sprout(tSecretOn()?1:0),P.x+P.w*.4,P.y-P.h*.55,P.h*.5,P.h*.6);c.fillStyle='#ffffff';c.beginPath();c.ellipse(P.x+P.w*.82,P.y-P.h*.05,P.w*.08,P.h*.22,0,0,7);c.fill();c.strokeStyle='#e0472f';c.lineWidth=2;c.stroke();
+  const u=run?cl(1-T.rem/Math.max(1,T.T)):0;
+  const vis=T.kids.filter(k=>k.st!=='out'&&k.st!=='gone').sort((a,b)=>a.v-b.v);vis.forEach(k=>{const seated=k.st==='sit',x=s2X(k.u),y=s2Y(k.v)+(seated?0:T.csy*.12);
+    const o={seated,ph:k.ph,act:k.st==='act'?k.act:k.st==='pres'?'wave':(T.mode==='act'&&T.sub==='test'&&seated?null:null),au:k.st==='act'?k.actT/k.actDur:(T.anim%1)};const a=s2Kid(c,x,y,k.n,o);k.ax=a.x;k.ay=a.y});
+  T.kids.forEach(k=>{if(k.st!=='sit')return;const kind=T.mode==='act'&&run?T.sub:(T.mode==='break'&&T.ended&&run?'book':null);if(kind&&kind!=='talk')tDeskItem(c,T,k.seat,k.n,kind,T.mode==='act'?u:1)});
+  vis.forEach(k=>{if(k.say&&k.sayUntil>T.anim)drawBubble(c,k.say,k.ax,k.ay-4,Math.round(Math.max(12,Math.min(18,T.cs*.22))),T.W)});
+  if(T.frozen){c.fillStyle='rgba(200,230,255,.28)';c.fillRect(0,T.wallH,T.W,T.H-T.wallH);if(T.snow.length<80)T.snow.push({x:Math.random()*T.W,y:T.wallH,v:20+Math.random()*30,r:1.5+Math.random()*2.5});c.fillStyle='#ffffff';T.snow.forEach(s=>{s.y+=s.v*rdt;s.x+=Math.sin(now/600+s.r)*.3;if(s.y>T.H){s.y=T.wallH}c.beginPath();c.arc(s.x,s.y,s.r,0,7);c.fill()})}
+  if(T.tsay&&now-T.tsay.t<(T.tsay.keep||3200))s2Bubble(c,T.tsay.txt,P.x+P.w/2,P.y-th*.62-2,Math.round(Math.max(13,Math.min(24,T.H*.03,T.W*.034))),T.W);
+  if(T.conf&&T.conf.length){T.conf.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.05;p.r+=p.vr;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.col;c.fillRect(-4,-2,8,4);c.restore()});T.conf=T.conf.filter(p=>p.y<T.H+20)}
+  if(run&&!T.frozen&&!T.ended&&now-T.barT>3500)$('#tBottom').classList.add('fade');
+  traf=requestAnimationFrame(tFrame)}
+
+/* ---------- 조작 ---------- */
+function tSoundUI(){const T=TM;if(!T)return;$('#tSound').textContent=T.cfg.mute?'🔇':'🔊';$('#tVol').value=Math.round(T.cfg.vol*100)}
+$('#tSound').onclick=()=>{const T=TM;if(!T)return;T.cfg.mute=!T.cfg.mute;persistSoon();tSoundUI();ensureAudio()};$('#tVol').oninput=e=>{const T=TM;if(!T)return;T.cfg.vol=e.target.value/100;T.cfg.mute=false;persistSoon();tSoundUI()};
+$('#tFull').onclick=()=>{const el=$('#timerView');try{if(document.fullscreenElement)document.exitFullscreen();else if(el.requestFullscreen)el.requestFullscreen()}catch(e){}};
+$('#tHome').onclick=()=>{closeTimer();window.scrollTo({top:0,behavior:'smooth'})};$('#tBack').onclick=()=>{if(TM){TM.frozen=false;tSeatAll();tPhase('setup')}};$('#tBadge').onclick=tNoteOpen;$('#btnTimer').onclick=openTimer;
+$('#timerView').addEventListener('pointermove',()=>{if(TM&&TM.phase==='run'){$('#tBottom').classList.remove('fade');TM.barT=performance.now()}});
+$('#timerCanvas').addEventListener('pointerdown',e=>{const T=TM;if(!T)return;$('#tBottom').classList.remove('fade');T.barT=performance.now();const rc=e.currentTarget.getBoundingClientRect(),x=e.clientX-rc.left,y=e.clientY-rc.top,tr=T.teachRect;
+  if(tr&&T.phase==='run'&&x>=tr.x&&x<=tr.x+tr.w&&y>=tr.y&&y<=tr.y+tr.h){T.lp=setTimeout(()=>{T.lp=null;tToggle()},1000)}});
+$('#timerCanvas').addEventListener('pointerup',()=>{const T=TM;if(T&&T.lp){clearTimeout(T.lp);T.lp=null;tSay(pick(['오늘도 화이팅!','시간 잘 지켜요~','다들 멋져요!','선생님은 아무것도 몰라요~','천천히 해도 돼요']))}});
+$('#timerCanvas').addEventListener('pointerleave',()=>{const T=TM;if(T&&T.lp){clearTimeout(T.lp);T.lp=null}});
+window.addEventListener('resize',()=>{if(TM){tLayout();TM.kids.forEach(k=>{if(k.st==='sit'){const p=s2Chair(TM.d.layout,k.seat);k.u=p[0];k.v=p[1]}})}});document.addEventListener('fullscreenchange',()=>{if(TM)setTimeout(tLayout,80)});
+document.addEventListener('keydown',e=>{const T=TM;if(!T)return;const tag=(document.activeElement||{}).tagName||'';
+  if(T.waitKey&&e.key.length===1){e.preventDefault();T.cfg.key=e.key.toLowerCase();T.waitKey=false;persistSoon();tNoteRender();return}
+  if(e.key==='Escape'){for(const id of ['#tNote','#tBells'])if($(id)&&!$(id).hidden){$(id).hidden=true;return}if(document.fullscreenElement)return;if(T.phase==='run'){T.frozen=false;tSeatAll();tPhase('setup')}else closeTimer();return}
+  if(/^(INPUT|SELECT|TEXTAREA)$/.test(tag))return;if(!$('#tNote').hidden)return;
+  if(e.key.toLowerCase()===T.cfg.key&&!e.ctrlKey&&!e.metaKey&&!e.altKey){if(tToggle()){e.preventDefault();return}}
+  if(e.key==='f'||e.key==='F'){$('#tFull').click();return}
+  if(T.phase!=='run')return;if(e.key===' '||e.code==='Space'){e.preventDefault();if(T.ended)tStart();else tFreeze()}else if(e.key==='ArrowUp'){e.preventDefault();tAdd(60)}else if(e.key==='ArrowDown'){e.preventDefault();tAdd(-60)}else if(e.key==='ArrowRight'&&T.mode==='pres'){tNextTurn()}});
 
 /* ---------- 시작 ---------- */
 if(!store.currentId||!store.classes[store.currentId])store.currentId=store.order[0]||null;
