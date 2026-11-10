@@ -4450,7 +4450,7 @@ function tStart(){const T=TM,cfg=T.cfg;ensureAudio();if(!T.seatOf.size){toast('�
   if(T.mode==='pres'){T.turns=tTurns();T.T=cfg.dur.pres;T.rem=T.T;T.endWall=Date.now()+T.T*T.turns.length*1000;T.waitNext=false}else{T.T=cfg.dur[cfg.mode];T.rem=T.T;T.endWall=Date.now()+T.T*1000}
   const now=performance.now();T.t0=now;T.lastT=now;T.elapsed=0;
   T.kids.forEach((k,i)=>{k.wake=rnd(.2,T.mode==='line'?Math.min(6,T.T*.3):3);k.st='sit';k.say=null;k.sayUntil=0;k.idleT=0});
-  if(T.mode==='break'){T.pFlag=0;shuffle(T.kids.slice()).forEach((k,i,a)=>{k.sitAt=Math.max(1.5,T.T*(.1-.07*(i/(a.length||1)))-rnd(0,T.T*.004));k.backAt=T.T*.2-rnd(0,Math.min(8,T.T*.03));k.tripDone=false;k.wentOut=false;k.trip=false})}
+  if(T.mode==='break'){T.pFlag=0;T.games=[];T.aisles=null;T.nextGame=0;T.kids.forEach(k=>{k.game=null;k.busy=null;k.gSeat=false;k.gHide=false});shuffle(T.kids.slice()).forEach((k,i,a)=>{k.sitAt=Math.max(1.5,T.T*(.1-.07*(i/(a.length||1)))-rnd(0,T.T*.004));k.backAt=T.T*.2-rnd(0,Math.min(8,T.T*.03));k.tripDone=false;k.wentOut=false;k.trip=false})}
   if(T.mode==='clean'){const n=Math.max(12,T.kids.length*2);T.trash=[];for(let i=0;i<n;i++){const p=tFloorPt(true);T.trash.push({u:p[0],v:p[1],type:pick(['ball','sheet','sheet','crayon','eraser','book','ball']),rot:Math.random()*6,col:pick(['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6','#ff8fb8'])})}T.trashTotal=n;
     const win=Math.min(T.T*.18,40);T.kids.forEach(k=>{k.sitAt=rnd(1,win)})}
   if(T.mode==='line'){const order=T.kids.slice().sort((a,b)=>a.n-b.n);const per=Math.max(1,Math.ceil(order.length/2)),gap=Math.min(.62,(T.uMax-T.uMin-.8)/per);order.forEach((k,i)=>{k.lineIdx=i;const row=Math.floor(i/per);k.lu=T.uMin+.5+(i%per)*gap+row*gap*.5;k.lv=T.lineV-row*.42})}
@@ -4502,7 +4502,8 @@ function tKidTick(k,dt){const T=TM,L=T.d.layout,seat=s2Chair(L,k.seat),now=T.ani
   if(k.st==='out'||k.st==='gone'){if(T.mode==='break'&&k.st==='out'){const D=tDoor();if(T.ended){k.u=D[0];k.v=D[1];k.st='go';k.fast=true}else if(k.trip?T.anim>=k.backT:T.rem<=k.backAt){k.u=D[0];k.v=D[1];k.trip=false;k.st='idle'}}return}
   const rem=T.rem,M=T.mode;
   if(M==='break'){if(T.ended)return;const prep=rem<=T.T*.2,sitPh=rem<=T.T*.1;
-    if(k.st==='sit'){if(el>=k.wake&&!sitPh)k.st='idle';return}
+    if(k.st==='sit'){if(k.busy&&!prep&&T.anim<k.busyUntil){if(Math.random()<dt*.04)tKidSay(k,G_SAY[k.busy==='read'?'read':'work']);return}k.busy=null;if(el>=k.wake&&!sitPh)k.st='idle';return}
+    if(k.st==='game')return;
     if(k.st==='line'||k.st==='pres')k.st='idle';
     if(k.st!=='idle')return;
     if(sitPh&&rem<=k.sitAt){k.st='go';return}
@@ -4511,6 +4512,7 @@ function tKidTick(k,dt){const T=TM,L=T.d.layout,seat=s2Chair(L,k.seat),now=T.ani
       if(!sitPh&&!k.tripDone&&r<.5){k.tripDone=true;const D=tDoor();tKidSay(k,['화장실 갔다 올게','물 마시고 올게','손 씻고 올게'],.7);tGo(k,D[0],D[1],()=>{k.st='out';k.trip=true;k.backT=T.anim+rnd(3,7)});return}
       const free=T.trash.filter(t=>!t.claim);if(free.length&&r<.85){let best=null,bd=1e9;free.forEach(t=>{const d=Math.hypot(t.u-k.u,t.v-k.v);if(d<bd){bd=d;best=t}});best.claim=k.n;tGo(k,best.u,best.v-.05,()=>{k.st='act';k.act='jump';k.actT=0;k.actDur=.7;k.after=()=>{const i=T.trash.indexOf(best);if(i>=0)T.trash.splice(i,1);if(Math.random()<.3)tKidSay(k,['정리 정리~','내 거다!','깨끗하게!'])}});return}
       if(Math.random()<.5){const w=pick(T.way);tGo(k,w[0],w[1])}else{k.st='act';k.act='look';k.actT=0;k.actDur=rnd(1,2)}return}
+    if(T.sub==='room'&&Math.random()<.07){k.busy=pick(['read','work']);k.busyUntil=T.anim+rnd(15,40);const sp=s2Chair(T.d.layout,k.seat);tGo(k,sp[0],sp[1],()=>{k.st='sit'});return}
     if(Math.random()<.5){const w=pick(T.way);tGo(k,w[0],w[1])}else{k.st='act';k.act=pick(['stretch','chat','sneeze','look','dance','jump','wave']);k.actT=0;k.actDur=rnd(1.4,3);if(Math.random()<.45)tKidSay(k,k.act==='sneeze'?['에취!']:k.act==='stretch'?['기지개 쭉~','하암~']:T_TALK.break);
       if(T.sub==='room'&&T.trash.length<22&&Math.random()<.18)k.after=()=>{T.trash.push({u:k.u+rnd(-.2,.2),v:k.v+rnd(.05,.25),type:pick(['ball','sheet','crayon','eraser','book']),rot:Math.random()*6,col:pick(['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6','#ff8fb8'])})}}return}
   if(M==='clean'){if(T.ended)return;if(k.st==='sit'){if(el>=k.wake&&rem>k.sitAt+3)k.st='idle';return}
@@ -4580,16 +4582,17 @@ function tFrame(now){const T=TM;if(!T)return;SC=T;const c=$('#timerCanvas').getC
     if(T.rem<=0){if(T.mode==='pres'&&T.turnIdx<T.turns.length-1){if(T.cfg.presAuto)tNextTurn();else{T.rem=0;T.waitNext=true;tTone(880,.3,.15,'sine');tSay('시간 끝! 다음 차례로 넘겨 주세요')}}else tEnd()}}
   if(run&&T.mode==='break'&&!T.ended){if(!T.pFlag&&T.rem<=T.T*.2){T.pFlag=1;tSay('정리하고 화장실, 물 마시고 와요!',6000);tBellMini()}else if(T.pFlag===1&&T.rem<=T.T*.1){T.pFlag=2;tSay('이제 자리에 앉아요~',6000);tBellMini()}}
   if(run&&T.mode==='break'&&T.sub!=='room'||run&&T.mode==='line'&&T.ended)T.doorK=Math.min(1,(T.doorK||0)+rdt*2);else T.doorK=Math.max(0,(T.doorK||0)-rdt);
+  if(run&&dt>0&&T.mode==='break'&&T.sub==='room')tGamesTick(dt);
   if(run&&dt>0)T.kids.forEach(k=>tKidTick(k,dt));else if(run&&T.ended&&T.frozen===false)T.kids.forEach(k=>tKidTick(k,rdt));
-  tRoom(c,T,now);T.trash.forEach(t=>tTrash(c,T,t));const L=T.d.layout,occupied=new Set(T.kids.filter(k=>k.st==='sit').map(k=>k.seat));
+  tRoom(c,T,now);if(run&&T.mode==='break')tGameProps(c,T);T.trash.forEach(t=>tTrash(c,T,t));const L=T.d.layout,occupied=new Set(T.kids.filter(k=>k.st==='sit').map(k=>k.seat));
   Object.entries(L.desks).forEach(([i,dir])=>{i=+i;const owner=T.kids.find(k=>k.seat===i);tDrawDesk(c,T,i,dir,run&&T.mode==='line'&&owner&&owner.leftSeat&&!occupied.has(i))});
   const P=T.tdesk,tw=P.h*1.7,th=tw*22/20;let f=0;if(now<T.wink)f=1;else if(T.tsay&&now-T.tsay.t<2600&&Math.floor(now/160)%2)f=2;c.imageSmoothingEnabled=false;c.drawImage(s2Teacher(f),P.x+P.w/2-tw/2,P.y-th*.62,tw,th);T.teachRect={x:P.x+P.w/2-tw/2,y:P.y-th*.62,w:tw,h:th*.62+P.h};
   c.fillStyle='#a8693a';c.fillRect(P.x,P.y+P.h*.2,P.w,P.h*.8);c.fillStyle='#c8874a';c.fillRect(P.x,P.y,P.w,P.h*.28);c.fillStyle='#3b82f6';c.fillRect(P.x+P.w*.08,P.y-P.h*.12,P.w*.28,P.h*.2);c.fillStyle='#ffffff';c.fillRect(P.x+P.w*.08,P.y-P.h*.2,P.w*.28,P.h*.1);
   c.drawImage(s2Sprout(tSecretOn()?1:0),P.x+P.w*.4,P.y-P.h*.55,P.h*.5,P.h*.6);c.fillStyle='#ffffff';c.beginPath();c.ellipse(P.x+P.w*.82,P.y-P.h*.05,P.w*.08,P.h*.22,0,0,7);c.fill();c.strokeStyle='#e0472f';c.lineWidth=2;c.stroke();
   const u=run?cl(1-T.rem/Math.max(1,T.T)):0;
-  const vis=T.kids.filter(k=>k.st!=='out'&&k.st!=='gone').sort((a,b)=>a.v-b.v);vis.forEach(k=>{const seated=k.st==='sit',x=s2X(k.u),y=s2Y(k.v)+(seated?0:T.csy*.12);
-    const o={seated,ph:k.ph,act:k.st==='act'?k.act:k.st==='pres'?'wave':(T.mode==='act'&&T.sub==='test'&&seated?null:null),au:k.st==='act'?k.actT/k.actDur:(T.anim%1)};const a=s2Kid(c,x,y,k.n,o);k.ax=a.x;k.ay=a.y});
-  T.kids.forEach(k=>{if(k.st!=='sit')return;const kind=T.mode==='act'&&run?T.sub:(T.mode==='break'&&T.ended&&run?'book':null);if(kind&&kind!=='talk')tDeskItem(c,T,k.seat,k.n,kind,T.mode==='act'?u:1)});
+  const vis=T.kids.filter(k=>k.st!=='out'&&k.st!=='gone').sort((a,b)=>a.v-b.v);vis.forEach(k=>{const gm=k.st==='game',seated=k.st==='sit'||gm&&k.gSeat,x=s2X(k.u),y=s2Y(k.v)+(seated?0:T.csy*.12);if(gm&&k.gHide){c.save();c.globalAlpha=.55}
+    const o={seated,ph:k.ph,act:k.st==='act'?k.act:k.st==='pres'?'wave':gm?k.gAct:null,au:k.st==='act'?k.actT/k.actDur:(T.anim%1)};const a=s2Kid(c,x,y,k.n,o);k.ax=a.x;k.ay=a.y;if(gm&&k.gHide)c.restore()});
+  T.kids.forEach(k=>{if(k.st!=='sit')return;const kind=T.mode==='act'&&run?T.sub:(T.mode==='break'&&run&&(T.ended||k.busy==='read')?'book':T.mode==='break'&&run&&k.busy==='work'?'sheet':null);if(kind&&kind!=='talk')tDeskItem(c,T,k.seat,k.n,kind,T.mode==='act'?u:1)});
   vis.forEach(k=>{if(k.say&&k.sayUntil>T.anim)drawBubble(c,k.say,k.ax,k.ay-4,Math.round(Math.max(12,Math.min(18,T.cs*.22))),T.W)});
   if(T.frozen){c.fillStyle='rgba(200,230,255,.28)';c.fillRect(0,T.wallH,T.W,T.H-T.wallH);if(T.snow.length<80)T.snow.push({x:Math.random()*T.W,y:T.wallH,v:20+Math.random()*30,r:1.5+Math.random()*2.5});c.fillStyle='#ffffff';T.snow.forEach(s=>{s.y+=s.v*rdt;s.x+=Math.sin(now/600+s.r)*.3;if(s.y>T.H){s.y=T.wallH}c.beginPath();c.arc(s.x,s.y,s.r,0,7);c.fill()})}
   if(T.tsay&&now-T.tsay.t<(T.tsay.keep||3200))s2Bubble(c,T.tsay.txt,P.x+P.w/2,P.y-th*.62-2,Math.round(Math.max(13,Math.min(24,T.H*.03,T.W*.034))),T.W);
@@ -4615,6 +4618,46 @@ document.addEventListener('keydown',e=>{const T=TM;if(!T)return;const tag=(docum
   if(e.key.toLowerCase()===T.cfg.key&&!e.ctrlKey&&!e.metaKey&&!e.altKey){if(tToggle()){e.preventDefault();return}}
   if(e.key==='f'||e.key==='F'){$('#tFull').click();return}
   if(T.phase!=='run')return;if(e.key===' '||e.code==='Space'){e.preventDefault();if(T.ended)tStart();else tFreeze()}else if(e.key==='ArrowUp'){e.preventDefault();tAdd(60)}else if(e.key==='ArrowDown'){e.preventDefault();tAdd(-60)}else if(e.key==='ArrowRight'&&T.mode==='pres'){tNextTurn()}});
+/* ---------- 쉬는 시간 놀이 ---------- */
+const G_TYPES=['board','hop','chicken','hide','mugung'];
+const G_SAY={board:['내 차례!','주사위 굴려!','야호 6이다!','앗 뒤로 세 칸…','이겼다!','한 판 더!'],hop:['깨금발!','하나 둘 셋!','앗 금 밟았다!','돌 던진다~','성공!'],chicken:['덤벼라!','꼬꼬댁!','으랏차!','버텨!'],read:['재밌다…','다음 장!','이 책 최고'],work:['이거 어렵다…','다 풀었다!','음…']};
+function tAisles(){const T=TM,L=T.d.layout,runs=[];for(let cc=-1;cc<=L.cols;cc++){const u=cc+.5;if(u<T.uMin+.2||u>T.uMax-.2)continue;let s=null;for(let r=0;r<=L.rows;r++){const free=r<L.rows&&(cc<0||cc>=L.cols||L.desks[r*L.cols+cc]===undefined);if(free&&s===null)s=r;if(!free&&s!==null){if(r-s>=2)runs.push({u,v0:s+.1,v1:r-.1});s=null}}}return runs}
+function tGameNew(type){const T=TM,L=T.d.layout,idle=T.kids.filter(k=>!k.game&&!k.busy&&(k.st==='idle'||k.st==='act'||(k.st==='walk'&&!k.then)));const need={board:[2,4],hop:[2,4],chicken:[2,2],hide:[3,5],mugung:[4,6]}[type];if(idle.length<need[0])return null;
+  const used=new Set(T.games.map(g=>g.run&&g.run.u)),runs=T.aisles.filter(r=>!used.has(r.u));const n=Math.min(idle.length,Math.floor(rnd(need[0],need[1]+1)));
+  let run=null;if(type==='hop'||type==='mugung'){const ok=runs.filter(r=>r.v1-r.v0>=2.6);if(!ok.length)return null;run=pick(ok)}
+  const far=p=>T.games.every(g=>!g.A||Math.hypot(g.A[0]-p[0],g.A[1]-p[1])>1.2);const wp=T.way.filter(far);
+  const mem=shuffle(idle.slice()).slice(0,n);const g={type,members:mem,run,t:0,endAt:T.anim+rnd(45,90),ph:'gather',i:0,pt:0};
+  if(type==='board'){if(!wp.length)return null;const p=pick(wp);g.A=[p[0],p[1]];g.slots=[[p[0]-.28,p[1]-.12],[p[0]+.28,p[1]-.12],[p[0]-.28,p[1]+.3],[p[0]+.28,p[1]+.3]]}
+  if(type==='hop'){g.A=[run.u,run.v0+.5];g.cells=[];const pat=[1,1,2,1,2,1];pat.forEach((w,i)=>{const v=run.v0+.75+i*.32;if(w===1)g.cells.push([[run.u,v]]);else g.cells.push([[run.u-.16,v],[run.u+.16,v]])});g.slots=mem.map((k,i)=>[run.u-.3+(i%2)*.6,run.v0+.25+Math.floor(i/2)*.0])}
+  if(type==='chicken'){if(!wp.length)return null;const p=pick(wp);g.A=[p[0],p[1]];g.slots=[[p[0]-.45,p[1]],[p[0]+.45,p[1]]]}
+  if(type==='hide'){const front=[rnd(T.uMin+.6,T.uMax-.6),Math.max(T.vMin+.65,-.35)];g.F=front;g.slots=mem.map((k,i)=>i===0?front:[front[0]+(i-2)*.3,front[1]+.25]);
+    const desks=Object.keys(L.desks).map(Number);g.spots=mem.map(()=>{const d=pick(desks),p=s2Chair(L,d);return[p[0]+(Math.random()<.5?-.38:.38),p[1]+.05]})}
+  if(type==='mugung'){g.F=[run.u,Math.max(T.vMin+.65,run.v0-.3)];g.B=run.v1-.1;g.slots=mem.map((k,i)=>i===0?g.F:[run.u+((i-1)%3-1)*.28,g.B-Math.floor((i-1)/3)*.15])}
+  mem.forEach((k,i)=>{k.after=null;k.game=g;k.gi=i;k.gSeat=false;k.gAct=null;const s=g.slots[Math.min(i,g.slots.length-1)];tGo(k,s[0],s[1],()=>{k.st=k.game===g?'game':'idle'})});T.games.push(g);return g}
+function tGameEnd(g){const T=TM;g.members.forEach(k=>{if(k.game===g){k.game=null;k.gSeat=false;k.gHide=false;k.gAct=null;if(k.st==='game')k.st='idle'}});T.games=T.games.filter(x=>x!==g)}
+function tGamesTick(dt){const T=TM;if(!T.games)T.games=[];if(!T.aisles)T.aisles=tAisles();const prep=T.rem<=T.T*.2;
+  if(prep||T.ended){T.games.slice().forEach(tGameEnd);return}
+  if(T.anim>(T.nextGame||0)){T.nextGame=T.anim+rnd(1.5,3.5);const inG=T.kids.filter(k=>k.game).length;if(inG<T.kids.length*.75){const have=new Set(T.games.map(g=>g.type));const opts=shuffle(G_TYPES.filter(t=>!have.has(t)));for(const t of opts){if(tGameNew(t))break}}}
+  T.games.slice().forEach(g=>{g.t+=dt;const ready=g.members.every(k=>k.st==='game'||k.game!==g);if(T.anim>g.endAt){tGameEnd(g);return}if(!ready)return;const M=g.members;
+    if(g.type==='board'){M.forEach((k,i)=>{const s=g.slots[i%4];k.u=s[0];k.v=s[1];k.gSeat=true});g.pt-=dt;if(g.pt<=0){g.pt=rnd(2.5,5);tKidSay(pick(M),G_SAY.board,.8)}}
+    else if(g.type==='hop'){const hop=M[g.i%M.length];g.pt+=dt;const n=g.cells.length,dur=5;const p=g.pt/dur;M.forEach((k,i)=>{if(k!==hop){const s=g.slots[i];k.u=s[0];k.v=s[1];k.gAct='look'}});
+      if(p<1){const ci=Math.min(n-1,Math.floor(p*n*2)%(n*2)<n?Math.floor(p*n*2):n*2-1-Math.floor(p*n*2)),cell=g.cells[Math.max(0,Math.min(n-1,ci))];const q=cell[Math.floor(g.pt*4)%cell.length];hop.u=q[0];hop.v=q[1];hop.gAct='jump'}else{g.pt=0;g.i++;if(Math.random()<.5)tKidSay(hop,G_SAY.hop)}}
+    else if(g.type==='chicken'){g.pt+=dt;const d=.48-.3*Math.abs(Math.sin(g.pt*1.6));M[0].u=g.A[0]-d;M[0].v=g.A[1];M[1].u=g.A[0]+d;M[1].v=g.A[1];M.forEach(k=>k.gAct='jump');if(g.pt>(g.next||4)){g.next=g.pt+rnd(4,7);const w=pick(M),l=M.find(k=>k!==w);tKidSay(w,['이겼다!','꼬꼬댁!']);tKidSay(l,['으악!','다리 아파~'])}}
+    else if(g.type==='hide'){const sk=M[0],hid=M.slice(1);
+      if(g.ph==='gather'){g.ph='count';g.pt=0;hid.forEach((k,i)=>{k.hs=g.spots[i+1];k.found=false})}
+      if(g.ph==='count'){g.pt+=dt;sk.u=g.F[0];sk.v=g.F[1];sk.gAct='look';if(Math.floor(g.pt/1.2)!==g.cnt){g.cnt=Math.floor(g.pt/1.2);sk.say=['하나…','둘…','셋…','넷…','다섯…','여섯…','일곱…','찾는다~!'][Math.min(7,g.cnt)];sk.sayUntil=T.anim+1.1}
+        hid.forEach(k=>{const dx=k.hs[0]-k.u,dy=k.hs[1]-k.v,d=Math.hypot(dx,dy),s=2.6*dt;if(d>s){k.u+=dx/d*s;k.v+=dy/d*s;k.ph+=dt*11;k.gSeat=false}else{k.u=k.hs[0];k.v=k.hs[1];k.gSeat=true;k.gHide=true}});if(g.pt>9.6){g.ph='seek';g.ti=0}}
+      else if(g.ph==='seek'){const left=hid.filter(k=>!k.found);if(!left.length){g.ph='gather';const nx=hid[0];g.members=[nx].concat(M.filter(k=>k!==nx));g.members.forEach(k=>{k.gHide=false;k.gSeat=false});return}
+        const tg=left[0],dx=tg.u-sk.u,dy=tg.v-sk.v,d=Math.hypot(dx,dy),s=1.8*dt;sk.gAct=null;if(d>.32){sk.u+=dx/d*s;sk.v+=dy/d*s;sk.ph+=dt*11}else{tg.found=true;tg.gHide=false;tg.gSeat=false;sk.say='찾았다! '+tg.n+'번!';sk.sayUntil=T.anim+1.8;tKidSay(tg,['들켰다!','에이~','어떻게 알았어?'])}
+        hid.filter(k=>k.found).forEach((k,i)=>{const tx=g.F[0]+(i-1)*.3,ty=g.F[1]+.3,ddx=tx-k.u,ddy=ty-k.v,dd=Math.hypot(ddx,ddy),s2=2*dt;if(dd>s2){k.u+=ddx/dd*s2;k.v+=ddy/dd*s2;k.ph+=dt*11}})}}
+    else if(g.type==='mugung'){const tg=M[0],run=M.slice(1);tg.u=g.F[0];tg.v=g.F[1];g.pt+=dt;
+      if(g.ph==='gather'){g.ph='call';g.pt=0;run.forEach((k,i)=>{k.u=g.slots[i+1][0];k.v=g.slots[i+1][1]})}
+      if(g.ph==='call'){tg.gAct='look';if(!g.said){g.said=1;tg.say='무궁화 꽃이 피었습니다!';tg.sayUntil=T.anim+3}run.forEach(k=>{const sp=(.25+.15*Math.sin(k.n))*dt;if(k.v>g.F[1]+.45){k.v-=sp;k.ph+=dt*9}else{g.ph='caught';g.pt=0;tg.say='찍었다!';tg.sayUntil=T.anim+2;tKidSay(k,['찍었다!','도망가~'])}});if(g.pt>3.2&&g.ph==='call'){g.ph='stop';g.pt=0;g.said=0;tg.say='멈춰!';tg.sayUntil=T.anim+1.6;if(Math.random()<.35){const c2=pick(run);c2.out=true;tKidSay(c2,['앗 움직였다!','들켰다…'])}}}
+      else if(g.ph==='stop'){tg.gAct=null;run.forEach(k=>{if(k.out){const sp=1.6*dt;if(k.v<g.B){k.v+=sp;k.ph+=dt*11}else k.out=false}});if(g.pt>2){g.ph='call';g.pt=0}}
+      else if(g.ph==='caught'){run.forEach(k=>{if(k.v<g.B){k.v+=2.4*dt;k.ph+=dt*13}});if(g.pt>2.4){g.ph='call';g.pt=0;g.said=0}}}})}
+function tGameProps(c,T){(T.games||[]).forEach(g=>{if(g.type==='hop'){c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=Math.max(2,T.cs*.03);const sx=T.csx*.3,sy=T.csy*.3;g.cells.forEach((cell,i)=>cell.forEach(q=>{const x=s2X(q[0]),y=s2Y(q[1]);c.strokeRect(x-sx/2,y-sy/2,sx,sy);c.fillStyle='rgba(255,255,255,.85)';c.font='900 '+Math.round(sy*.45)+'px sans-serif';c.textAlign='center';c.textBaseline='middle';c.fillText(String(i+1),x,y)}));c.textAlign='left';c.textBaseline='alphabetic'}
+  if(g.type==='board'){const x=s2X(g.A[0]),y=s2Y(g.A[1]+.06),w=T.csx*.42,h=T.csy*.3;c.fillStyle='#fff6d6';c.fillRect(x-w/2,y-h/2,w,h);c.strokeStyle='#8a5a2e';c.lineWidth=2;c.strokeRect(x-w/2,y-h/2,w,h);const cols=['#e8463a','#3b82f6','#4cb36b','#f2c12e'];for(let i=0;i<8;i++){c.fillStyle=cols[i%4];c.fillRect(x-w/2+i*w/8,y-h/2,w/8-1,h*.2);c.fillRect(x-w/2+i*w/8,y+h*.3,w/8-1,h*.2)}c.fillStyle='#ffffff';c.fillRect(x-4,y-4,8,8);c.fillStyle='#1d1d1d';c.fillRect(x-1,y-1,2,2)}
+  if(g.type==='mugung'&&g.F){const x=s2X(g.F[0]),y=s2Y(g.B+.15);c.strokeStyle='rgba(255,255,255,.75)';c.setLineDash([6,5]);c.lineWidth=2;c.beginPath();c.moveTo(x-T.csx*.45,y);c.lineTo(x+T.csx*.45,y);c.stroke();c.setLineDash([])}})}
 
 /* ---------- 시작 ---------- */
 if(!store.currentId||!store.classes[store.currentId])store.currentId=store.order[0]||null;
