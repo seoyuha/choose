@@ -4337,14 +4337,14 @@ function s2SyncNote(){const el=$('#s2Sync');if(el)el.textContent=SDB?'☁ 다른
 
 /* ===== 딩동댕 교실 타이머 ===== */
 let TM=null,traf=0;
-const T_MODES=[['break','쉬는 시간','놀다가 하나둘 자리로','🔔','#e0472f'],['act','활동','활동지·그리기·토의 등','✏️','#3b82f6'],['clean','정리 시간','교실이 점점 깨끗해져요','🧹','#14a3b8'],['pres','발표','한 명씩·모둠별 차례대로','🎤','#8a5cd6'],['line','줄서기','이동 수업 준비','🚶','#d99a10']];
-const T_ACTS=[['sheet','활동지'],['draw','그리기'],['make','만들기'],['read','독서'],['test','시험'],['talk','토의']];
-const T_BREAK=[['room','교실에서','쉬는 시간'],['mid','중간놀이','밖에서 놀다 와요'],['lunch','점심시간','급식 먹고 놀다 와요']];
+const T_MODES=[['break','쉬는 시간','놀다가 하나둘 자리로','🔔','#e0472f'],['act','활동','활동지·그리기·토의 등','✏️','#3b82f6'],['exp','실험','모둠별로 보글보글 실험','🧪','#16a34a'],['test','시험','조용히 시험 보기','📝','#64748b'],['clean','정리 시간','교실이 점점 깨끗해져요','🧹','#14a3b8'],['pres','발표','한 명씩·모둠별 차례대로','🎤','#8a5cd6'],['line','줄서기','이동 수업 준비','🚶','#d99a10']];
+const T_ACTS=[['sheet','활동지'],['draw','그리기'],['make','만들기'],['read','독서'],['talk','토의']];const T_ACTNAME={sheet:'활동지',draw:'그리기',make:'만들기',read:'독서',talk:'토의',exp:'실험',test:'시험'};
+const T_BREAK=[['room','교실에서','쉬는 시간'],['lunch','점심시간','급식 먹고 놀다 와요']];
 const T_DEST=['도서실','체육관','운동장','과학실','음악실','급식실'];
-const T_DESC={break:'학생들이 놀다가 시간이 다가올수록 하나둘 자리에 앉아요. 종이 치면 모두 책을 펴고 수업 준비 끝!',act:'고른 활동을 화면 속 친구들도 함께 해요. 활동 중에는 효과음 없이 마지막 10초와 종소리로 알려 줘요.',clean:'바닥의 쓰레기를 줍고 흐트러진 물건을 정리하면서 교실이 점점 깨끗해져요.',pres:'지금 발표하는 친구나 모둠의 남은 시간이 칠판에 크게 나와요.',line:'친구들이 의자를 넣고 교실 뒤에 줄을 서요. 시간이 끝나면 함께 출발해요!'};
+const T_DESC={break:'학생들이 놀다가 시간이 다가올수록 하나둘 자리에 앉아요. 종이 치면 모두 책을 펴고 수업 준비 끝!',exp:'모둠 친구들과 실험해요. 책상 위 비커가 보글보글 끓고 색이 변해요. 마지막 10초와 종소리로 알려 줘요.',test:'조용히 시험을 봐요. 시험지가 한 줄씩 채워지고, 효과음 없이 마지막 10초와 종소리만 울려요.',act:'고른 활동을 화면 속 친구들도 함께 해요. 활동 중에는 효과음 없이 마지막 10초와 종소리로 알려 줘요.',clean:'바닥의 쓰레기를 줍고 흐트러진 물건을 정리하면서 교실이 점점 깨끗해져요.',pres:'지금 발표하는 친구나 모둠의 남은 시간이 칠판에 크게 나와요.',line:'친구들이 의자를 넣고 교실 뒤에 줄을 서요. 시간이 끝나면 함께 출발해요!'};
 const T_SPEEDS=[[.5,'0.5배','천천히'],[.8,'0.8배','천천히'],[1,'보통','1배'],[1.2,'1.2배','빨리'],[1.5,'1.5배','빨리'],[2,'2배','빨리']];
-function tDefaults(){return{mode:'break',brk:'room',act:'draw',pres:'one',presOrder:'seq',presAuto:true,dest:'도서실',dur:{break:600,act:600,clean:180,pres:120,line:60},recent:[],bells:['09:40','10:30','11:20','12:10','13:50','14:40','15:30'],vol:.7,mute:false,speed:1.5,sMode:'signal',key:'s',openCls:false}}
-function tCfg(){if(!store.timer)store.timer=tDefaults();const d=store.timer,df=tDefaults();for(const k in df)if(d[k]===undefined)d[k]=df[k];for(const k in df.dur)if(d.dur[k]===undefined)d.dur[k]=df.dur[k];return d}
+function tDefaults(){return{mode:'break',brk:'room',act:'draw',pres:'one',presOrder:'seq',presAuto:true,dest:'도서실',dur:{break:600,act:600,exp:1200,test:2400,clean:180,pres:120,line:60},recent:[],bells:['09:40','10:30','11:20','12:10','13:50','14:40','15:30'],vol:.7,mute:false,speed:1.5,sMode:'signal',key:'s',openCls:false}}
+function tCfg(){if(!store.timer)store.timer=tDefaults();const d=store.timer,df=tDefaults();if(d.brk==='mid')d.brk='room';if(d.act==='test')d.act='sheet';for(const k in df)if(d[k]===undefined)d[k]=df[k];for(const k in df.dur)if(d.dur[k]===undefined)d.dur[k]=df.dur[k];return d}
 function tFmt(s){s=Math.max(0,Math.ceil(s-1e-6));const h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?h+':'+pad(m)+':'+pad(x):m+':'+pad(x)}
 function tDurTxt(s){s=Math.round(s);const m=Math.floor(s/60),x=s%60;return m&&x?m+'분 '+x+'초':m?m+'분':x+'초'}
 function tClock(ms){const d=new Date(ms),h=d.getHours()%12||12;return h+':'+pad(d.getMinutes())}
@@ -4372,7 +4372,7 @@ function tPhase(p){const T=TM;T.phase=p;const run=p!=='setup';$('#tSetup').hidde
 /* ---------- 설정 카드 ---------- */
 function tSetupRender(){const T=TM,cfg=T.cfg,c=T.c,mode=cfg.mode,named=c.display==='name';
   const modeBtns=T_MODES.map(([k,t,sub,ic,col])=>'<button type="button" class="t-mode'+(mode===k?' on':'')+'" data-tm="'+k+'" style="--mc:'+col+'"><i>'+ic+'</i><span><b>'+t+'</b><small>'+sub+'</small></span></button>').join('');
-  let sub='';if(mode==='break')sub='<b class="t-lb">어디서 놀아요?</b>'+s2Seg('data-tbrk',T_BREAK.map(([k,t,s])=>[k,t,s]),cfg.brk,'s-seg3');
+  let sub='';if(mode==='break')sub='<b class="t-lb">어디서 놀아요?</b>'+s2Seg('data-tbrk',T_BREAK.map(([k,t,s])=>[k,t,s]),cfg.brk);
   else if(mode==='act')sub='<b class="t-lb">어떤 활동이에요?</b><div class="s-seg2 s-seg3">'+T_ACTS.map(([k,t])=>'<button type="button" data-tact="'+k+'" aria-pressed="'+(cfg.act===k)+'">'+t+'</button>').join('')+'</div>';
   else if(mode==='pres')sub='<b class="t-lb">누가 발표해요?</b>'+s2Seg('data-tpres',[['one','한 명씩'],['group','모둠별']],cfg.pres)+'<b class="t-lb">순서</b>'+s2Seg('data-tporder',[['seq','순서대로'],['rand','무작위']],cfg.presOrder)+
     '<label class="s-tg"><span>시간이 끝나면 다음 차례로<small>끄면 「다음 차례」 단추로 넘겨요</small></span><input type="checkbox" data-tauto'+(cfg.presAuto?' checked':'')+'></label>';
@@ -4392,7 +4392,7 @@ function tSetupRender(){const T=TM,cfg=T.cfg,c=T.c,mode=cfg.mode,named=c.display
 function tWill(){const T=TM;if(!T||T.phase!=='setup')return;const cfg=T.cfg,el=$('#tWill');if(!el)return;const dur=cfg.dur[cfg.mode];
   if(cfg.mode==='pres'){const n=tTurns().length;el.innerHTML=n+(cfg.pres==='group'?'모둠':'명')+' × '+tDurTxt(dur)+' = 모두 <b>'+tDurTxt(n*dur)+'</b>';return}
   el.innerHTML='지금 시작하면 <b>'+tClock(Date.now()+dur*1000)+'</b>에 종이 울려요'}
-function tRecLabel(r){const m=T_MODES.find(x=>x[0]===r.mode);let s;if(r.mode==='break')s=(T_BREAK.find(b=>b[0]===r.brk)||T_BREAK[0])[0]==='room'?'쉬는 시간':(T_BREAK.find(b=>b[0]===r.brk))[1];else if(r.mode==='act')s=(T_ACTS.find(a=>a[0]===r.act)||[0,'활동'])[1];else if(r.mode==='pres')s=(r.pres==='group'?'모둠 발표 ':'발표 ')+tDurTxt(r.dur)+'씩';else if(r.mode==='line')s='줄서기 '+tDurTxt(r.dur)+' · '+r.dest;else s=m[1];
+function tRecLabel(r){const m=T_MODES.find(x=>x[0]===r.mode);let s;if(r.mode==='break')s=(T_BREAK.find(b=>b[0]===r.brk)||T_BREAK[0])[0]==='room'?'쉬는 시간':(T_BREAK.find(b=>b[0]===r.brk))[1];else if(r.mode==='act')s=T_ACTNAME[r.act]||'활동';else if(r.mode==='exp')s='실험';else if(r.mode==='test')s='시험';else if(r.mode==='pres')s=(r.pres==='group'?'모둠 발표 ':'발표 ')+tDurTxt(r.dur)+'씩';else if(r.mode==='line')s='줄서기 '+tDurTxt(r.dur)+' · '+r.dest;else s=m[1];
   return r.mode==='pres'||r.mode==='line'?s:s+' '+tDurTxt(r.dur)}
 function tSetDur(s){const T=TM,cfg=T.cfg;cfg.dur[cfg.mode]=Math.max(5,Math.min(3*3600,Math.round(s)));persistSoon();const inp=$('#tDurIn');if(inp)inp.value=tFmt(cfg.dur[cfg.mode]);document.querySelectorAll('#tSetup [data-tset]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.tset===cfg.dur[cfg.mode])));tWill()}
 $('#tSetup').addEventListener('click',e=>{const T=TM;if(!T)return;const b=e.target.closest('button');if(!b)return;const cfg=T.cfg,c=T.c;
@@ -4445,9 +4445,9 @@ function tTurns(){const T=TM,cfg=T.cfg,kids=[...T.seatOf.keys()].sort((a,b)=>a-b
 function tStart(){const T=TM,cfg=T.cfg;ensureAudio();if(!T.seatOf.size){toast('앉을 학생이 없어요');return}
   if(cfg.mode==='line'){const v=($('#tDestIn')||{}).value;if(v&&v.trim())cfg.dest=v.trim()}
   const rec={mode:cfg.mode,brk:cfg.brk,act:cfg.act,pres:cfg.pres,presOrder:cfg.presOrder,presAuto:cfg.presAuto,dest:cfg.dest,dur:cfg.dur[cfg.mode]};const key=JSON.stringify(rec);cfg.recent=[rec].concat(cfg.recent.filter(r=>JSON.stringify(r)!==key)).slice(0,4);persistSoon();
-  T.mode=cfg.mode;T.sub=cfg.mode==='break'?cfg.brk:cfg.mode==='act'?cfg.act:cfg.mode==='line'?cfg.dest:cfg.pres;T.frozen=false;T.sig=false;T.ended=false;T.turnIdx=0;T.tsay=null;T.conf=[];T.snow=[];T.lastTick=-1;
+  T.mode=cfg.mode==='exp'||cfg.mode==='test'?'act':cfg.mode;T.sub=cfg.mode==='exp'||cfg.mode==='test'?cfg.mode:cfg.mode==='break'?cfg.brk:cfg.mode==='act'?cfg.act:cfg.mode==='line'?cfg.dest:cfg.pres;T.frozen=false;T.sig=false;T.ended=false;T.turnIdx=0;T.tsay=null;T.conf=[];T.snow=[];T.lastTick=-1;
   tPrepClass();tLayout();tSeatAll();
-  if(T.mode==='pres'){T.turns=tTurns();T.T=cfg.dur.pres;T.rem=T.T;T.endWall=Date.now()+T.T*T.turns.length*1000;T.waitNext=false}else{T.T=cfg.dur[T.mode];T.rem=T.T;T.endWall=Date.now()+T.T*1000}
+  if(T.mode==='pres'){T.turns=tTurns();T.T=cfg.dur.pres;T.rem=T.T;T.endWall=Date.now()+T.T*T.turns.length*1000;T.waitNext=false}else{T.T=cfg.dur[cfg.mode];T.rem=T.T;T.endWall=Date.now()+T.T*1000}
   const now=performance.now();T.t0=now;T.lastT=now;T.elapsed=0;
   T.kids.forEach((k,i)=>{k.wake=rnd(.2,T.mode==='line'?Math.min(6,T.T*.3):3);k.st='sit';k.say=null;k.sayUntil=0;k.idleT=0});
   if(T.mode==='break'){T.pFlag=0;shuffle(T.kids.slice()).forEach((k,i,a)=>{k.sitAt=Math.max(1.5,T.T*(.1-.07*(i/(a.length||1)))-rnd(0,T.T*.004));k.backAt=T.T*.2-rnd(0,Math.min(8,T.T*.03));k.tripDone=false;k.wentOut=false;k.trip=false})}
@@ -4455,11 +4455,11 @@ function tStart(){const T=TM,cfg=T.cfg;ensureAudio();if(!T.seatOf.size){toast('�
     const win=Math.min(T.T*.18,40);T.kids.forEach(k=>{k.sitAt=rnd(1,win)})}
   if(T.mode==='line'){const order=T.kids.slice().sort((a,b)=>a.n-b.n);const per=Math.max(1,Math.ceil(order.length/2)),gap=Math.min(.62,(T.uMax-T.uMin-.8)/per);order.forEach((k,i)=>{k.lineIdx=i;const row=Math.floor(i/per);k.lu=T.uMin+.5+(i%per)*gap+row*gap*.5;k.lv=T.lineV-row*.42})}
   tPhase('run');tSay(tStartLine(),3600);tBellMini();T.barT=performance.now()}
-function tStartLine(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간이에요! 교실에서는 걸어요!':T.sub==='mid'?'중간놀이 시간! 재미있게 놀다 와요~':'점심시간! 맛있게 먹고 와요~';
-  if(T.mode==='act')return (T_ACTS.find(a=>a[0]===T.sub)||[0,'활동'])[1]+' 시간 시작!';if(T.mode==='clean')return'깨끗하게 정리해요!';if(T.mode==='pres')return'발표 시작! 잘 들어 줘요';return T.cfg.dest+'에 갈 준비해요! 의자 넣고 줄 서요~'}
+function tStartLine(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간이에요! 교실에서는 걸어요!':'점심시간! 맛있게 먹고 와요~';
+  if(T.mode==='act')return T.sub==='exp'?'실험 시작! 안전하게 해요':T.sub==='test'?'시험 시작! 조용히 풀어요':(T_ACTNAME[T.sub]||'활동')+' 시간 시작!';if(T.mode==='clean')return'깨끗하게 정리해요!';if(T.mode==='pres')return'발표 시작! 잘 들어 줘요';return T.cfg.dest+'에 갈 준비해요! 의자 넣고 줄 서요~'}
 function tBellMini(){if(!actx)return;const t=actx.currentTime+.03;tTone(784,.5,.14,'sine',t);tTone(1046,.7,.14,'sine',t+.18)}
 function tSay(txt,keep){if(TM)TM.tsay={txt,t:performance.now(),keep:keep||3200}}
-function tLabel(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간':T.sub==='mid'?'중간놀이':'점심시간';if(T.mode==='act')return(T_ACTS.find(a=>a[0]===T.sub)||[0,'활동'])[1]+' 시간';if(T.mode==='clean')return'정리 시간';
+function tLabel(){const T=TM;if(T.mode==='break')return T.sub==='room'?'쉬는 시간':'점심시간';if(T.mode==='act')return(T_ACTNAME[T.sub]||'활동')+' 시간';if(T.mode==='clean')return'정리 시간';
   if(T.mode==='pres')return(T.cfg.pres==='group'?'모둠 발표 ':'발표 ')+Math.min(T.turns.length,T.turnIdx+1)+' / '+T.turns.length;return'줄서기 · '+T.cfg.dest}
 function tRight(){const T=TM;if(T.mode==='pres'){const nx=T.turns[T.turnIdx+1];return T.ended?'':nx?'다음 '+(T.cfg.pres==='group'?nx.label:nx.name):'마지막 차례'}const t=tClock(T.endWall);return T.mode==='break'?t+' 수업 시작':T.mode==='line'?t+' 출발':t+'까지'}
 function tCenter(){const T=TM;if(T.frozen)return'얼음!';if(T.ended)return T.mode==='break'?'수업 시작!':T.mode==='line'?'출발!':T.mode==='pres'?'발표 끝!':'끝!';if(T.mode==='pres'){if(T.waitNext)return'시간 끝!';const t=T.turns[T.turnIdx];return t?(T.cfg.pres==='group'?t.label:t.name)+' 발표 중':''}return''}
@@ -4492,7 +4492,7 @@ function tFloorPt(avoidDesk){const T=TM,L=T.d.layout;for(let g=0;g<20;g++){const
     if(avoidDesk&&r>=0&&cc>=0&&r<L.rows&&cc<L.cols&&L.desks[r*L.cols+cc]!==undefined){const fu=u-cc,fv=v-r,dir=L.desks[r*L.cols+cc];if(dir%2===0?(dir===0?fv<.55:fv>.45):true)continue}return[u,v]}return pick(T.way)}
 
 /* ---------- 학생 움직임 ---------- */
-const T_TALK={break:['같이 놀자!','술래잡기 하자','물 마시러 가자','어제 그거 봤어?','히히','쉿!','안녕~','화장실 갔다 올게','여기도 없고…','기지개 쭉~'],talk:['내 생각엔…','좋은 생각이다!','그건 왜?','맞아 맞아','이렇게 해 볼까?','나도 그렇게 생각해'],clean:['주웠다!','내 거 고마워~','깨끗해!','이거 누구 거야?','쓰레기 발견!'],pres:['이 그림을 보면…','저희 모둠은…','질문 있나요?','감사합니다!'],line:['빨리 가고 싶다','어디 가?','내 앞에 누구야?','줄 서자~','신난다!']};
+const T_TALK={break:['같이 놀자!','술래잡기 하자','물 마시러 가자','어제 그거 봤어?','히히','쉿!','안녕~','화장실 갔다 올게','여기도 없고…','기지개 쭉~'],exp:['우와!','색이 변했어!','보글보글~','조심조심!','기록하자','다시 해 볼까?'],talk:['내 생각엔…','좋은 생각이다!','그건 왜?','맞아 맞아','이렇게 해 볼까?','나도 그렇게 생각해'],clean:['주웠다!','내 거 고마워~','깨끗해!','이거 누구 거야?','쓰레기 발견!'],pres:['이 그림을 보면…','저희 모둠은…','질문 있나요?','감사합니다!'],line:['빨리 가고 싶다','어디 가?','내 앞에 누구야?','줄 서자~','신난다!']};
 function tGo(k,u,v,then){k.st='walk';k.tu=u;k.tv=v;k.then=then}
 function tKidSay(k,list,p){if(Math.random()<(p||1)){k.say=pick(list);k.sayUntil=TM.anim+2.4;const T=TM;if(T.mode!=='act'&&T.mode!=='pres'&&!T.frozen)tTone(500+Math.random()*500,.06,.04,'square')}}
 function tKidTick(k,dt){const T=TM,L=T.d.layout,seat=s2Chair(L,k.seat),now=T.anim,el=T.elapsed;
@@ -4517,7 +4517,7 @@ function tKidTick(k,dt){const T=TM,L=T.d.layout,seat=s2Chair(L,k.seat),now=T.ani
     if(k.st==='idle'){if(rem<=k.sitAt){k.st='go';return}const allow=T.trash.length>T.trashTotal*(rem/T.T)-1;const free=T.trash.filter(t=>!t.claim);
       if(allow&&free.length){let best=null,bd=1e9;free.forEach(t=>{const d=Math.hypot(t.u-k.u,t.v-k.v);if(d<bd){bd=d;best=t}});best.claim=k.n;tGo(k,best.u,best.v-.05,()=>{k.st='act';k.act='jump';k.actT=0;k.actDur=.7;k.after=()=>{const i=T.trash.indexOf(best);if(i>=0)T.trash.splice(i,1);if(Math.random()<.3)tKidSay(k,T_TALK.clean)}})}
       else if(Math.random()<.5){const w=pick(T.way);tGo(k,w[0],w[1])}else{k.st='act';k.act='look';k.actT=0;k.actDur=rnd(1,2)}}return}
-  if(M==='act'){if(k.st!=='sit'){k.st='go';return}if(T.sub==='talk'&&!T.ended&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(5,14);if(Math.random()<.5)tKidSay(k,T_TALK.talk)}return}
+  if(M==='act'){if(k.st!=='sit'){k.st='go';return}if((T.sub==='talk'||T.sub==='exp')&&!T.ended&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(5,14);if(Math.random()<.5)tKidSay(k,T.sub==='exp'?T_TALK.exp:T_TALK.talk)}return}
   if(M==='pres'){const turn=T.turns[T.turnIdx],mine=!T.ended&&turn&&turn.who.includes(k.n);
     if(mine){const idx=turn.who.indexOf(k.n),spot=[L.cols/2+(idx-(turn.who.length-1)/2)*.62,T.presSpots[0][1]];if(k.st==='sit'||k.st==='idle'&&(Math.abs(k.u-spot[0])>.05||Math.abs(k.v-spot[1])>.05)){tGo(k,spot[0],spot[1],()=>{k.st='pres'})}
       else if(k.st==='pres'&&!T.frozen&&now>(k.nextTalk||0)){k.nextTalk=now+rnd(4,9);if(Math.random()<.6)tKidSay(k,T_TALK.pres)}return}
@@ -4564,6 +4564,8 @@ function tDeskItem(c,T,seat,n,kind,u){const L=T.d.layout,r=Math.floor(seat/L.col
   if(kind==='read'||kind==='book'){c.fillStyle='#ffffff';c.fillRect(cx-s*.95,cy-s*.42,s*.9,s*.75);c.fillRect(cx+s*.05,cy-s*.42,s*.9,s*.75);c.strokeStyle='#8a6f5d';c.lineWidth=1;c.strokeRect(cx-s*.95,cy-s*.42,s*1.9,s*.75);c.fillStyle=colorFor(n).col;c.fillRect(cx-s*1,cy+s*.33,s*2,s*.08);c.fillStyle='#c9ced3';for(let i=0;i<3;i++){c.fillRect(cx-s*.8,cy-s*.25+i*s*.18,s*.6,1.5);c.fillRect(cx+s*.2,cy-s*.25+i*s*.18,s*.6,1.5)}return}
   if(kind==='sheet'||kind==='test'){c.fillStyle='#ffffff';c.fillRect(cx-s*.55,cy-s*.5,s*1.1,s*.95);c.strokeStyle='#c9ced3';c.lineWidth=1.2;const lines=Math.floor(4*(kind==='test'?Math.min(1,u*1.3):u)+.5);for(let i=0;i<4;i++){c.strokeStyle=i<lines?'#3a4652':'#e3e6ea';c.beginPath();c.moveTo(cx-s*.4,cy-s*.3+i*s*.2);c.lineTo(cx+s*.4,cy-s*.3+i*s*.2);c.stroke()}if(kind==='test'){c.fillStyle='#e0472f';c.font='900 '+Math.round(s*.3)+'px sans-serif';c.fillText('',cx,cy)}c.fillStyle='#f2c12e';c.fillRect(cx+s*.45,cy-s*.1,s*.5,s*.09);return}
   if(kind==='draw'){c.fillStyle='#ffffff';c.fillRect(cx-s*.7,cy-s*.5,s*1.4,s*.95);const cols=['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6'];const k=Math.floor(u*8)+1;for(let i=0;i<k;i++){c.strokeStyle=cols[(n+i)%5];c.lineWidth=2;c.beginPath();const a=hh(n*13+i,7),b=hh(n*13+i,9);c.moveTo(cx-s*.5+a*s,cy-s*.35+b*s*.6);c.quadraticCurveTo(cx,cy,cx-s*.5+hh(n+i,3)*s,cy-s*.35+hh(n+i,4)*s*.6);c.stroke()}return}
+  if(kind==='exp'){const col=['#4fd3ff','#ff6fb1','#7cff6b','#ffd23f','#c08cff'][(n+Math.floor(u*4))%5],bw=s*.55,bh=s*.75,bx=cx-s*.15,by=cy+s*.35;c.fillStyle='rgba(220,240,255,.85)';c.fillRect(bx-bw/2,by-bh,bw,bh);c.fillStyle=col;c.fillRect(bx-bw/2,by-bh*.55,bw,bh*.55);c.strokeStyle='#5b6e7c';c.lineWidth=1.5;c.strokeRect(bx-bw/2,by-bh,bw,bh);
+    const t=TM?TM.anim:0;c.fillStyle='rgba(255,255,255,.9)';for(let i=0;i<3;i++){const ph2=((t*1.2+i/3+n*.13)%1);c.beginPath();c.arc(bx-bw*.25+i*bw*.25,by-bh*.55-ph2*bh*.7,Math.max(1.5,s*.06),0,7);c.fill()}c.fillStyle='#ffffff';c.fillRect(cx+s*.35,cy-s*.2,s*.12,s*.55);c.fillStyle=col;c.fillRect(cx+s*.35,cy+s*.1,s*.12,s*.25);return}
   if(kind==='make'){const cols=['#e8463a','#3b82f6','#4cb36b','#f2c12e','#8a5cd6'];const k=Math.floor(u*6)+1;for(let i=0;i<k;i++){c.fillStyle=cols[(n+i)%5];c.fillRect(cx-s*.6+(i%3)*s*.42,cy+s*.1-Math.floor(i/3)*s*.32,s*.38,s*.3)}return}}
 function tTrash(c,T,t){const x=s2X(t.u),y=s2Y(t.v),s=Math.max(6,T.cs*.12);c.save();c.translate(x,y);c.rotate(t.rot);
   if(t.type==='ball'){c.fillStyle='#ffffff';c.beginPath();c.arc(0,0,s*.6,0,7);c.fill();c.strokeStyle='#b8c4cf';c.lineWidth=1;c.stroke();c.beginPath();c.moveTo(-s*.3,-s*.1);c.lineTo(s*.2,s*.2);c.stroke()}
