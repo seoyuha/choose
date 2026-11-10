@@ -4551,16 +4551,16 @@ function tBoard(c,T,now){const B=T.board,{x,y,w,h}=B;c.fillStyle='#a8693a';c.fil
   c.fillStyle='rgba(255,255,255,.7)';c.fillRect(x+w*.035,hy+fs*.62,c.measureText(tLabel()).width,2);
   c.textAlign='right';c.fillStyle='#f4f7f0';c.fillText(tRight(),x+w*.965,hy);c.textAlign='center';const ct=tCenter();if(ct){c.fillStyle=T.frozen?'#bfe6ff':'#ffd75e';c.fillText(ct,x+w/2,hy)}
   const last=!T.ended&&!T.frozen&&T.rem<=10&&T.rem>0,pulse=last?1+.06*Math.sin(now/90):1;let col=T.frozen?'#bfe6ff':T.mode==='break'?'#ffd75e':'#f4f7f0';if(last)col='#ff8a80';
-  const prepB=T.mode==='break'&&!T.ended&&T.rem<=T.T*.2,dy=prepB?h*.38:h*.6,dsz=prepB?h*.5:h*.9;
-  if(prepB){const sitPh=T.rem<=T.T*.1,ms=Math.max(16,Math.min(h*.13,w*.045));c.textAlign='center';c.textBaseline='middle';c.font='900 '+Math.round(ms)+'px "Noto Sans KR",sans-serif';
-    const l1=sitPh?'🪑 자리에 앉아요!':'🧹 정리하기 · 🚻 화장실 다녀오기 · 💧 물 마시기',l2=sitPh?'정리 · 화장실 · 물 마시기 끝! 수업 준비해요':tDurTxt(Math.ceil(T.rem-T.T*.1))+' 뒤에 자리에 앉아요';
-    c.fillStyle='rgba(255,215,94,.16)';c.fillRect(x+w*.04,y+h*.6,w*.92,h*.3);c.fillStyle=sitPh?'#ffd75e':'#ffffff';c.save();if(sitPh){const pz=1+.04*Math.sin(now/180);c.translate(x+w/2,y+h*.69);c.scale(pz,pz);c.fillText(l1,0,0)}else c.fillText(l1,x+w/2,y+h*.69);c.restore();
-    c.font='700 '+Math.round(ms*.62)+'px "Noto Sans KR",sans-serif';c.fillStyle='#cfe6d6';c.fillText(l2,x+w/2,y+h*.81)}
-  c.save();c.translate(x+w/2,y+dy);c.scale(pulse,pulse);c.font=Math.round(dsz)+'px "Black Han Sans","Noto Sans KR",sans-serif';{const mw=c.measureText(tFmt(T.rem)).width,lim=w*(prepB?.62:.96);if(mw>lim){const k=lim/mw;c.scale(k,k)}}c.fillStyle='rgba(0,0,0,.18)';c.fillText(tFmt(T.rem),4,6);c.fillStyle=col;c.fillText(tFmt(T.rem),0,0);
+  const prepB=T.mode==='break'&&!T.ended&&T.rem<=T.T*.2,dy=prepB?h*.55:h*.6,dsz=prepB?h*.84:h*.9;
+  if(prepB){const sitPh=T.rem<=T.T*.1,ms=Math.max(16,Math.min(h*.085,w*.034));c.textAlign='center';c.textBaseline='middle';c.fillStyle='rgba(20,40,32,.55)';c.fillRect(x+w*.02,y+h*.885,w*.96,h*.105);
+    c.font='900 '+Math.round(ms)+'px "Noto Sans KR",sans-serif';const l1=sitPh?'🪑 자리에 앉아요! · 정리 · 화장실 · 물 마시기 끝!':'🧹 정리하기 · 🚻 화장실 다녀오기 · 💧 물 마시기 · '+tDurTxt(Math.ceil(T.rem-T.T*.1))+' 뒤에 자리에 앉아요';
+    c.fillStyle=sitPh?'#ffd75e':'#ffffff';c.save();c.translate(x+w/2,y+h*.938);const mw=c.measureText(l1).width;if(mw>w*.94)c.scale(w*.94/mw,1);if(sitPh){const pz=1+.04*Math.sin(now/180);c.scale(pz,pz)}c.fillText(l1,0,0);c.restore()}
+  c.save();c.translate(x+w/2,y+dy);c.scale(pulse,pulse);c.font=Math.round(dsz)+'px "Black Han Sans","Noto Sans KR",sans-serif';{const mw=c.measureText(tFmt(T.rem)).width,lim=w*.96;if(mw>lim){const k=lim/mw;c.scale(k,k)}}c.fillStyle='rgba(0,0,0,.18)';c.fillText(tFmt(T.rem),4,6);c.fillStyle=col;c.fillText(tFmt(T.rem),0,0);
   c.globalCompositeOperation='destination-out';c.fillStyle='rgba(0,0,0,.12)';for(let i=0;i<70;i++){c.fillRect(hh(i,301)*w*.6-w*.3,hh(i,302)*h*.6-h*.3,2,2)}c.restore();
   if(T.mode==='break'&&!T.frozen&&!prepB){c.font='700 '+Math.round(fs*.85)+'px "Noto Sans KR",sans-serif';c.fillStyle='rgba(255,236,160,.55)';c.textAlign='left';c.fillText('야호',x+w*.04,y+h*.42);c.fillText('헤헤',x+w*.04,y+h*.72);c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=2;c.beginPath();c.arc(x+w*.92,y+h*.48,h*.06,0,7);c.stroke()}
-  const frac=T.mode==='pres'?T.rem/T.T:T.rem/Math.max(1,T.T),lx0=x+w*.12,lw=w*.76,ly=y+h*.94;c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw,ly);c.stroke();c.strokeStyle=T.mode==='break'?'#ffd75e':'#f4f7f0';c.lineWidth=4;c.setLineDash([10,4]);c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw*cl(frac),ly);c.stroke();c.setLineDash([]);
-  c.fillStyle='#c9a77a';c.fillRect(lx0-34,ly-6,30,12);c.fillStyle='#4a5563';c.fillRect(lx0-34,ly+2,30,4);c.fillStyle='#ffffff';c.fillRect(lx0+lw*cl(frac)-2,ly-3,14,6);c.textAlign='left';c.textBaseline='alphabetic'}
+  if(!prepB){const frac=T.mode==='pres'?T.rem/T.T:T.rem/Math.max(1,T.T),lx0=x+w*.12,lw=w*.76,ly=y+h*.94;c.strokeStyle='rgba(255,255,255,.18)';c.lineWidth=3;c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw,ly);c.stroke();c.strokeStyle=T.mode==='break'?'#ffd75e':'#f4f7f0';c.lineWidth=4;c.setLineDash([10,4]);c.beginPath();c.moveTo(lx0,ly);c.lineTo(lx0+lw*cl(frac),ly);c.stroke();c.setLineDash([]);
+  c.fillStyle='#c9a77a';c.fillRect(lx0-34,ly-6,30,12);c.fillStyle='#4a5563';c.fillRect(lx0-34,ly+2,30,4);c.fillStyle='#ffffff';c.fillRect(lx0+lw*cl(frac)-2,ly-3,14,6);}
+  c.textAlign='left';c.textBaseline='alphabetic'}
 function tDeskItem(c,T,seat,n,kind,u){const L=T.d.layout,r=Math.floor(seat/L.cols),cc=seat%L.cols,dir=L.desks[seat]||0,X=T.csx,Y=T.csy,x0=s2X(cc),y0=s2Y(r);
   let cx=x0+X/2,cy=dir===0?y0+Y*.21:dir===2?y0+Y*.72:y0+Y/2;if(dir===1)cx=x0+X*.72;if(dir===3)cx=x0+X*.28;const s=dir%2===0?Math.min(X*.3,Y*.24):Math.min(X*.24,Y*.3);
   if(kind==='read'||kind==='book'){c.fillStyle='#ffffff';c.fillRect(cx-s*.95,cy-s*.42,s*.9,s*.75);c.fillRect(cx+s*.05,cy-s*.42,s*.9,s*.75);c.strokeStyle='#8a6f5d';c.lineWidth=1;c.strokeRect(cx-s*.95,cy-s*.42,s*1.9,s*.75);c.fillStyle=colorFor(n).col;c.fillRect(cx-s*1,cy+s*.33,s*2,s*.08);c.fillStyle='#c9ced3';for(let i=0;i<3;i++){c.fillRect(cx-s*.8,cy-s*.25+i*s*.18,s*.6,1.5);c.fillRect(cx+s*.2,cy-s*.25+i*s*.18,s*.6,1.5)}return}
@@ -4580,7 +4580,7 @@ function tFrame(now){const T=TM;if(!T)return;SC=T;const c=$('#timerCanvas').getC
   const rdt=Math.min(.1,(now-T.lastT)/1000);T.lastT=now;const run=T.phase==='run',dt=run&&!T.frozen?rdt:0;T.anim+=dt;
   if(run&&!T.frozen&&!T.ended&&!T.waitNext){const sp=tSecretOn()?T.cfg.speed:1;T.rem-=rdt*sp;T.elapsed+=rdt;const sec=Math.ceil(T.rem);if(sec<=10&&sec>0&&sec!==T.lastTick){T.lastTick=sec;tTone(sec<=3?1046:880,.08,.12,'square')}
     if(T.rem<=0){if(T.mode==='pres'&&T.turnIdx<T.turns.length-1){if(T.cfg.presAuto)tNextTurn();else{T.rem=0;T.waitNext=true;tTone(880,.3,.15,'sine');tSay('시간 끝! 다음 차례로 넘겨 주세요')}}else tEnd()}}
-  if(run&&T.mode==='break'&&!T.ended){if(!T.pFlag&&T.rem<=T.T*.2){T.pFlag=1;tSay('정리하고 화장실, 물 마시고 와요!',6000);tBellMini()}else if(T.pFlag===1&&T.rem<=T.T*.1){T.pFlag=2;tSay('이제 자리에 앉아요~',6000);tBellMini()}}
+  if(run&&T.mode==='break'&&!T.ended){if(!T.pFlag&&T.rem<=T.T*.2){T.pFlag=1;tSay('정리하고 화장실, 물 마시고 와요!',2600);tBellMini()}else if(T.pFlag===1&&T.rem<=T.T*.1){T.pFlag=2;tSay('이제 자리에 앉아요~',2600);tBellMini()}}
   if(run&&T.mode==='break'&&T.sub!=='room'||run&&T.mode==='line'&&T.ended)T.doorK=Math.min(1,(T.doorK||0)+rdt*2);else T.doorK=Math.max(0,(T.doorK||0)-rdt);
   if(run&&dt>0&&T.mode==='break'&&T.sub==='room')tGamesTick(dt);
   if(run&&dt>0)T.kids.forEach(k=>tKidTick(k,dt));else if(run&&T.ended&&T.frozen===false)T.kids.forEach(k=>tKidTick(k,rdt));
